@@ -6,20 +6,9 @@ import '@cads-ui/core/index.css';
 import { createTheme, ThemeProvider } from '@mui/material';
 import React from 'react';
 
-const themeOverride = {
-  palette: {
-    action: {
-      hover: 'rgba(0, 0, 0, 0.45)'
-    }
-  }
-};
-
 function ThemeConfig({ children }) {
-  const muiTheme = React.useMemo(() => createTheme(), []);
-  const cadsTheme = React.useMemo(
-    () => cadsCreateTheme(muiTheme, themeOverride),
-    []
-  );
+  const cadsTheme = React.useMemo(() => cadsCreateTheme(), []);
+  const muiTheme = React.useMemo(() => createTheme(cadsTheme), []);
 
   return (
     <CadsThemeProvider theme={cadsTheme}>
