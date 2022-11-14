@@ -23,7 +23,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 yarn.lock
-.vscode
 note.txt
 .vercel
 backend/.gitignore

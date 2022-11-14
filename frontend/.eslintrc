@@ -1,0 +1,31 @@
+{
+  "extends": ["plugin:react/recommended", "eslint-config-prettier"],
+  "parserOptions": {
+    "ecmaVersion": 8,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/resolver": {
+      "node": {
+        "paths": ["src"],
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
+  "rules": {
+    "semi": 1,
+    "quotes": [1, "single"],
+    "react/prop-types": 0,
+    "react/display-name": 0,
+    "no-console": 1,
+    "no-const-assign": 2,
+    "no-unused-vars": 1,
+    "react/react-in-jsx-scope": 0
+  }
+}
