@@ -8,7 +8,7 @@ function LoadingScreen() {
     if (!loading) toggleLoading(true);
 
     return () => {
-      setTimeout(() => toggleLoading(false), 100);
+      setTimeout(() => toggleLoading(false), 250);
     };
   }, []);
 

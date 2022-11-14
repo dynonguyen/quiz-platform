@@ -1,11 +1,11 @@
-import React, { Suspense } from 'react';
-import LoadingScreen from './components/LoadingScreen';
-import { ToastContainer } from 'react-toastify';
-import ThemeConfig from './components/ThemeConfig';
-import { Routes } from 'react-router-dom';
-import renderRoutes from './routes/renderRoutes';
-import routes from './routes';
 import { GlobalLoading } from '@cads-ui/core';
+import { Suspense } from 'react';
+import { Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import LoadingScreen from './components/LoadingScreen';
+import ThemeConfig from './components/ThemeConfig';
+import routes from './routes';
+import renderRoutes from './routes/renderRoutes';
 
 // -----------------------------
 import 'react-toastify/dist/ReactToastify.css';
