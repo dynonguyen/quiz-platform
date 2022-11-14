@@ -1,11 +1,13 @@
 import axios from 'axios';
 import queryString from 'query-string';
 import { apiConfig } from '~/configs/apiConfig';
+import { getToken } from '~/helper';
 
 const axiosClient = axios.create({
   baseURL: apiConfig.baseUrl,
   headers: {
-    'content-type': 'application/json'
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${getToken()}`
   },
   withCredentials: true,
   paramsSerializer: (params) => queryString.stringify(params)
