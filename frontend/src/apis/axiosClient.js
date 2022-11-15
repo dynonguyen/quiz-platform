@@ -1,20 +1,17 @@
 import axios from 'axios';
-import queryString from 'query-string';
 import { apiConfig } from '~/configs/apiConfig';
 import { getToken } from '~/helper';
 
 const axiosClient = axios.create({
   baseURL: apiConfig.baseUrl,
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${getToken()}`
-  },
-  withCredentials: true,
-  paramsSerializer: (params) => queryString.stringify(params)
+  headers: { 'Content-Type': 'application/json' },
+  withCredentials: true
 });
 
 axiosClient.interceptors.request.use(
   (config) => {
+    const token = getToken();
+    config.headers['Authorization'] = token ? `Bearer ${getToken()}` : '';
     return config;
   },
   (error) => {
@@ -23,10 +20,11 @@ axiosClient.interceptors.request.use(
 );
 
 axios.interceptors.response.use(
-  (res) => {
-    return res;
-  },
+  (response) => response,
   (error) => {
+    if (error.response?.status == 401) {
+      // TODO: Handle logic logout here
+    }
     throw error;
   }
 );

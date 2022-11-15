@@ -27,6 +27,8 @@
   - Socket.io client (https://socket.io/)
   - React Hook Form + Yup. (https://react-hook-form.com/)
   - Redux, react-redux, reudx-toolkit. (https://redux-toolkit.js.org/)
+  - react-google-login (https://www.npmjs.com/package/react-google-login)
+  - react-facebook-login (https://www.npmjs.com/package/react-facebook-login)
   - Icon - Iconify + MUI icon (https://icon-sets.iconify.design/)
   - React-toastify (https://www.npmjs.com/package/react-toastify)
   - Build tool: ViteJS (https://vitejs.dev/)

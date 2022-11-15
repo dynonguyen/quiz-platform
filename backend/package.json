@@ -1,0 +1,34 @@
+{
+  "name": "quiz-platform-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "1712149, 18120634, 18120644",
+  "_moduleAliases": {
+    "~": "./src"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js --inspect"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.5",
+    "cookie-session": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^8.5.1",
+    "module-alias": "^2.2.2",
+    "mongoose": "^6.7.2",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.6.3",
+    "passport": "^0.4.1",
+    "passport-facebook-token": "^4.0.0",
+    "passport-google-token": "^0.1.2",
+    "path": "^0.12.7",
+    "socket.io": "^4.5.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
