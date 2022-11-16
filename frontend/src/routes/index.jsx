@@ -1,7 +1,8 @@
 import { PageResult } from '@cads-ui/core';
 import { lazy } from 'react';
 import notFoundSrc from '~/assets/img/not-found.svg';
-const HomePage = lazy(() => import('~/pages/HomePage'));
+const HomePage = lazy(() => import('~/pages/Home'));
+const RegisterPage = lazy(() => import('~/pages/Register'));
 
 const routes = [
   {
@@ -20,7 +21,7 @@ const routes = [
     path: '/register',
     exact: true,
     isProtect: false,
-    element: <>Register</>
+    element: <RegisterPage />
   },
   {
     path: '*',

@@ -63,7 +63,7 @@ exports.postRegisterAccount = async (req, res) => {
         .json({ message: 'Tạo tài khoản thất bại, thử lại' });
     }
 
-    return res.status(200).json({ message: 'Tạo tài khoản thành công' });
+    return res.status(201).json({ message: 'Tạo tài khoản thành công' });
   } catch (error) {
     console.error('POST REGISTER ACCOUNT ERROR: ', error);
     return res.status(503).json({ message: 'Lỗi dịch vụ, thử lại sau' });
