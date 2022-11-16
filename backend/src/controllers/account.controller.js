@@ -92,10 +92,6 @@ exports.postLogin = async (req, res) => {
       getEnv('JWT_SECRET_KEY') || 'quiz-secret',
       { accountId: account._id },
     );
-    res.cookie(KEYS.JWT_TOKEN, token, {
-      httpOnly: true,
-      expires: new Date(Date.now() + COOKIE_EXPIRES_TIME),
-    });
 
     return res.status(200).json({
       message: 'success',
@@ -138,11 +134,6 @@ exports.postLoginSocialNetwork = async (req, res) => {
       getEnv('JWT_SECRET_KEY') || 'quiz-secret',
       { accountId },
     );
-
-    res.cookie(KEYS.JWT_TOKEN, token, {
-      httpOnly: true,
-      expires: new Date(Date.now() + COOKIE_EXPIRES_TIME),
-    });
 
     return res.status(200).json({
       message: 'success',

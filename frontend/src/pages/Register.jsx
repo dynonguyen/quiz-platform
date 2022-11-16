@@ -4,7 +4,6 @@ import {
   Button,
   Divider,
   Flex,
-  Grid,
   Input,
   InputPassword,
   makeStyles,
@@ -20,7 +19,6 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import { accountApi } from '~/apis/accoutApi';
-import FacebookLoginButton from '~/components/FacebookLoginButton';
 import GoogleLoginButton from '~/components/GoogleLoginButton';
 import { MAX, MIN } from '~/constant/validation';
 
@@ -40,8 +38,8 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   logo: {
-    w: 50,
-    h: 50,
+    w: 72,
+    h: 72,
     mx: 'auto'
   }
 }));
@@ -71,7 +69,7 @@ function RegisterForm() {
   const handleRegister = async (form) => {
     setRegistering(true);
     try {
-      const apiRes = await accountApi.register(form);
+      const apiRes = await accountApi.postRegister(form);
       if (apiRes.status === 201) {
         toast.success(`Tạo tài khoản thành công. Xin chào ${form.name}`);
         navigate('/login');
@@ -90,21 +88,13 @@ function RegisterForm() {
       <Flex spacing={2} direction="column" center sx={{ mb: 6 }}>
         <img className={classes.logo} src={logoSrc} />
         <Typography variant="h3" color="primary.main">
-          Create a free account
+          Tạo tài khoản miễn phí
         </Typography>
       </Flex>
 
       {/* Social login */}
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <GoogleLoginButton />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <FacebookLoginButton />
-        </Grid>
-      </Grid>
-
-      <Divider spacing={4} />
+      <GoogleLoginButton />
+      <Divider variant="dashed" spacing={4} />
 
       {/* Sign up with email */}
       <Flex
@@ -119,7 +109,7 @@ function RegisterForm() {
           </Alert>
         )}
         <Input
-          placeholder="Enter your email"
+          placeholder="Nhập email"
           fullWidth
           autoFocus
           size="small"
@@ -128,7 +118,7 @@ function RegisterForm() {
           {...register('email')}
         />
         <Input
-          placeholder="Enter your name"
+          placeholder="Nhập họ tên"
           fullWidth
           size="small"
           startIcon={<Icon icon="mdi:user-circle" />}
@@ -136,7 +126,7 @@ function RegisterForm() {
           {...register('name')}
         />
         <InputPassword
-          placeholder="Enter your password"
+          placeholder="Nhập mật khẩu"
           fullWidth
           size="small"
           startIcon={<Icon icon="mdi:password" />}
@@ -144,25 +134,23 @@ function RegisterForm() {
           {...register('password')}
         />
         <InputPassword
-          placeholder="Re-enter your password"
+          placeholder="Nhập lại mật khẩu"
           fullWidth
           size="small"
           startIcon={<Icon icon="mdi:password" />}
           error={Boolean(errors.confirmPwd)}
           {...register('confirmPwd')}
         />
-        <Button sx={{ mt: '24px !important' }} loading={registering}>
-          Register
-        </Button>
+        <Button loading={registering}>Đăng ký</Button>
       </Flex>
       <Divider spacing={4} />
 
       {/* Redirect login */}
       <Typography variant="body1" align="center">
-        Have already an account?{' '}
+        Bạn đã có tài khoản?{' '}
         <Link to="/login" style={{ textDecoration: 'none' }}>
           <Typography sx={{ fw: 500 }} color="primary.main" component="span">
-            Login here
+            Đăng nhập ngay
           </Typography>
         </Link>
       </Typography>
