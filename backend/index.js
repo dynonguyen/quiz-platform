@@ -9,10 +9,12 @@ const cors = require('cors');
 const morgan = require('morgan');
 
 // import local file
-const { MAX, BASE_URL } = require('~/constant');
 const corsConfig = require('~/configs/cors.config');
-const authApi = require('~/apis/auth.api');
+const { MAX, BASE_URL } = require('~/constant');
+const { authorization } = require('~/middleware/authorize.middleware');
 const { getEnv } = require('~/helper');
+const authApi = require('~/apis/auth.api');
+const userApi = require('~/apis/user.api');
 
 // ================== set port ==================
 const app = express();
@@ -51,6 +53,7 @@ app.use(cors(corsConfig));
 
 // ================== Apis ==================
 app.use(`${BASE_URL}/auth`, authApi);
+app.use(`${BASE_URL}/user`, authorization, userApi);
 
 // ================== Listening ... ==================
 app.listen(PORT, () => {

@@ -1,11 +1,32 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import userApi from '~/apis/userApi';
 
+// -----------------------------
+export const getUserInfo = createAsyncThunk(
+  'users/getUserInfo',
+  async (_, thunkAPI) => {
+    try {
+      console.log('RUN');
+      const apiRes = await userApi.getUserInfo();
+      const { status } = apiRes;
+      if (status === 200) {
+      }
+    } catch (error) {}
+  }
+);
+
+// -----------------------------
 const initialState = {
-  username: ''
+  isAuth: false,
+  accountId: '',
+  username: '',
+  name: '',
+  avt: ''
 };
 
+// -----------------------------
 const userSlice = createSlice({
-  name: 'user-slice',
+  name: 'users',
   initialState,
   reducers: {}
 });

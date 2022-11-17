@@ -2,6 +2,7 @@ import { GlobalLoading } from '@cads-ui/core';
 import { Suspense } from 'react';
 import { Provider } from 'react-redux';
 import { Routes } from 'react-router-dom';
+import InitWrapper from './components/InitWrapper';
 import LoadingScreen from './components/LoadingScreen';
 import ThemeConfig from './components/ThemeConfig';
 import store from './redux/store';
@@ -14,9 +15,11 @@ function App() {
     <ThemeConfig>
       <GlobalLoading />
       <Provider store={store}>
-        <Suspense fallback={<LoadingScreen />}>
-          <Routes>{renderRoutes(routes)}</Routes>
-        </Suspense>
+        <InitWrapper>
+          <Suspense fallback={<LoadingScreen />}>
+            <Routes>{renderRoutes(routes)}</Routes>
+          </Suspense>
+        </InitWrapper>
       </Provider>
     </ThemeConfig>
   );

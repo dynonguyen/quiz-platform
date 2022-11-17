@@ -28,6 +28,10 @@ const accountSchema = new Schema({
     required: true,
     default: new Date(),
   },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 // hash password with bcrypt

@@ -1,5 +1,4 @@
 const { ACCOUNT_TYPES } = require('~/constant');
-const { hashPassword } = require('~/helper');
 const AccountModel = require('~/models/account.model');
 const UserModel = require('~/models/user.model');
 

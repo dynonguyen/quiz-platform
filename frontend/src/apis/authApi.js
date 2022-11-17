@@ -6,10 +6,8 @@ const authApi = {
   postRegister: (form) => {
     return axiosClient.post(`${ENDPOINT}/register`, form);
   },
-  postLoginWithGoogle: (accessToken) => {
-    return axiosClient.post(`${ENDPOINT}/login-gg`, {
-      access_token: accessToken
-    });
+  postLoginWithGoogle: (response) => {
+    return axiosClient.post(`${ENDPOINT}/login/google`, response);
   }
 };
 
