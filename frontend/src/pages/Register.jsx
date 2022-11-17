@@ -18,8 +18,9 @@ import { Icon } from '@iconify/react';
 import React from 'react';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
-import { accountApi } from '~/apis/accoutApi';
+import authApi from '~/apis/authApi';
 import GoogleLoginButton from '~/components/GoogleLoginButton';
+import { PATH } from '~/constant/path';
 import { MAX, MIN } from '~/constant/validation';
 
 // -----------------------------
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     mt: 20,
     mx: 'auto',
-    maxW: 480,
+    maxW: 450,
     px: 6,
     py: 8,
     borderRadius: 4,
@@ -69,10 +70,10 @@ function RegisterForm() {
   const handleRegister = async (form) => {
     setRegistering(true);
     try {
-      const apiRes = await accountApi.postRegister(form);
+      const apiRes = await authApi.postRegister(form);
       if (apiRes.status === 201) {
         toast.success(`Tạo tài khoản thành công. Xin chào ${form.name}`);
-        navigate('/login');
+        navigate(PATH.LOGIN);
       }
     } catch (error) {
       toast.error(
@@ -148,7 +149,7 @@ function RegisterForm() {
       {/* Redirect login */}
       <Typography variant="body1" align="center">
         Bạn đã có tài khoản?{' '}
-        <Link to="/login" style={{ textDecoration: 'none' }}>
+        <Link to={PATH.LOGIN} style={{ textDecoration: 'none' }}>
           <Typography sx={{ fw: 500 }} color="primary.main" component="span">
             Đăng nhập ngay
           </Typography>

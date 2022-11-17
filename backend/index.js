@@ -11,7 +11,7 @@ const morgan = require('morgan');
 // import local file
 const { MAX, BASE_URL } = require('~/constant');
 const corsConfig = require('~/configs/cors.config');
-const accountApi = require('~/apis/account.api');
+const authApi = require('~/apis/auth.api');
 const { getEnv } = require('~/helper');
 
 // ================== set port ==================
@@ -50,7 +50,7 @@ app.use(cookieParser());
 app.use(cors(corsConfig));
 
 // ================== Apis ==================
-app.use(`${BASE_URL}/account`, accountApi);
+app.use(`${BASE_URL}/auth`, authApi);
 
 // ================== Listening ... ==================
 app.listen(PORT, () => {

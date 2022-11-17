@@ -1,24 +1,26 @@
 import { PageResult } from '@cads-ui/core';
 import { lazy } from 'react';
 import notFoundSrc from '~/assets/img/not-found.svg';
+import { PATH } from '~/constant/path';
 const HomePage = lazy(() => import('~/pages/Home'));
 const RegisterPage = lazy(() => import('~/pages/Register'));
+const LoginPage = lazy(() => import('~/pages/Login'));
 
 const routes = [
   {
-    path: '/',
+    path: PATH.HOME,
     exact: true,
     isProtect: false,
     element: <HomePage />
   },
   {
-    path: '/login',
+    path: PATH.LOGIN,
     exact: true,
     isProtect: false,
-    element: <>Login</>
+    element: <LoginPage />
   },
   {
-    path: '/register',
+    path: PATH.REGISTER,
     exact: true,
     isProtect: false,
     element: <RegisterPage />

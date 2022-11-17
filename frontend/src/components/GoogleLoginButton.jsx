@@ -1,67 +1,50 @@
-import { Button } from '@cads-ui/core';
-import { Icon } from '@iconify/react';
+import { makeStyles } from '@cads-ui/core';
 import React from 'react';
-import GoogleLogin from 'react-google-login';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { accountApi } from '~/apis/accoutApi';
+import authApi from '~/apis/authApi';
+import { PATH } from '~/constant/path';
 import { getEnv } from '~/helper';
+import useDynamicScript from '~/hooks/useScript';
+
+const useStyles = makeStyles(() => ({
+  root: { '& iframe': { margin: '0 auto !important' } }
+}));
 
 function GoogleLoginButton() {
-  const [loading, setLoading] = React.useState(false);
-  const loaded = React.useRef(false);
-  const clientId = getEnv('VITE_GOOGLE_CLIENT_ID');
+  const classes = useStyles();
+  const ref = React.useRef(null);
+  const navigate = useNavigate();
 
-  const handleLoginFailure = async (response) => {
-    console.log(response);
-  };
-
-  const handleLoginSuccess = async (response) => {
+  const handleCallbackResponse = async (response) => {
     try {
-      if (!loaded.current) {
-        loaded.current = true;
-        return;
+      console.log(response.credential);
+      const apiRes = await authApi.postLoginWithGoogle(response.credential);
+      if (apiRes.status === 200) {
+        navigate(PATH.HOME);
       }
-      setLoading(true);
-
-      console.log(response);
-      const { accessToken } = response;
-
-      const apiRes = await accountApi.postLoginWithGoogle(accessToken);
-      const { status, data } = apiRes;
-
-      if (status === 200) {
-        handleLoginSuccess(data);
-      }
-
-      setLoading(false);
     } catch (error) {
-      const message =
-        error.response?.data?.message || 'Đăng nhập thất bại, thử lại !';
-      toast.error(message);
-      setLoading(false);
+      toast.error('Đăng nhập thất bại, thử lại !');
+      console.log(error);
     }
   };
 
-  return (
-    <GoogleLogin
-      clientId={clientId}
-      autoLoad={false}
-      onSuccess={handleLoginSuccess}
-      onFailure={handleLoginFailure}
-      cookiePolicy={'single_host_origin'}
-      render={(renderProps) => (
-        <Button
-          onClick={renderProps.onClick}
-          loading={loading}
-          color="#c64d3a"
-          fullWidth
-          startIcon={<Icon icon="bi:google" />}
-        >
-          Tiếp tục với Google
-        </Button>
-      )}
-    />
-  );
+  useDynamicScript('https://accounts.google.com/gsi/client', () => {
+    google.accounts.id.initialize({
+      client_id: getEnv('VITE_GOOGLE_CLIENT_ID'),
+      callback: handleCallbackResponse,
+      auto_select: false
+    });
+
+    google.accounts.id.renderButton(ref.current, {
+      theme: 'outline',
+      size: 'large'
+    });
+
+    google.accounts.id.prompt();
+  });
+
+  return <div className={classes.root} ref={ref}></div>;
 }
 
 export default GoogleLoginButton;
