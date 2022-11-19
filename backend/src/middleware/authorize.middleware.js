@@ -1,10 +1,10 @@
 const { verifyToken } = require('~/configs/jwt.config');
 
 exports.authorization = (req, res, next) => {
-  const { authorization } = req.headers;
-  if (!authorization) throw new Error('Authorization header not found !');
-
   try {
+    const { authorization } = req.headers;
+    if (!authorization) throw new Error('Authorization header not found !');
+
     const token = authorization.replace('Bearer ', '');
     const decoded = verifyToken(token);
     if (decoded) {

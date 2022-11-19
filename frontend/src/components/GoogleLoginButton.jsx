@@ -1,12 +1,15 @@
 import { makeStyles } from '@cads-ui/core';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import authApi from '~/apis/authApi';
 import { apiConfig } from '~/configs/apiConfig';
+import { LS_KEY } from '~/constant/key';
 import { PATH } from '~/constant/path';
 import { getEnv } from '~/helper';
 import useDynamicScript from '~/hooks/useScript';
+import { getUserInfo } from '~/redux/slices/userSlice';
 
 // -----------------------------
 const useStyles = makeStyles(() => ({
@@ -22,11 +25,15 @@ function GoogleLoginButton() {
   const classes = useStyles();
   const ref = React.useRef(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleCallbackResponse = async (response) => {
     try {
       const apiRes = await authApi.postLoginWithGoogle(response);
       if (apiRes.status === 200) {
+        const { token } = apiRes.data;
+        localStorage.setItem(LS_KEY.ACCESS_TOKEN, token);
+        dispatch(getUserInfo());
         navigate(PATH.HOME);
       }
     } catch (error) {

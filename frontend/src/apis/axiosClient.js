@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { apiConfig } from '~/configs/apiConfig';
 import { getToken } from '~/helper';
+import { handleUnAuthentication } from '~/helper/authentication';
 
 const axiosClient = axios.create({
   baseURL: apiConfig.baseUrl,
@@ -23,7 +24,7 @@ axios.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status == 401) {
-      // TODO: Handle logic logout here
+      handleUnAuthentication();
     }
     throw error;
   }

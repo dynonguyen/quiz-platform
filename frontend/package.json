@@ -9,7 +9,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@cads-ui/core": "^1.5.1",
+    "@cads-ui/core": "^1.5.2",
     "@cads-ui/x": "^1.1.14",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",

@@ -11,11 +11,12 @@ import {
 } from '@cads-ui/core';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import logoSrc from '~/assets/img/logo.png';
 
 import { Icon } from '@iconify/react';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import authApi from '~/apis/authApi';
@@ -24,7 +25,7 @@ import { PATH } from '~/constant/path';
 import { MAX, MIN } from '~/constant/validation';
 
 // -----------------------------
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((_) => ({
   root: {
     mt: 20,
     mx: 'auto',
@@ -66,6 +67,12 @@ function RegisterForm() {
   const navigate = useNavigate();
   const classes = useStyles();
   const [registering, setRegistering] = React.useState(false);
+
+  const { isAuth } = useSelector((state) => state.user);
+
+  if (isAuth) {
+    return <Navigate to={PATH.HOME} />;
+  }
 
   const handleRegister = async (form) => {
     setRegistering(true);

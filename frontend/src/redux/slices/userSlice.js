@@ -6,17 +6,23 @@ export const getUserInfo = createAsyncThunk(
   'users/getUserInfo',
   async (_, thunkAPI) => {
     try {
-      console.log('RUN');
       const apiRes = await userApi.getUserInfo();
       const { status } = apiRes;
       if (status === 200) {
+        const user = apiRes.data;
+        thunkAPI.dispatch(
+          updateUserInfo({ isAuth: true, isLoading: false, ...user })
+        );
       }
-    } catch (error) {}
+    } catch (error) {
+      thunkAPI.dispatch(updateUserInfo({ isAuth: false, isLoading: false }));
+    }
   }
 );
 
 // -----------------------------
 const initialState = {
+  isLoading: true,
   isAuth: false,
   accountId: '',
   username: '',
@@ -28,9 +34,13 @@ const initialState = {
 const userSlice = createSlice({
   name: 'users',
   initialState,
-  reducers: {}
+  reducers: {
+    updateUserInfo(state, action) {
+      return { ...state, ...action.payload };
+    }
+  }
 });
 
 const { reducer, actions } = userSlice;
-export const {} = actions;
+export const { updateUserInfo } = actions;
 export default reducer;

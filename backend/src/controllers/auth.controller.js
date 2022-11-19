@@ -100,7 +100,7 @@ exports.postGoogleLogin = async (req, res) => {
       }
 
       const username = `${name}-${id}`.slice(0, MAX.USER_NAME).toLowerCase();
-      await createUser(accountId, username, name, avt);
+      userLogged = await createUser(accountId, username, name, avt);
     } else {
       accountId = account._id;
     }
