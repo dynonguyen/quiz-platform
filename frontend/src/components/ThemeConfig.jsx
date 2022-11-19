@@ -8,8 +8,8 @@ import { ToastContainer } from 'react-toastify';
 
 // -----------------------------
 import '@cads-ui/core/index.css';
-import 'react-toastify/dist/ReactToastify.css';
 import '@cads-ui/core/override/react-toastify.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 // -----------------------------
 function ThemeConfig({ children }) {
@@ -18,7 +18,12 @@ function ThemeConfig({ children }) {
 
   return (
     <CadsThemeProvider theme={cadsTheme}>
-      <ToastContainer autoClose={5000} draggable={false} limit={5} />
+      <ToastContainer
+        autoClose={5000}
+        draggable={false}
+        limit={5}
+        position="bottom-right"
+      />
       <ThemeProvider theme={muiTheme}>{children}</ThemeProvider>
     </CadsThemeProvider>
   );

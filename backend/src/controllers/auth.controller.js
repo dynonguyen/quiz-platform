@@ -67,7 +67,10 @@ exports.postLogin = async (req, res) => {
     }
 
     // set cookie with jwt
-    const token = await jwtConfig.encodedToken({ accountId: account._id });
+    const token = await jwtConfig.encodedToken({
+      accountId: account._id,
+      email,
+    });
 
     return res.status(200).json({ token });
   } catch (error) {

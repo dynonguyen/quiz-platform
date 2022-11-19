@@ -24,12 +24,7 @@ exports.createAccount = async (
   authType = ACCOUNT_TYPES.LOCAL,
 ) => {
   try {
-    const newAccount = await AccountModel.create({
-      email,
-      password,
-      authType,
-      createdDate: new Date(),
-    });
+    const newAccount = await AccountModel.create({ email, password, authType });
     if (newAccount && newAccount._id) return newAccount._id;
     return null;
   } catch (error) {

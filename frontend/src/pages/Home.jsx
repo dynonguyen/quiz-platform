@@ -1,5 +1,11 @@
+import { Typography } from '@cads-ui/core';
+
 function HomePage() {
-  return <div>Hello home page</div>;
+  return (
+    <Typography variant="h3" align="center" sx={{ mt: 6 }}>
+      Quiz Platform | Realtime Quiz Based Learning Platform
+    </Typography>
+  );
 }
 
 export default HomePage;

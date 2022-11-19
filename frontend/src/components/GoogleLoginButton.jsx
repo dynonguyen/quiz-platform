@@ -51,12 +51,12 @@ function GoogleLoginButton() {
       auto_select: false
     });
 
+    google.accounts.id.disableAutoSelect();
+
     google.accounts.id.renderButton(ref.current, {
       theme: 'outline',
       size: 'large'
     });
-
-    google.accounts.id.prompt();
   }, []);
 
   useDynamicScript(GOOGLE_GSI_URL, gsiInitial);

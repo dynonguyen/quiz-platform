@@ -1,0 +1,99 @@
+import {
+  Button,
+  Divider,
+  Flex,
+  List,
+  makeStyles,
+  Popover
+} from '@cads-ui/core';
+import { Icon } from '@iconify/react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import defaultUserAvt from '~/assets/img/default-user.png';
+import { LS_KEY } from '~/constant/key';
+import { PATH } from '~/constant/path';
+import { updateUserInfo } from '~/redux/slices/userSlice';
+
+// -----------------------------
+const useStyles = makeStyles((theme) => ({
+  avt: {
+    w: 40,
+    h: 40,
+    cursor: 'pointer',
+    borderRadius: 50,
+    transition: 'opacity 0.3s',
+    '&:hover': {
+      opacity: 0.9
+    }
+  },
+  menu: {
+    w: 280
+  }
+}));
+
+// -----------------------------
+function Account() {
+  const { isAuth, email, name, avt } = useSelector((state) => state.user);
+  const [avtRef, setAvtRef] = React.useState(null);
+  const classes = useStyles();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const userAvt = avt || defaultUserAvt;
+
+  const handleLogout = () => {
+    localStorage.removeItem(LS_KEY.ACCESS_TOKEN);
+    dispatch(updateUserInfo({ isAuth: false }));
+    toast.success('Đăng xuất thành công');
+  };
+
+  return !isAuth ? (
+    <Flex spacing={2}>
+      <Link to={PATH.LOGIN}>
+        <Button variant="outlined">Đăng nhập</Button>
+      </Link>
+      <Link to={PATH.REGISTER}>
+        <Button>Đăng ký</Button>
+      </Link>
+    </Flex>
+  ) : (
+    <>
+      <img
+        className={classes.avt}
+        src={userAvt}
+        alt={name}
+        onClick={(e) => setAvtRef((pre) => (pre ? null : e.currentTarget))}
+      />
+      <Popover
+        anchorEl={avtRef}
+        anchorPosition={{ top: 10 }}
+        anchorOrigin={{ horizontal: 'right' }}
+        transformOrigin={{ horizontal: 'right' }}
+        open={Boolean(avtRef)}
+        onClose={() => setAvtRef(null)}
+        className={classes.menu}
+      >
+        <List items={[{ primary: name, secondary: email, inset: false }]} />
+        <Divider />
+        <List
+          items={[
+            {
+              primary: 'Quản lý tài khoản',
+              icon: <Icon icon="material-symbols:settings-outline-rounded" />,
+              onItemClick: () => navigate(PATH.MANAGE_ACCOUNT)
+            },
+            {
+              primary: 'Đăng xuất',
+              icon: <Icon icon="material-symbols:logout-rounded" />,
+              onItemClick: handleLogout
+            }
+          ]}
+        />
+      </Popover>
+    </>
+  );
+}
+
+export default Account;

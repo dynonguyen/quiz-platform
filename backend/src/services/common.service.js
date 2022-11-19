@@ -6,11 +6,7 @@ exports.saveVerifyCode = async (code = '', email = '') => {
     // delete old code
     await VerifyCodeModel.deleteOne({ email });
 
-    const newItem = await VerifyCodeModel.create({
-      code,
-      email,
-      createdDate: new Date(),
-    });
+    const newItem = await VerifyCodeModel.create({ code, email });
     return newItem;
   } catch (error) {
     throw error;

@@ -4,35 +4,33 @@ const bcrypt = require('bcryptjs');
 const { MAX, ACCOUNT_TYPES } = require('~/constant');
 const { getEnv } = require('~/helper');
 
-const accountSchema = new Schema({
-  email: {
-    type: String,
-    unique: true,
-    required: true,
-    trim: true,
-    lowercase: true,
-    maxLength: MAX.EMAIL_LEN,
+const accountSchema = new Schema(
+  {
+    email: {
+      type: String,
+      unique: true,
+      required: true,
+      trim: true,
+      lowercase: true,
+      maxLength: MAX.EMAIL_LEN,
+    },
+    password: {
+      type: String,
+      default: '',
+      maxLength: MAX.PASSWORD_LEN,
+    },
+    authType: {
+      type: String,
+      enum: Object.keys(ACCOUNT_TYPES).map((key) => ACCOUNT_TYPES[key]),
+      default: ACCOUNT_TYPES.LOCAL,
+    },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
   },
-  password: {
-    type: String,
-    default: '',
-    maxLength: MAX.PASSWORD_LEN,
-  },
-  authType: {
-    type: String,
-    enum: Object.keys(ACCOUNT_TYPES).map((key) => ACCOUNT_TYPES[key]),
-    default: ACCOUNT_TYPES.LOCAL,
-  },
-  createdDate: {
-    type: Date,
-    required: true,
-    default: new Date(),
-  },
-  verified: {
-    type: Boolean,
-    default: false,
-  },
-});
+  { timestamps: true },
+);
 
 // hash password with bcrypt
 // Note: callback should be a normal function -> use 'this'
