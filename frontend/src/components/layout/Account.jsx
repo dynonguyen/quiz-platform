@@ -75,14 +75,17 @@ function Account() {
         onClose={() => setAvtRef(null)}
         className={classes.menu}
       >
-        <List items={[{ primary: name, secondary: email, inset: false }]} />
+        <List
+          items={[{ primary: name, secondary: email, inset: false }]}
+          allowSelect={false}
+        />
         <Divider />
         <List
           items={[
             {
               primary: 'Quản lý tài khoản',
               icon: <Icon icon="material-symbols:settings-outline-rounded" />,
-              onItemClick: () => navigate(PATH.MANAGE_ACCOUNT)
+              onItemClick: () => navigate(PATH.SETTINGS.PROFILE)
             },
             {
               primary: 'Đăng xuất',

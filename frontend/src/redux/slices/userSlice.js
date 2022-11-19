@@ -10,7 +10,6 @@ export const getUserInfo = createAsyncThunk(
       const { status } = apiRes;
       if (status === 200) {
         const user = apiRes.data;
-        console.log(user);
         thunkAPI.dispatch(
           updateUserInfo({ isAuth: true, isLoading: false, ...user })
         );

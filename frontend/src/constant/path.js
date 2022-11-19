@@ -4,5 +4,11 @@ export const PATH = {
   REGISTER: '/register',
   ACTIVITY: '/activity',
   GROUP: '/group',
-  MANAGE_ACCOUNT: '/manage'
+  SETTINGS: {
+    ROOT: '/settings',
+    PROFILE: '/settings/profile',
+    UPDATE_PASSWORD: '/settings/update-password',
+    ACTIVATION: '/settings/activation',
+    PROFILE: '/settings/profile'
+  }
 };

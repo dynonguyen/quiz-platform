@@ -1,16 +1,27 @@
-import { PageResult } from '@cads-ui/core';
-import React from 'react';
+import { Fragment, lazy } from 'react';
 import { Route } from 'react-router-dom';
-import errorImgSrc from '~/assets/img/internal-error.svg';
 import AuthProtect from '~/components/guard/AuthProtect';
 import GuestProtect from '~/components/guard/GuestProtect';
 import MainLayout from '~/components/layout/MainLayout';
+const ServerErrorPage = lazy(() => import('~/pages/ServerError'));
 
 const renderRoutes = (routes = []) => {
   return routes.map((route, index) => {
-    const { path, exact, element, isProtect, layout } = route;
-    const Guard = isProtect ? AuthProtect : GuestProtect;
-    const Layout = layout === false ? React.Fragment : layout || MainLayout;
+    const {
+      path,
+      exact,
+      element,
+      isProtect,
+      layout,
+      isNested = false,
+      nested
+    } = route;
+    const Guard = isNested ? Fragment : isProtect ? AuthProtect : GuestProtect;
+    const Layout = isNested
+      ? Fragment
+      : layout === false
+      ? Fragment
+      : layout || MainLayout;
 
     return (
       <Route
@@ -22,10 +33,10 @@ const renderRoutes = (routes = []) => {
             <Layout>{element}</Layout>
           </Guard>
         }
-        errorElement={
-          <PageResult variant="500" illustration={<img src={errorImgSrc} />} />
-        }
-      />
+        errorElement={<ServerErrorPage />}
+      >
+        {nested && renderRoutes(nested)}
+      </Route>
     );
   });
 };
