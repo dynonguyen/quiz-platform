@@ -32,6 +32,7 @@ function GoogleLoginButton() {
       const apiRes = await authApi.postLoginWithGoogle(response);
       if (apiRes.status === 200) {
         const { token } = apiRes.data;
+        toast.success(`Đăng nhập thành công !`);
         localStorage.setItem(LS_KEY.ACCESS_TOKEN, token);
         dispatch(getUserInfo());
         navigate(PATH.HOME);
@@ -42,7 +43,7 @@ function GoogleLoginButton() {
     }
   };
 
-  useDynamicScript(GOOGLE_GSI_URL, () => {
+  const gsiInitial = React.useCallback(() => {
     google.accounts.id.initialize({
       client_id: getEnv('VITE_GOOGLE_CLIENT_ID'),
       callback: handleCallbackResponse,
@@ -56,7 +57,9 @@ function GoogleLoginButton() {
     });
 
     google.accounts.id.prompt();
-  });
+  }, []);
+
+  useDynamicScript(GOOGLE_GSI_URL, gsiInitial);
 
   return <div className={classes.root} ref={ref}></div>;
 }

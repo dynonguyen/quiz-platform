@@ -29,7 +29,7 @@ const useStyles = makeStyles((_) => ({
   root: {
     mt: 20,
     mx: 'auto',
-    maxW: 450,
+    maxW: 400,
     px: 6,
     py: 8,
     borderRadius: 4,
@@ -53,12 +53,12 @@ const schema = yup.object({
   password: yup.string().required().min(MIN.PASSWORD).max(MAX.PASSWORD),
   confirmPwd: yup
     .string()
-    .required('Please re-enter your password')
-    .oneOf([yup.ref('password')], 'Your passwords do not match !')
+    .required('Vui lòng nhập lại mật khẩu')
+    .oneOf([yup.ref('password')], 'Mật khẩu không trùng khớp !')
 });
 
 // -----------------------------
-function RegisterForm() {
+function RegisterPage() {
   const {
     register,
     handleSubmit,
@@ -166,4 +166,4 @@ function RegisterForm() {
   );
 }
 
-export default RegisterForm;
+export default RegisterPage;
