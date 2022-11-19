@@ -1,30 +1,37 @@
 const bcrypt = require('bcryptjs');
+const { encodedToken } = require('~/configs/jwt.config');
 const { MAX } = require('~/constant');
+
+function getEnv(key) {
+  return process.env[key];
+}
 
 // @fn: create an username for user by email, account id
 // @ex: dyno2000@email.com, id: 127391212 => dyno200012739
-exports.createUsername = (email = '', id = '') => {
+function createUsername(email = '', id = '') {
   const idStr = id.toString();
   return (
     email.toString().split('@')[0] + idStr.slice(idStr.length - 5, idStr.length)
   );
-};
+}
 
-exports.generateVerifyCode = (numberOfDigits) => {
-  const n = parseInt(numberOfDigits);
-  const number = Math.floor(Math.random() * Math.pow(10, n)) + 1;
-  let numberStr = number.toString();
-  const l = numberStr.length;
-  for (let i = 0; i < MAX.VERIFY_CODE - l; ++i) {
-    numberStr = '0' + numberStr;
-  }
-  return numberStr;
-};
-
-exports.hashPassword = async (password = '') => {
+async function hashPassword(password = '') {
   const saltRounds = parseInt(this.getEnv('SALT_ROUND'));
   const hashPassword = await bcrypt.hash(password, saltRounds);
   return hashPassword;
-};
+}
 
-exports.getEnv = (key) => process.env[key];
+async function generateActivateLink(accountId) {
+  const code = await encodedToken(
+    { type: 'activate', accountId },
+    MAX.VERIFY_TIME,
+  );
+  return `${getEnv('CORS_ORIGIN')}/settings/activation?code=${code}`;
+}
+
+module.exports = {
+  getEnv,
+  createUsername,
+  generateActivateLink,
+  hashPassword,
+};

@@ -3,9 +3,11 @@ import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Provider } from 'react-redux';
 import { Routes } from 'react-router-dom';
+import { SWRConfig } from 'swr';
 import InitWrapper from './components/InitWrapper';
 import LoadingScreen from './components/LoadingScreen';
 import ThemeConfig from './components/ThemeConfig';
+import swrConfig from './configs/swrConfig';
 import ServerError from './pages/ServerError';
 import store from './redux/store';
 import routes from './routes';
@@ -16,14 +18,16 @@ function App() {
   return (
     <ErrorBoundary FallbackComponent={ServerError}>
       <ThemeConfig>
-        <GlobalLoading />
-        <Provider store={store}>
-          <InitWrapper>
-            <Suspense fallback={<LoadingScreen />}>
-              <Routes>{renderRoutes(routes)}</Routes>
-            </Suspense>
-          </InitWrapper>
-        </Provider>
+        <SWRConfig value={swrConfig}>
+          <GlobalLoading />
+          <Provider store={store}>
+            <InitWrapper>
+              <Suspense fallback={<LoadingScreen />}>
+                <Routes>{renderRoutes(routes)}</Routes>
+              </Suspense>
+            </InitWrapper>
+          </Provider>
+        </SWRConfig>
       </ThemeConfig>
     </ErrorBoundary>
   );

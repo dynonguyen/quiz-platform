@@ -23,7 +23,7 @@
   - ReactJS, React Hook (Version 18)
   - React-router-dom v6.3 (https://reactrouter.com/en/main)
   - UI Library: [Material UI v5](https://mui.com/) + [@cads-ui/core](https://www.npmjs.com/package/@cads-ui/core) + [@cads-ui/x](https://www.npmjs.com/package/@cads-ui/x)
-  - Axios RESTFul API (https://www.npmjs.com/package/axios)
+  - Axios RESTFul API, useSWR (https://www.npmjs.com/package/axios), (https://swr.vercel.app/docs/getting-started)
   - Socket.io client (https://socket.io/)
   - React Hook Form + Yup. (https://react-hook-form.com/)
   - Redux, react-redux, reudx-toolkit. (https://redux-toolkit.js.org/)

@@ -13,8 +13,10 @@ const corsConfig = require('~/configs/cors.config');
 const { MAX, BASE_URL } = require('~/constant');
 const { authorization } = require('~/middleware/authorize.middleware');
 const { getEnv } = require('~/helper');
+
 const authApi = require('~/apis/auth.api');
 const userApi = require('~/apis/user.api');
+const accountApi = require('~/apis/account.api');
 
 // ================== set port ==================
 const app = express();
@@ -54,6 +56,7 @@ app.use(cors(corsConfig));
 // ================== Apis ==================
 app.use(`${BASE_URL}/auth`, authApi);
 app.use(`${BASE_URL}/user`, authorization, userApi);
+app.use(`${BASE_URL}/account`, authorization, accountApi);
 
 // ================== Listening ... ==================
 app.listen(PORT, () => {

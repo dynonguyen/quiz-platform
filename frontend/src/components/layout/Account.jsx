@@ -4,7 +4,8 @@ import {
   Flex,
   List,
   makeStyles,
-  Popover
+  Popover,
+  useMediaQuery
 } from '@cads-ui/core';
 import { Icon } from '@iconify/react';
 import React from 'react';
@@ -40,6 +41,7 @@ function Account() {
   const classes = useStyles();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const isSm = useMediaQuery({ down: 'sm' });
 
   const userAvt = avt || defaultUserAvt;
 
@@ -59,7 +61,16 @@ function Account() {
       </Link>
     </Flex>
   ) : (
-    <>
+    <Flex spacing={4}>
+      <Link to={PATH.QUIZ.NEW}>
+        <Button
+          endIcon={isSm ? null : <Icon icon="mdi:plus" />}
+          variant="contained"
+          isIconBtn={isSm}
+        >
+          {isSm ? <Icon icon="mdi:plus" /> : 'Tạo quiz'}
+        </Button>
+      </Link>
       <img
         className={classes.avt}
         src={userAvt}
@@ -85,7 +96,10 @@ function Account() {
             {
               primary: 'Quản lý tài khoản',
               icon: <Icon icon="material-symbols:settings-outline-rounded" />,
-              onItemClick: () => navigate(PATH.SETTINGS.PROFILE)
+              onItemClick: () => {
+                setAvtRef(null);
+                navigate(PATH.SETTINGS.PROFILE);
+              }
             },
             {
               primary: 'Đăng xuất',
@@ -95,7 +109,7 @@ function Account() {
           ]}
         />
       </Popover>
-    </>
+    </Flex>
   );
 }
 

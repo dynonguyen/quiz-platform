@@ -5,7 +5,9 @@ function LoadingScreen() {
   const { loading, toggleLoading } = useToggleGlobalLoading();
 
   React.useEffect(() => {
-    if (!loading) toggleLoading(true);
+    if (!loading) {
+      toggleLoading(true);
+    }
 
     return () => {
       toggleLoading(false);

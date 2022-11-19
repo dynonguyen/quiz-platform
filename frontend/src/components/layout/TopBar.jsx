@@ -8,13 +8,12 @@ import Account from './Account';
 
 // -----------------------------
 const useStyles = makeStyles((theme) => ({
-  root: {
-    shadow: 1
-  },
+  root: { shadow: 1 },
   menu: {
     '& .cads-button': {
       bg: 'none',
       textDecoration: 'none',
+      minW: '50px',
       p: 0,
       '&:hover': {
         color: 'primary.main'

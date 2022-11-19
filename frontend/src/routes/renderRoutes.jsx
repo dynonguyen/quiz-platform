@@ -1,8 +1,8 @@
 import { Fragment, lazy } from 'react';
 import { Route } from 'react-router-dom';
-import AuthProtect from '~/components/guard/AuthProtect';
-import GuestProtect from '~/components/guard/GuestProtect';
-import MainLayout from '~/components/layout/MainLayout';
+const AuthProtect = lazy(() => import('~/components/guard/AuthProtect'));
+const GuestProtect = lazy(() => import('~/components/guard/GuestProtect'));
+const MainLayout = lazy(() => import('~/components/layout/MainLayout'));
 const ServerErrorPage = lazy(() => import('~/pages/ServerError'));
 
 const renderRoutes = (routes = []) => {

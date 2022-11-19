@@ -10,5 +10,9 @@ export const PATH = {
     UPDATE_PASSWORD: '/settings/update-password',
     ACTIVATION: '/settings/activation',
     PROFILE: '/settings/profile'
+  },
+  QUIZ: {
+    ROOT: '/quiz',
+    NEW: '/quiz/new'
   }
 };

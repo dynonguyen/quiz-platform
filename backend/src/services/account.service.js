@@ -32,11 +32,18 @@ exports.createAccount = async (
   }
 };
 
-exports.createUser = async (accountId, username, name, avt = '') => {
+exports.isVerified = async (accountId) => {
+  if (!accountId) return false;
   try {
-    const newUser = await UserModel.create({ accountId, name, username, avt });
-    if (newUser && newUser._id) return newUser;
-    return null;
+    return await AccountModel.exists({ accountId, verified: true });
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.updateAccountById = async (accountId, updateFields = {}) => {
+  try {
+    return await AccountModel.updateOne({ _id: accountId }, updateFields);
   } catch (error) {
     throw error;
   }

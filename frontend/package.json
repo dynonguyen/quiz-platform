@@ -9,7 +9,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@cads-ui/core": "^1.5.3",
+    "@cads-ui/core": "^1.5.4",
     "@cads-ui/x": "^1.1.14",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
@@ -29,6 +29,7 @@
     "react-router-dom": "^6.4.3",
     "react-toastify": "^9.1.1",
     "socket.io-client": "^4.5.3",
+    "swr": "^1.3.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {

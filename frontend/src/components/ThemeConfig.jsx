@@ -21,7 +21,7 @@ function ThemeConfig({ children }) {
       <ToastContainer
         autoClose={5000}
         draggable={false}
-        limit={5}
+        limit={2}
         position="bottom-right"
       />
       <ThemeProvider theme={muiTheme}>{children}</ThemeProvider>

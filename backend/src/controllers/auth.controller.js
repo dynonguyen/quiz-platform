@@ -3,11 +3,11 @@ const bcrypt = require('bcryptjs');
 const {
   isExistAccount,
   createAccount,
-  createUser,
   findAccount,
 } = require('~/services/account.service');
 const { ACCOUNT_TYPES, MAX } = require('~/constant');
 const jwtConfig = require('~/configs/jwt.config');
+const { createUser } = require('~/services/user.service');
 
 exports.postRegisterAccount = async (req, res) => {
   try {
@@ -69,6 +69,7 @@ exports.postLogin = async (req, res) => {
     // set cookie with jwt
     const token = await jwtConfig.encodedToken({
       accountId: account._id,
+      verified: account.verified,
       email,
     });
 
@@ -105,7 +106,11 @@ exports.postGoogleLogin = async (req, res) => {
     }
 
     // Generate token
-    const token = await jwtConfig.encodedToken({ accountId, email });
+    const token = await jwtConfig.encodedToken({
+      accountId,
+      email,
+      verified: account.verified,
+    });
 
     return res.status(200).json({ token });
   } catch (error) {

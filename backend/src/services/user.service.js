@@ -7,3 +7,13 @@ exports.getUserByAccountId = async (accountId) => {
     throw error;
   }
 };
+
+exports.createUser = async (accountId, username, name, avt = '') => {
+  try {
+    const newUser = await UserModel.create({ accountId, name, username, avt });
+    if (newUser && newUser._id) return newUser;
+    return null;
+  } catch (error) {
+    throw error;
+  }
+};

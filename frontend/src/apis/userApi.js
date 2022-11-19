@@ -1,10 +1,11 @@
+import ENDPOINTS from '~/constant/endpoints';
 import axiosClient from './axiosClient';
 
-const ENDPOINT = '/user';
+const endpoint = ENDPOINTS.USER;
 
 const userApi = {
   getUserInfo: () => {
-    return axiosClient.get(`${ENDPOINT}/info`);
+    return axiosClient.get(`${endpoint}/info`);
   }
 };
 

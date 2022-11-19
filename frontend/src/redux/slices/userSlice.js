@@ -25,6 +25,7 @@ const initialState = {
   isLoading: true,
   isAuth: false,
   accountId: '',
+  verified: false,
   username: '',
   name: '',
   email: '',

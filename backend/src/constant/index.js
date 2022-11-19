@@ -1,5 +1,5 @@
 exports.BASE_URL = '/api/v1';
-exports.APP_NAME = 'Quiz';
+exports.APP_NAME = 'Quiz Platform';
 
 exports.ACCOUNT_TYPES = {
   LOCAL: 'local',
@@ -19,7 +19,6 @@ exports.MAX = {
   PASSWORD_LEN: 40,
   NAME_LEN: 50,
   USER_NAME: 110,
-  VERIFY_CODE: 6,
   VERIFY_TIME: 10 * 60 * 1000, // 10 minutes
 };
 
