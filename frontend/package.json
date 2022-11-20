@@ -6,7 +6,8 @@
   "author": "1712149, 18120634, 18120644",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "deploy": "vercel deploy"
   },
   "dependencies": {
     "@cads-ui/core": "^1.5.4",

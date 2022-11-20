@@ -28,3 +28,4 @@ note.txt
 backend/.gitignore
 backup-data/
 package-lock.json
+.vercel
