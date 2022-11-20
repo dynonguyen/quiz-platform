@@ -1,9 +1,11 @@
 import { lazy } from 'react';
 import { PATH } from '~/constant/path';
+
 const HomePage = lazy(() => import('~/pages/Home'));
 const RegisterPage = lazy(() => import('~/pages/Register'));
 const LoginPage = lazy(() => import('~/pages/Login'));
 const NotFoundPage = lazy(() => import('~/pages/NotFound'));
+
 const SettingsPage = lazy(() => import('~/pages/Settings'));
 const ProfilePage = lazy(() => import('~/pages/Settings/Profile'));
 const ActivationPage = lazy(() => import('~/pages/Settings/Activation'));
@@ -11,13 +13,27 @@ const UpdatePasswordPage = lazy(() =>
   import('~/pages/Settings/UpdatePassword')
 );
 
+const GroupPage = lazy(() => import('~/pages/Group'));
+const NewGroupPage = lazy(() => import('~/pages/Group/New'));
+const JoinedGroupPage = lazy(() => import('~/pages/Group/Joined'));
+const ListGroupPage = lazy(() => import('~/pages/Group/List'));
+
+const ManageGroupPage = lazy(() => import('~/pages/Group/Manage'));
+const GroupNewsPage = lazy(() => import('~/pages/Group/Manage/News'));
+const DeleteGroupPage = lazy(() => import('~/pages/Group/Manage/Delete'));
+const GroupMembersPage = lazy(() => import('~/pages/Group/Manage/Members'));
+const GroupPracticesPage = lazy(() => import('~/pages/Group/Manage/Practices'));
+const GroupGeneralPage = lazy(() => import('~/pages/Group/Manage/General'));
+
 const routes = [
+  // Home page
   {
     path: PATH.HOME,
     exact: true,
     isProtect: false,
     element: <HomePage />
   },
+  // Login
   {
     path: PATH.LOGIN,
     exact: true,
@@ -25,6 +41,7 @@ const routes = [
     layout: false,
     element: <LoginPage />
   },
+  // Register
   {
     path: PATH.REGISTER,
     exact: true,
@@ -32,6 +49,7 @@ const routes = [
     layout: false,
     element: <RegisterPage />
   },
+  // Account setting
   {
     path: PATH.SETTINGS.ROOT,
     exact: false,
@@ -58,6 +76,71 @@ const routes = [
       }
     ]
   },
+  // Group
+  {
+    path: PATH.GROUP.ROOT,
+    exact: false,
+    isProtect: true,
+    element: <GroupPage />,
+    nested: [
+      {
+        path: PATH.GROUP.NEW,
+        element: <NewGroupPage />,
+        exact: true,
+        isNested: true
+      },
+      {
+        path: PATH.GROUP.JOINED,
+        element: <JoinedGroupPage />,
+        exact: true,
+        isNested: true
+      },
+      {
+        path: PATH.GROUP.LIST,
+        element: <ListGroupPage />,
+        exact: true,
+        isNested: true
+      }
+    ]
+  },
+  {
+    path: PATH.MANAGE_GROUP.GENERAL,
+    element: <ManageGroupPage />,
+    exact: false,
+    nested: [
+      {
+        path: PATH.MANAGE_GROUP.GENERAL,
+        element: <GroupGeneralPage />,
+        exact: true,
+        isNested: true
+      },
+      {
+        path: PATH.MANAGE_GROUP.NEWS,
+        element: <GroupNewsPage />,
+        exact: true,
+        isNested: true
+      },
+      {
+        path: PATH.MANAGE_GROUP.MEMBERS,
+        element: <GroupMembersPage />,
+        exact: true,
+        isNested: true
+      },
+      {
+        path: PATH.MANAGE_GROUP.PRACTICES,
+        element: <GroupPracticesPage />,
+        exact: true,
+        isNested: true
+      },
+      {
+        path: PATH.MANAGE_GROUP.DELETE,
+        element: <DeleteGroupPage />,
+        exact: true,
+        isNested: true
+      }
+    ]
+  },
+  // 404
   {
     path: '*',
     exact: false,

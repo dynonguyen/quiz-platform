@@ -63,7 +63,11 @@ function TopBar() {
           {MENU.map((item, index) => (
             <Link key={index} to={item.to}>
               <Button
-                className={clsx({ active: pathname === item.to })}
+                className={clsx({
+                  active:
+                    pathname === item.to ||
+                    (pathname.includes(item.to) && item.to !== PATH.HOME)
+                })}
                 startIcon={item.icon}
                 variant="text"
                 size="large"

@@ -5,7 +5,16 @@ export const PATH = {
   ACTIVITY: '/activity',
   GROUP: {
     ROOT: '/group',
-    ROOT: '/group/new'
+    NEW: '/group/new',
+    LIST: '/group/list',
+    JOINED: '/group/joined'
+  },
+  MANAGE_GROUP: {
+    GENERAL: '/group/manage/:groupId',
+    DELETE: '/group/manage/:groupId/delete',
+    MEMBERS: '/group/manage/:groupId/members',
+    NEWS: '/group/manage/:groupId/news',
+    PRACTICES: '/group/manage/:groupId/practices'
   },
   SETTINGS: {
     ROOT: '/settings',

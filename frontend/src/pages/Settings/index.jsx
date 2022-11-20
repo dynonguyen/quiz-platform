@@ -1,4 +1,4 @@
-import { Grid, List, makeStyles, Typography } from '@cads-ui/core';
+import { Grid, List, Typography } from '@cads-ui/core';
 import { Icon } from '@iconify/react';
 import { Container } from '@mui/material';
 import clsx from 'clsx';
@@ -6,24 +6,15 @@ import { Suspense } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useLeftMenuStyles } from '~/common/styles';
 import ComponentLoading from '~/components/ComponentLoading';
 import { LS_KEY } from '~/constant/key';
 import { PATH } from '~/constant/path';
 import { updateUserInfo } from '~/redux/slices/userSlice';
 
 // -----------------------------
-const useStyles = makeStyles((_) => ({
-  box: {
-    shadow: 4,
-    p: 4,
-    borderRadius: '8px',
-    '&.content': { h: 1 }
-  }
-}));
-
-// -----------------------------
 function SettingsPage() {
-  const classes = useStyles();
+  const classes = useLeftMenuStyles();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { pathname } = window.location;
@@ -38,7 +29,7 @@ function SettingsPage() {
     toast.success('Đăng xuất thành công');
   };
 
-  const SETTINGS_MENU = [
+  const MENU = [
     {
       primary: 'Hồ sơ cá nhân',
       icon: <Icon icon="ic:baseline-account-circle" />,
@@ -73,7 +64,7 @@ function SettingsPage() {
       <Grid container spacing={4}>
         <Grid item xs={12} md={4}>
           <div className={classes.box}>
-            <List items={SETTINGS_MENU} isMargin />
+            <List items={MENU} isMargin />
           </div>
         </Grid>
         <Grid item xs={12} md={8}>

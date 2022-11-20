@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Chip,
   Flex,
@@ -37,7 +36,7 @@ function HomePage() {
   const { isAuth, name } = useSelector((state) => state.user);
 
   return (
-    <Container className={classes.root} maxWidth="xl">
+    <Container className={classes.root} maxWidth="lg">
       {/* Join group */}
       <Grid container spacing={6}>
         <Grid item xs={12} sm={8}>
@@ -64,7 +63,7 @@ function HomePage() {
                 <Flex spacing={2} sx={{ mt: 2 }}>
                   <Link to={PATH.SETTINGS.PROFILE}>
                     <Typography fw={500} fs={14} color="secondary.light">
-                      Cập nhật thông tin
+                      Chỉnh sửa hồ sơ
                     </Typography>
                   </Link>
                   <Typography fw={500} fs={14} color="secondary.light">
@@ -99,12 +98,6 @@ function HomePage() {
           </Flex>
         </Grid>
       </Grid>
-
-      {/* Discover */}
-      <Box sx={{ mt: 4 }}>
-        <h2 className={classes.title}>Nhóm của bạn</h2>
-      </Box>
-      {/* Show group list here */}
     </Container>
   );
 }
