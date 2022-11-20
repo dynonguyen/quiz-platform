@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "type": "module",
   "author": "1712149, 18120634, 18120644",
+  "homepage": "",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
