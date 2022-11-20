@@ -3,7 +3,10 @@ export const PATH = {
   LOGIN: '/login',
   REGISTER: '/register',
   ACTIVITY: '/activity',
-  GROUP: '/group',
+  GROUP: {
+    ROOT: '/group',
+    ROOT: '/group/new'
+  },
   SETTINGS: {
     ROOT: '/settings',
     PROFILE: '/settings/profile',

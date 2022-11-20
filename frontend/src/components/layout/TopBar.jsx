@@ -45,7 +45,7 @@ const MENU = [
     text: 'Hoạt Động',
     icon: <Icon icon="ic:baseline-history" />
   },
-  { to: PATH.GROUP, text: 'Nhóm', icon: <Icon icon="mdi:account-group" /> }
+  { to: PATH.GROUP.ROOT, text: 'Nhóm', icon: <Icon icon="mdi:account-group" /> }
 ];
 
 // -----------------------------

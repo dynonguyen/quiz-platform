@@ -15,7 +15,7 @@ const routes = [
   {
     path: PATH.HOME,
     exact: true,
-    isProtect: true,
+    isProtect: false,
     element: <HomePage />
   },
   {

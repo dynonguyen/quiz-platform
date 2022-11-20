@@ -20,6 +20,9 @@ exports.MAX = {
   NAME_LEN: 50,
   USER_NAME: 110,
   VERIFY_TIME: 10 * 60 * 1000, // 10 minutes
+  GROUP_NAME: 100,
+  GROUP_DESC: 250,
+  GROUP_CODE: 10,
 };
 
 exports.MIN = {

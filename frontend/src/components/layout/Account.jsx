@@ -62,13 +62,13 @@ function Account() {
     </Flex>
   ) : (
     <Flex spacing={4}>
-      <Link to={PATH.QUIZ.NEW}>
+      <Link to={PATH.GROUP.NEW}>
         <Button
           endIcon={isSm ? null : <Icon icon="mdi:plus" />}
           variant="contained"
           isIconBtn={isSm}
         >
-          {isSm ? <Icon icon="mdi:plus" /> : 'Tạo quiz'}
+          {isSm ? <Icon icon="mdi:plus" /> : 'Tạo nhóm'}
         </Button>
       </Link>
       <img

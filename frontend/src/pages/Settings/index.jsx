@@ -65,7 +65,7 @@ function SettingsPage() {
   ];
 
   return (
-    <Container maxWidth="lg" sx={{ py: 3 }}>
+    <Container maxWidth="xl" sx={{ py: 3 }}>
       <Typography variant="h3" fw={400} component="h1" color="grey.700">
         Cài đặt tài khoản
       </Typography>
