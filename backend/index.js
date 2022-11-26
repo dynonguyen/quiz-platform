@@ -17,6 +17,7 @@ const { getEnv } = require('~/helper');
 const authApi = require('~/apis/auth.api');
 const userApi = require('~/apis/user.api');
 const accountApi = require('~/apis/account.api');
+const groupApi = require('~/apis/group.api');
 
 // ================== set port ==================
 const app = express();
@@ -55,6 +56,7 @@ app.use(cors(corsConfig));
 
 // ================== Apis ==================
 app.use(`${BASE_URL}/auth`, authApi);
+app.use(`${BASE_URL}/group`, groupApi);
 app.use(`${BASE_URL}/user`, authorization, userApi);
 app.use(`${BASE_URL}/account`, authorization, accountApi);
 
