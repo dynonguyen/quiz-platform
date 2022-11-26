@@ -43,9 +43,9 @@ const activateAccountMail = (link) => {
     <h2 style="color: #444">Xin chào,</h2>
 
     <p style="color: #666;line-height: 1.5;margin: 12px auto;">
-      Chúng tôi nhận được yêu cầu xác minh tài khoản của bạn tại ứng dụng <strong>${APP_NAME}</strong>. Để kích hoạt tài khoản, vui lòng nhấn nút <b>"Xác minh tài khoản"</b> bên dưới.
-      <br/>
-      Liên kết sẽ hết hạn sau ${MAX.VERIFY_TIME / 60_000} phút.
+      Bạn có một lời mời tham gia vào nhóm <strong>ABC</strong> trong <strong>${APP_NAME}</strong> từ người dùng
+      <b>xyz</b>. Bạn có thể tham gia nhóm bằng các nhấn vào nút <b>"Tham gia"</b> bên dưới.
+      <br />
     </p>
 
 
@@ -65,7 +65,39 @@ const activateAccountMail = (link) => {
   </div>`;
 };
 
+const inviteJoinGroupMail = (link, groupName, senderName) => {
+  return `
+  <div style="max-width: 776px; margin: 0 auto; font-family: sans-serif;">
+    <h2 style="color: #444">Xin chào,</h2>
+
+    <p style="color: #666;line-height: 1.5;margin: 12px auto;">
+      Bạn có một lời mời tham gia vào nhóm <strong>${groupName}</strong> trong <strong>${APP_NAME}</strong> từ người dùng
+      <b>${senderName}</b>. Bạn có thể tham gia nhóm bằng các nhấn vào nút <b>"Tham gia"</b> bên dưới.
+      <br />
+    </p>
+
+
+    <div style="margin:24px;text-align: center;">
+      <a style="text-decoration: none;" href="${link}" target="_blank">
+        <button
+          style="border: none; background: #2065D1; padding: 12px 16px; outline: none;color: #fff;border-radius: 8px;cursor: pointer;font-weight: 500;font-size: 18px">Tham
+          gia</button>
+      </a>
+    </div>
+
+    <p style="color: #666;line-height: 1.5;margin: 12px auto;text-align: center;">Hoặc, bạn có thể sao chép và dán liên
+      kết bên dưới vào trình duyệt.</p>
+
+    <div style="padding: 8px; background-color: #e5e5e5; text-align: center;">
+      <a href="${link}" target="_blank" style="color: #2065D1;">
+        ${link}
+      </a>
+    </div>
+  </div>`;
+};
+
 module.exports = {
   sendEmail,
   activateAccountMail,
+  inviteJoinGroupMail,
 };
