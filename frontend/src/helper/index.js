@@ -11,3 +11,7 @@ export function isProduction() {
 export function getToken() {
   return localStorage.getItem(LS_KEY.ACCESS_TOKEN);
 }
+
+export function getOriginPath(path = '') {
+  return `${window.location.origin}${path}`;
+}

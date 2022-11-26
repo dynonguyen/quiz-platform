@@ -27,3 +27,18 @@ exports.getGroupById = async (
     throw error;
   }
 };
+
+exports.getGroupByCode = async (code) => {
+  return await GroupModel.findOne({ code });
+};
+
+exports.checkUserExistInGroup = async (userId, query = {}) => {
+  return await GroupModel.exists({
+    ...query,
+    $or: [{ owner: userId }, { coOwners: userId }, { members: userId }],
+  });
+};
+
+exports.joinGroup = async (userId, query = {}) => {
+  return await GroupModel.updateOne(query, { $push: { members: userId } });
+};

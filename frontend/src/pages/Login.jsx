@@ -11,7 +11,7 @@ import {
 } from '@cads-ui/core';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import logoSrc from '~/assets/img/logo.png';
 
 import { Icon } from '@iconify/react';
@@ -65,11 +65,12 @@ function LoginPage() {
   const classes = useStyles();
   const [loggingIn, setLoggingIn] = React.useState(false);
   const dispatch = useDispatch();
+  const { state } = useLocation();
 
   const { isAuth } = useSelector((state) => state.user);
 
   if (isAuth) {
-    return <Navigate to={PATH.HOME} />;
+    return <Navigate to={state?.from || PATH.HOME} />;
   }
 
   const handleLogin = async (form) => {
@@ -81,7 +82,7 @@ function LoginPage() {
         toast.success(`Đăng nhập thành công !`);
         localStorage.setItem(LS_KEY.ACCESS_TOKEN, token);
         dispatch(getUserInfo());
-        navigate(PATH.HOME);
+        navigate(state?.from || PATH.HOME);
       }
     } catch (error) {
       toast.error(

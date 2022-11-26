@@ -1,6 +1,5 @@
-import { Grid, List, Typography } from '@cads-ui/core';
+import { Container, Grid, List, Typography } from '@cads-ui/core';
 import { Icon } from '@iconify/react';
-import { Container } from '@mui/material';
 import clsx from 'clsx';
 import { Suspense } from 'react';
 import { useDispatch } from 'react-redux';

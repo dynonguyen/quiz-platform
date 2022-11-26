@@ -49,6 +49,7 @@ function Account() {
     localStorage.removeItem(LS_KEY.ACCESS_TOKEN);
     dispatch(updateUserInfo({ isAuth: false }));
     toast.success('Đăng xuất thành công');
+    setAvtRef(null);
   };
 
   return !isAuth ? (

@@ -16,6 +16,7 @@ const UpdatePasswordPage = lazy(() =>
 const GroupPage = lazy(() => import('~/pages/Group'));
 const NewGroupPage = lazy(() => import('~/pages/Group/New'));
 const JoinedGroupPage = lazy(() => import('~/pages/Group/Joined'));
+const JoinGroupPage = lazy(() => import('~/pages/Group/Join'));
 const ListGroupPage = lazy(() => import('~/pages/Group/List'));
 
 const ManageGroupPage = lazy(() => import('~/pages/Group/Manage'));
@@ -102,9 +103,17 @@ const routes = [
     ]
   },
   {
+    path: PATH.GROUP.JOIN,
+    exact: true,
+    isProtect: true,
+    layout: false,
+    element: <JoinGroupPage />
+  },
+  {
     path: PATH.MANAGE_GROUP.GENERAL,
     element: <ManageGroupPage />,
     exact: false,
+    isProtect: true,
     nested: [
       {
         path: PATH.MANAGE_GROUP.GENERAL,

@@ -13,7 +13,10 @@ function AuthProtect({ children }) {
   }
 
   if (!isAuth || !accessToken) {
-    return <Navigate to={PATH.LOGIN} />;
+    const { search, pathname } = window.location;
+    return (
+      <Navigate to={PATH.LOGIN} state={{ from: `${pathname}${search}` }} />
+    );
   }
 
   return children;

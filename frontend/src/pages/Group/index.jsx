@@ -1,6 +1,5 @@
-import { Grid, List, Typography } from '@cads-ui/core';
+import { Container, Grid, List, Typography } from '@cads-ui/core';
 import { Icon } from '@iconify/react';
-import { Container } from '@mui/material';
 import { Suspense } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { useLeftMenuStyles } from '~/common/styles';
@@ -43,7 +42,7 @@ function GroupPage() {
 
   return (
     <Container maxWidth="xl" sx={{ py: 3 }}>
-      <Typography variant="h3" fw={400} component="h1" color="grey.700">
+      <Typography variant="h2" fw={500} component="h1" color="secondary.main">
         Quản lý nhóm
       </Typography>
 

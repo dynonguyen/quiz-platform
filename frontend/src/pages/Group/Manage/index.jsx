@@ -1,5 +1,5 @@
-import { Box, Flex } from '@cads-ui/core';
-import { Container, Tab, Tabs } from '@mui/material';
+import { Box, Container, Flex } from '@cads-ui/core';
+import { Tab, Tabs } from '@mui/material';
 import { Suspense } from 'react';
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
 import ComponentLoading from '~/components/ComponentLoading';

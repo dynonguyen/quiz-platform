@@ -1,7 +1,7 @@
 import { makeStyles } from '@cads-ui/core';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import authApi from '~/apis/authApi';
 import { apiConfig } from '~/configs/apiConfig';
@@ -26,6 +26,7 @@ function GoogleLoginButton() {
   const ref = React.useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { state } = useLocation();
 
   const handleCallbackResponse = async (response) => {
     try {
@@ -35,7 +36,7 @@ function GoogleLoginButton() {
         toast.success(`Đăng nhập thành công !`);
         localStorage.setItem(LS_KEY.ACCESS_TOKEN, token);
         dispatch(getUserInfo());
-        navigate(PATH.HOME);
+        navigate(state?.from || PATH.HOME);
       }
     } catch (error) {
       toast.error('Đăng nhập thất bại, thử lại !');

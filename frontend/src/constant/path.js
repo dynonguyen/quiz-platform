@@ -7,9 +7,11 @@ export const PATH = {
     ROOT: '/group',
     NEW: '/group/new',
     LIST: '/group/list',
-    JOINED: '/group/joined'
+    JOINED: '/group/joined',
+    JOIN: '/group/join'
   },
   MANAGE_GROUP: {
+    ROOT: '/group/manage',
     GENERAL: '/group/manage/:groupId',
     DELETE: '/group/manage/:groupId/delete',
     MEMBERS: '/group/manage/:groupId/members',

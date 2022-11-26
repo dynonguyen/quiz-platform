@@ -1,5 +1,9 @@
-const { getGroupById } = require('~/services/group.service');
-const { getUserByAccountId } = require('~/services/user.service');
+const {
+  getGroupById,
+  checkUserExistInGroup,
+  getGroupByCode,
+  joinGroup,
+} = require('~/services/group.service');
 
 exports.getGroupMembers = async (req, res) => {
   try {
@@ -30,5 +34,30 @@ exports.getGroupMembers = async (req, res) => {
   } catch (error) {
     console.log('getMembersList ERROR: ', error);
     return res.status(400).json({ message: 'Failed' });
+  }
+};
+
+exports.postJoinGroupByCode = async (req, res) => {
+  try {
+    const { code } = req.body;
+    const { userId } = req.user;
+
+    if (!code) throw new Error('Code invalid');
+
+    const group = await getGroupByCode(code);
+    if (!group) throw new Error('Code invalid');
+
+    const isUserInGroup = await checkUserExistInGroup(userId, { code });
+
+    if (isUserInGroup) {
+      return res.status(200).json({ message: 'success', groupId: group._id });
+    }
+
+    await joinGroup(userId, { code });
+
+    return res.status(201).json({ message: 'success', groupId: group._id });
+  } catch (error) {
+    console.log('postJoinGroupByCode ERROR: ', error);
+    return res.status(400).json({ msg: 'Failed' });
   }
 };
