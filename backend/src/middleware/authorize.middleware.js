@@ -8,6 +8,7 @@ exports.authorization = (req, res, next) => {
     const token = authorization.replace('Bearer ', '');
     const decoded = verifyToken(token);
     if (decoded) {
+      /** accountId, userId, email, verified */
       req.user = decoded.sub;
       next();
     } else {
@@ -17,6 +18,6 @@ exports.authorization = (req, res, next) => {
     console.log('Authorization Error: ', error);
     return res
       .status(401)
-      .json({ msg: 'Unauthorized - Token invalid or expired' });
+      .json({ message: 'Unauthorized - Token invalid or expired' });
   }
 };

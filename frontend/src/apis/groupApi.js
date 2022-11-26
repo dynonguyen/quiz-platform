@@ -1,11 +1,11 @@
 import ENDPOINTS from '~/constant/endpoints';
-import useFetch from '~/hooks/useFetch';
+import axiosClient from './axiosClient';
 
 const endpoint = ENDPOINTS.GROUP;
 
 const groupApi = {
   getGroup: (groupID) => {
-    return useFetch(`${endpoint}/${groupID}/members`);
+    return axiosClient.get(`${endpoint}/${groupID}/members`);
   }
 };
 

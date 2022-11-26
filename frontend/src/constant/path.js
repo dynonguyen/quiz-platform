@@ -26,5 +26,6 @@ export const PATH = {
   QUIZ: {
     ROOT: '/quiz',
     NEW: '/quiz/new'
-  }
+  },
+  NOTFOUND: '/not-found'
 };

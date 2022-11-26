@@ -11,7 +11,7 @@ exports.checkVerified = async (req, res) => {
     return res.status(200).json({ verified: Boolean(isVerified) });
   } catch (error) {
     console.log('checkVerified ERROR: ', error);
-    return res.status(400).json({ msg: 'Failed' });
+    return res.status(400).json({ message: 'Failed' });
   }
 };
 
@@ -61,6 +61,6 @@ exports.postActivateAccount = async (req, res) => {
     throw new Error('Invalid code');
   } catch (error) {
     console.log('postActivateAccount ERROR: ', error);
-    return res.status(400).json({ msg: 'Failed' });
+    return res.status(400).json({ message: 'Failed' });
   }
 };

@@ -11,7 +11,12 @@ export const getUserInfo = createAsyncThunk(
       if (status === 200) {
         const user = apiRes.data;
         thunkAPI.dispatch(
-          updateUserInfo({ isAuth: true, isLoading: false, ...user })
+          updateUserInfo({
+            isAuth: true,
+            isLoading: false,
+            userId: user._id,
+            ...user
+          })
         );
       }
     } catch (error) {
@@ -25,6 +30,7 @@ const initialState = {
   isLoading: true,
   isAuth: false,
   accountId: '',
+  userId: '',
   verified: false,
   username: '',
   name: '',

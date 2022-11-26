@@ -136,7 +136,7 @@ function LoginPage() {
         />
         <Button loading={loggingIn}>Đăng nhập</Button>
       </Flex>
-      <Divider spacing={4} />
+      <Divider spacing={4}>Hoặc</Divider>
 
       {/* Redirect login */}
       <Typography variant="body1" align="center">

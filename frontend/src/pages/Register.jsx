@@ -151,7 +151,7 @@ function RegisterPage() {
         />
         <Button loading={registering}>Đăng ký</Button>
       </Flex>
-      <Divider spacing={4} />
+      <Divider spacing={4}>Hoặc</Divider>
 
       {/* Redirect login */}
       <Typography variant="body1" align="center">

@@ -38,7 +38,6 @@ const routes = [
     path: PATH.LOGIN,
     exact: true,
     isProtect: false,
-    layout: false,
     element: <LoginPage />
   },
   // Register
@@ -46,7 +45,6 @@ const routes = [
     path: PATH.REGISTER,
     exact: true,
     isProtect: false,
-    layout: false,
     element: <RegisterPage />
   },
   // Account setting
@@ -141,6 +139,12 @@ const routes = [
     ]
   },
   // 404
+  {
+    path: PATH.NOTFOUND,
+    exact: true,
+    isProtect: false,
+    element: <NotFoundPage />
+  },
   {
     path: '*',
     exact: false,

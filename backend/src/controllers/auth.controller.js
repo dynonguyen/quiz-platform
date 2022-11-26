@@ -7,7 +7,7 @@ const {
 } = require('~/services/account.service');
 const { ACCOUNT_TYPES, MAX } = require('~/constant');
 const jwtConfig = require('~/configs/jwt.config');
-const { createUser } = require('~/services/user.service');
+const { createUser, getUserByAccountId } = require('~/services/user.service');
 
 exports.postRegisterAccount = async (req, res) => {
   try {
@@ -66,11 +66,14 @@ exports.postLogin = async (req, res) => {
       return res.status(400).json({ message: errorMsg });
     }
 
+    const userLogged = await getUserByAccountId(account._id);
+
     // set cookie with jwt
     const token = await jwtConfig.encodedToken({
       accountId: account._id,
       verified: account.verified,
       email,
+      userId: userLogged._id,
     });
 
     return res.status(200).json({ token });
@@ -91,6 +94,7 @@ exports.postGoogleLogin = async (req, res) => {
 
     const account = await findAccount(email);
     let accountId = null;
+    let userLogged = null;
 
     // If not exist then create a new account
     if (!account) {
@@ -103,6 +107,7 @@ exports.postGoogleLogin = async (req, res) => {
       userLogged = await createUser(accountId, username, name, avt);
     } else {
       accountId = account._id;
+      userLogged = await getUserByAccountId(accountId);
     }
 
     // Generate token
@@ -110,6 +115,7 @@ exports.postGoogleLogin = async (req, res) => {
       accountId,
       email,
       verified: account.verified,
+      userId: userLogged._id,
     });
 
     return res.status(200).json({ token });

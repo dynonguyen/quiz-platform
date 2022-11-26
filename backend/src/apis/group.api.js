@@ -1,6 +1,6 @@
 const groupApi = require('express').Router();
 const controller = require('~/controllers/group.controller');
 
-groupApi.get('/:groupID/members', controller.getGroup);
+groupApi.get('/:groupId/members', controller.getGroupMembers);
 
 module.exports = groupApi;
