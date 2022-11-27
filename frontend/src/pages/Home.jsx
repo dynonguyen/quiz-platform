@@ -1,22 +1,10 @@
-import {
-  Button,
-  Chip,
-  Flex,
-  Grid,
-  Input,
-  makeStyles,
-  Typography
-} from '@cads-ui/core';
+import { Box, Chip, Flex, Grid, makeStyles, Typography } from '@cads-ui/core';
 import { Container } from '@mui/material';
-import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import groupApi from '~/apis/groupApi';
+import { Link } from 'react-router-dom';
+import JoinGroup from '~/components/JoinGroup';
 import { APP_NAME } from '~/constant';
 import { PATH } from '~/constant/path';
-import { MAX } from '~/constant/validation';
-import { getOriginPath } from '~/helper';
 
 // -----------------------------
 const useStyles = makeStyles((theme) => ({
@@ -27,7 +15,8 @@ const useStyles = makeStyles((theme) => ({
     p: 4,
     borderRadius: '8px',
     shadow: 4,
-    minH: 150
+    minH: 150,
+    h: 1
   },
   title: {
     fontWeight: 500,
@@ -39,80 +28,15 @@ const useStyles = makeStyles((theme) => ({
 function HomePage() {
   const classes = useStyles();
   const { isAuth, name } = useSelector((state) => state.user);
-  const [joining, setJoining] = React.useState(false);
-  const codeInput = React.useRef(null);
-  const navigate = useNavigate();
-
-  const handleJoinGroup = async (code) => {
-    setJoining(true);
-    try {
-      const apiRes = await groupApi.postJoinGroup(code);
-      if (apiRes.status === 200 || apiRes.status === 201) {
-        if (apiRes.status === 201) {
-          toast.success('Tham gia nhóm thành công');
-        }
-        const { groupId } = apiRes.data;
-        return navigate(`${PATH.MANAGE_GROUP.ROOT}/${groupId}`);
-      }
-    } catch (error) {
-      toast.error('Mã lớp học hoặc liên kết không hợp lệ');
-    }
-    setJoining(false);
-  };
-
-  const handleCheckCode = () => {
-    if (!isAuth) {
-      return navigate(PATH.LOGIN);
-    }
-
-    const codeOrLink = codeInput.current?.value.trim() || '';
-    if (!codeOrLink) return;
-
-    const joinPath = getOriginPath(`${PATH.GROUP.JOIN}?code=`);
-    const isLink = codeOrLink.startsWith(joinPath);
-    let code = '';
-
-    function toastInvalidCode() {
-      toast.error('Mã lớp học hoặc liên kết không hợp lệ');
-    }
-
-    if (!isLink) {
-      if (!codeOrLink || codeOrLink.length > MAX.GROUP_CODE) {
-        return toastInvalidCode();
-      }
-      code = codeOrLink;
-    } else {
-      code = codeOrLink.replace(joinPath, '');
-      if (code.length > MAX.GROUP_CODE) {
-        return toastInvalidCode();
-      }
-    }
-
-    handleJoinGroup(code);
-  };
 
   return (
     <Container className={classes.root} maxWidth="lg">
       {/* Join group */}
       <Grid container spacing={6}>
         <Grid item xs={12} sm={8}>
-          <Flex center className={classes.box} spacing={2} wrap>
-            <Input
-              placeholder="Nhập mã lớp học hoặc liên kết"
-              size="large"
-              ref={codeInput}
-            />
-            <Button
-              sx={{ flexShrink: 0 }}
-              size="large"
-              variant="soft"
-              color="secondary"
-              onClick={handleCheckCode}
-              loading={joining}
-            >
-              {isAuth ? 'Tham gia' : 'Đăng nhập để tham gia'}
-            </Button>
-          </Flex>
+          <Box className={classes.box}>
+            <JoinGroup flexProps={{ sx: { h: 1 } }} />
+          </Box>
         </Grid>
 
         <Grid item xs={12} sm={4}>

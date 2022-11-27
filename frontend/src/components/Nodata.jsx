@@ -7,6 +7,7 @@ function Nodata({ pageResultProps = {} }) {
       variant="no-data"
       illustration={<img src={nodataSrc} style={{ width: '120px' }} />}
       action={<></>}
+      title="Không có dữ liệu"
       {...pageResultProps}
     />
   );

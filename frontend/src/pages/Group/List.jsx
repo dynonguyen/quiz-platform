@@ -1,10 +1,16 @@
-import { Grid, Typography } from '@cads-ui/core';
+import { Box, Button, Grid } from '@cads-ui/core';
+import { Link } from 'react-router-dom';
+import { useLeftMenuStyles } from '~/common/styles';
 import CardGroupItem from '~/components/CardGroupItem';
 import ComponentLoading from '~/components/ComponentLoading';
+import Nodata from '~/components/Nodata';
 import ENDPOINTS from '~/constant/endpoints';
+import { PATH } from '~/constant/path';
 import useFetch from '~/hooks/useFetch';
 
 function GroupListPage() {
+  const classes = useLeftMenuStyles();
+
   const { isValidating, data, error } = useFetch(
     `${ENDPOINTS.GROUP}/my-groups`
   );
@@ -12,7 +18,18 @@ function GroupListPage() {
   if (isValidating) return <ComponentLoading />;
 
   return error || !data?.groups || !data.groups.length ? (
-    <Typography>Bạn chưa tạo nhóm nào!</Typography>
+    <Box className={classes.box}>
+      <Nodata
+        pageResultProps={{
+          subTitle: 'Bạn chưa tạo lớp nào!',
+          action: (
+            <Link to={PATH.GROUP.NEW}>
+              <Button variant="text">Tạo nhóm ngay</Button>
+            </Link>
+          )
+        }}
+      />
+    </Box>
   ) : (
     <Grid rowSpacing={4} columnSpacing={8} container>
       {data.groups.map((group) => (
