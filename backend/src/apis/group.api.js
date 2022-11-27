@@ -4,5 +4,6 @@ const controller = require('~/controllers/group.controller');
 groupApi.get('/:groupId/members', controller.getGroupMembers);
 groupApi.post('/join', controller.postJoinGroupByCode);
 groupApi.post('/invite', controller.postInviteJoinGroup);
+groupApi.post('/new', controller.postCreateGroup);
 
 module.exports = groupApi;

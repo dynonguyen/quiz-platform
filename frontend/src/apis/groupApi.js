@@ -12,6 +12,9 @@ const groupApi = {
   },
   postInviteJoinGroup: (emails, groupId) => {
     return axiosClient.post(`${endpoint}/invite`, { emails, groupId });
+  },
+  postCreateGroup: (form) => {
+    return axiosClient.post(`${endpoint}/new`, form);
   }
 };
 

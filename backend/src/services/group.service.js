@@ -42,3 +42,7 @@ exports.checkUserExistInGroup = async (userId, query = {}) => {
 exports.joinGroup = async (userId, query = {}) => {
   return await GroupModel.updateOne(query, { $push: { members: userId } });
 };
+
+exports.createGroup = async (group = {}) => {
+  return await GroupModel.create(group);
+};

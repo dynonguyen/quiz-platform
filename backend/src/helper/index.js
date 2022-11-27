@@ -29,9 +29,23 @@ async function generateActivateLink(accountId) {
   return `${getEnv('CORS_ORIGIN')}/settings/activation?code=${code}`;
 }
 
+function generateUniqueString(length = 8) {
+  let res = '';
+  const alphabet =
+    'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const alLength = alphabet.length;
+
+  for (let i = 0; i < length; i++) {
+    res += alphabet[~~(Math.random() * alLength)];
+  }
+
+  return res;
+}
+
 module.exports = {
   getEnv,
   createUsername,
   generateActivateLink,
   hashPassword,
+  generateUniqueString,
 };

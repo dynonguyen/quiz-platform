@@ -1,11 +1,12 @@
 const { sendEmail, inviteJoinGroupMail } = require('~/configs/mail.config');
-const { APP_NAME } = require('~/constant');
-const { getEnv } = require('~/helper');
+const { APP_NAME, MAX } = require('~/constant');
+const { getEnv, generateUniqueString } = require('~/helper');
 const {
   getGroupById,
   checkUserExistInGroup,
   getGroupByCode,
   joinGroup,
+  createGroup,
 } = require('~/services/group.service');
 const { getUserByAccountId } = require('~/services/user.service');
 
@@ -93,6 +94,33 @@ exports.postInviteJoinGroup = async (req, res) => {
     return res.status(200).json({ message: 'Success' });
   } catch (error) {
     console.log('postInviteJoinGroup ERROR: ', error);
+    return res.status(400).json({ msg: 'Failed' });
+  }
+};
+
+exports.postCreateGroup = async (req, res) => {
+  try {
+    const { name, desc } = req.body;
+    const { userId } = req.user;
+
+    let code = generateUniqueString(MAX.GROUP_CODE);
+    const limitLoop = 5;
+    for (let i = 0; i < limitLoop; i++) {
+      const isGroupExist = await getGroupByCode(code);
+      if (isGroupExist) {
+        code = generateUniqueString(MAX.GROUP_CODE);
+      } else {
+        break;
+      }
+    }
+
+    const newGroup = await createGroup({ name, desc, code, owner: userId });
+    if (newGroup) {
+      return res.status(201).json(newGroup.toObject());
+    }
+    throw new Error('Create group false');
+  } catch (error) {
+    console.log('postCreateGroup ERROR: ', error);
     return res.status(400).json({ msg: 'Failed' });
   }
 };
