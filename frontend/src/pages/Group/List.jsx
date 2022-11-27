@@ -1,4 +1,4 @@
-import { Box, Grid } from '@cads-ui/core';
+import { Grid, Typography } from '@cads-ui/core';
 import CardGroupItem from '~/components/CardGroupItem';
 import ComponentLoading from '~/components/ComponentLoading';
 import ENDPOINTS from '~/constant/endpoints';
@@ -10,10 +10,9 @@ function GroupListPage() {
   );
 
   if (isValidating) return <ComponentLoading />;
-  console.log(data);
 
   return error || !data?.groups || !data.groups.length ? (
-    <Box>Bạn chưa tạo nhóm nào!</Box>
+    <Typography>Bạn chưa tạo nhóm nào!</Typography>
   ) : (
     <Grid rowSpacing={4} columnSpacing={8} container>
       {data.groups.map((group) => (

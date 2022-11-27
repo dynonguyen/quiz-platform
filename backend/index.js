@@ -60,20 +60,6 @@ app.use(`${BASE_URL}/auth`, authApi);
 app.use(`${BASE_URL}/group`, authorization, groupApi);
 app.use(`${BASE_URL}/user`, authorization, userApi);
 app.use(`${BASE_URL}/account`, authorization, accountApi);
-app.get('/temp', async (req, res) => {
-  try {
-    await GroupModel.create({
-      name: 'ABC',
-      code: '123456',
-      owner: '637902b3fe1f46d7c44cb8c3',
-      coOwners: ['6381c58b9a0079fb64bbf0b6'],
-      members: [],
-    });
-    res.send('hi');
-  } catch (error) {
-    console.log(error``);
-  }
-});
 
 // ================== Listening ... ==================
 app.listen(PORT, () => {

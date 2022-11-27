@@ -61,10 +61,6 @@ function HomePage() {
   };
 
   const handleCheckCode = () => {
-    groupApi.postInviteJoinGroup(
-      ['tuannguyentn2504@gmail.com', 'tramytbh@gmail.com'],
-      '6381c6a6ca6ecbf47f4070d7'
-    );
     if (!isAuth) {
       return navigate(PATH.LOGIN);
     }
@@ -86,11 +82,10 @@ function HomePage() {
       }
       code = codeOrLink;
     } else {
-      const splitLink = codeOrLink.replace(joinPath, '').split('/');
-      if (splitLink.length !== 1 || splitLink[0].length >= MAX.GROUP_CODE) {
+      code = codeOrLink.replace(joinPath, '');
+      if (code.length > MAX.GROUP_CODE) {
         return toastInvalidCode();
       }
-      code = splitLink[0];
     }
 
     handleJoinGroup(code);

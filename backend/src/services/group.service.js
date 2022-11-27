@@ -50,3 +50,9 @@ exports.createGroup = async (group = {}) => {
 exports.getGroupsByOwnerId = async (ownerId) => {
   return await GroupModel.find({ owner: ownerId }).populate('owner');
 };
+
+exports.getGroupsByMemberId = async (userId) => {
+  return await GroupModel.find({
+    $or: [{ coOwners: userId }, { members: userId }],
+  }).populate('owner');
+};
