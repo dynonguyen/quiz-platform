@@ -1,4 +1,4 @@
-const ENDPOINTS = {
+export const ENDPOINTS = {
   ACCOUNT: '/account',
   AUTH: '/auth',
   USER: '/user',

@@ -7,7 +7,6 @@ import { SWRConfig } from 'swr';
 import InitWrapper from './components/InitWrapper';
 import LoadingScreen from './components/LoadingScreen';
 import ThemeConfig from './components/ThemeConfig';
-import swrConfig from './configs/swrConfig';
 import ServerError from './pages/ServerError';
 import store from './redux/store';
 import routes from './routes';
@@ -18,7 +17,7 @@ function App() {
   return (
     <ErrorBoundary FallbackComponent={ServerError}>
       <ThemeConfig>
-        <SWRConfig value={swrConfig}>
+        <SWRConfig value={{ revalidateOnMount: true }}>
           <GlobalLoading />
           <Provider store={store}>
             <InitWrapper>

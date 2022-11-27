@@ -7,6 +7,7 @@ const {
   getGroupByCode,
   joinGroup,
   createGroup,
+  getGroupsByOwnerId,
 } = require('~/services/group.service');
 const { getUserByAccountId } = require('~/services/user.service');
 
@@ -38,6 +39,17 @@ exports.getGroupMembers = async (req, res) => {
     return res.status(200).json(group.toObject());
   } catch (error) {
     console.log('getMembersList ERROR: ', error);
+    return res.status(400).json({ message: 'Failed' });
+  }
+};
+
+exports.getMyGroups = async (req, res) => {
+  try {
+    const { userId } = req.user;
+    const groups = await getGroupsByOwnerId(userId);
+    return res.status(200).json({ groups: groups || [] });
+  } catch (error) {
+    console.log('getMyGroups ERROR: ', error);
     return res.status(400).json({ message: 'Failed' });
   }
 };

@@ -46,3 +46,7 @@ exports.joinGroup = async (userId, query = {}) => {
 exports.createGroup = async (group = {}) => {
   return await GroupModel.create(group);
 };
+
+exports.getGroupsByOwnerId = async (ownerId) => {
+  return await GroupModel.find({ owner: ownerId }).populate('owner');
+};
