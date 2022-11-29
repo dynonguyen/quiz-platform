@@ -6,6 +6,9 @@ const endpoint = ENDPOINTS.USER;
 const userApi = {
   getUserInfo: () => {
     return axiosClient.get(`${endpoint}/info`);
+  },
+  postUpdateUser: (req) => {
+    return axiosClient.post(`${endpoint}/edit`, req);
   }
 };
 

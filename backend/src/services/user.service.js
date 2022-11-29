@@ -17,3 +17,22 @@ exports.createUser = async (accountId, username, name, avt = '') => {
     throw error;
   }
 };
+
+exports.updateUser = async (userID, updateField, updateContent) => {
+  try {
+    return await UserModel.updateOne(
+      { _id: userID },
+      { [updateField]: updateContent },
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.isUsernameExist = async (username) => {
+  try {
+    return await UserModel.exists({ username: username });
+  } catch (error) {
+    throw error;
+  }
+};

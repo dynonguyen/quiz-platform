@@ -66,7 +66,7 @@ function Title({ title, numOfMembers = 0 }) {
   );
 }
 
-function MemberItem({ member, data = {} }) {
+function MemberItem({ member, data = {}, mutate }) {
   const classes = useStyles();
   const [confirmState, setConfirmState] = React.useState({
     onConfirmAction: () => {},
@@ -91,7 +91,7 @@ function MemberItem({ member, data = {} }) {
       if (res.status === 200) {
         toast.success('Chuyển trưởng nhóm thành công');
         setConfirmState({ ...confirmState, isOpen: false });
-        //refresh data
+        mutate();
       }
     }
   };
@@ -103,7 +103,7 @@ function MemberItem({ member, data = {} }) {
       });
       if (res.status === 200) {
         toast.success('Thêm Co-Owner thành công');
-        //refresh data
+        mutate();
       }
     }
   };
@@ -115,7 +115,7 @@ function MemberItem({ member, data = {} }) {
       });
       if (res.status === 200) {
         toast.success('Xóa Co-Owner thành công');
-        //refresh data
+        mutate();
       }
     }
   };
@@ -127,7 +127,7 @@ function MemberItem({ member, data = {} }) {
     if (res.status === 200) {
       toast.success('Xóa Member thành công');
       setConfirmState({ ...confirmState, isOpen: false });
-      //refresh data
+      mutate();
     }
   };
 
@@ -260,7 +260,7 @@ function MemberItem({ member, data = {} }) {
 // -----------------------------
 function GroupMembersPage() {
   const { groupId } = useParams();
-  const { data, error, isValidating } = useFetch(
+  const { data, error, isValidating, mutate } = useFetch(
     `${ENDPOINTS.GROUP}/${groupId}/members`
   );
 
@@ -274,11 +274,16 @@ function GroupMembersPage() {
       {/* Owner, co-owners */}
       <Title title="Chủ sở hữu" numOfMembers={coOwners.length + 1} />
       <Flex spacing={3} direction="column" sx={{ mb: 20 }}>
-        <MemberItem member={owner} data={data} />
+        <MemberItem member={owner} data={data} mutate={mutate} />
         {coOwners.length > 0 &&
           coOwners.map((user) => {
             return (
-              <MemberItem member={user} key={user.accountId} data={data} />
+              <MemberItem
+                member={user}
+                key={user.accountId}
+                data={data}
+                mutate={mutate}
+              />
             );
           })}
       </Flex>
@@ -289,7 +294,12 @@ function GroupMembersPage() {
         {members.length > 0 ? (
           members.map((user) => {
             return (
-              <MemberItem member={user} key={user.accountId} data={data} />
+              <MemberItem
+                member={user}
+                key={user.accountId}
+                data={data}
+                mutate={mutate}
+              />
             );
           })
         ) : (
