@@ -7,5 +7,12 @@ groupApi.get('/:groupId/members', controller.getGroupMembers);
 groupApi.post('/join', controller.postJoinGroupByCode);
 groupApi.post('/invite', controller.postInviteJoinGroup);
 groupApi.post('/new', controller.postCreateGroup);
+groupApi.post('/:groupId/members', controller.postTransferOwner);
+groupApi.post(
+  '/:groupId/members/addmorecoowner',
+  controller.postAddMoreCoOwner,
+);
+groupApi.post('/:groupId/members/removecoowner', controller.postRemoveCoOwner);
+groupApi.post('/:groupId/members/kickoutmember', controller.postKickOutMember);
 
 module.exports = groupApi;

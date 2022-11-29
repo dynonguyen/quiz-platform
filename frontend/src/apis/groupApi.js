@@ -15,6 +15,27 @@ const groupApi = {
   },
   postCreateGroup: (form) => {
     return axiosClient.post(`${endpoint}/new`, form);
+  },
+  postTransferOwner: (groupID, req) => {
+    return axiosClient.post(`${endpoint}/${groupID}/members/`, req);
+  },
+  postAddMoreCoOwner: (groupID, req) => {
+    return axiosClient.post(
+      `${endpoint}/${groupID}/members/addmorecoowner`,
+      req
+    );
+  },
+  postRemoveCoOwner: (groupID, req) => {
+    return axiosClient.post(
+      `${endpoint}/${groupID}/members/removecoowner`,
+      req
+    );
+  },
+  postKichOutMember: (groupID, req) => {
+    return axiosClient.post(
+      `${endpoint}/${groupID}/members/kickoutmember`,
+      req
+    );
   }
 };
 

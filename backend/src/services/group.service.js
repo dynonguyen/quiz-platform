@@ -56,3 +56,62 @@ exports.getGroupsByMemberId = async (userId) => {
     $or: [{ coOwners: userId }, { members: userId }],
   }).populate('owner');
 };
+
+exports.transferOwner = async (groupId, OldOwnerId, newOwnerId) => {
+  try {
+    await GroupModel.findByIdAndUpdate(
+      { _id: groupId },
+      {
+        $pullAll: { coOwners: [newOwnerId], members: [newOwnerId] },
+        $set: { owner: newOwnerId },
+      },
+    );
+    return await GroupModel.findByIdAndUpdate(
+      { _id: groupId },
+      { $push: { coOwners: OldOwnerId } },
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.addMoreCoOwner = async (groupId, coOwnerId) => {
+  try {
+    return await GroupModel.findByIdAndUpdate(
+      { _id: groupId },
+      {
+        $pullAll: { members: [coOwnerId] },
+        $push: { coOwners: coOwnerId },
+      },
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.removeCoOwner = async (groupId, coOwnerId) => {
+  try {
+    return await GroupModel.findByIdAndUpdate(
+      { _id: groupId },
+      {
+        $pullAll: { coOwners: [coOwnerId] },
+        $push: { members: coOwnerId },
+      },
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.kickOutMember = async (groupId, memberId) => {
+  try {
+    return await GroupModel.findByIdAndUpdate(
+      { _id: groupId },
+      {
+        $pullAll: { coOwners: [memberId], members: [memberId] },
+      },
+    );
+  } catch (error) {
+    throw error;
+  }
+};
