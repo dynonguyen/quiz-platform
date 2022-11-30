@@ -187,19 +187,20 @@ function MemberItem({ member, data = {}, mutate }) {
         icon: <Icon icon="material-symbols:admin-panel-settings" />,
         onItemClick: handleTransferOwner
       });
-    moreMenu.push(
-      isCoOwner && isUserOwner
-        ? {
-            primary: 'Rút quyền đồng sở hữu nhóm',
-            icon: <Icon icon="subway:admin-2" />,
-            onItemClick: handleRemoveCoOwner
-          }
-        : {
-            primary: 'Chuyển thành đồng sở hữu nhóm',
-            icon: <Icon icon="subway:admin-1" />,
-            onItemClick: handleAddCoOwner
-          }
-    );
+    if (isUserOwner)
+      moreMenu.push(
+        isCoOwner
+          ? {
+              primary: 'Rút quyền đồng sở hữu nhóm',
+              icon: <Icon icon="subway:admin-2" />,
+              onItemClick: handleRemoveCoOwner
+            }
+          : {
+              primary: 'Chuyển thành đồng sở hữu nhóm',
+              icon: <Icon icon="subway:admin-1" />,
+              onItemClick: handleAddCoOwner
+            }
+      );
     if ((isCoOwner && isUserOwner) || (!isOwner && !isCoOwner)) {
       moreMenu.push({
         primary: 'Xoá khỏi nhóm',

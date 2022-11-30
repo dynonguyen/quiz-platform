@@ -1,12 +1,14 @@
-import { Flex, InputPassword } from '@cads-ui/core';
-import { Button, Grid } from '@mui/material';
-import { useState } from 'react';
+import { Alert, Flex, InputPassword } from '@cads-ui/core';
+import { Button, Grid, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import accountApi from '~/apis/accountApi';
 import { LS_KEY } from '~/constant/key';
+import { MAX, MIN, REGEX } from '~/constant/validation';
 import { updateUserInfo } from '~/redux/slices/userSlice';
+
 function PasswordForm(props) {
   return (
     <Grid
@@ -25,9 +27,19 @@ function PasswordForm(props) {
           type="password"
           fullWidth
           defaultValue=""
-          error={props.error}
-          {...props.register(props.registerName)}
+          error={Boolean(props.error)}
+          {...props.register(props.registerName, {
+            required: 'Mật khẩu không được bỏ trống',
+            maxLength: { value: MAX.PASSWORD, message: 'Mật khẩu quá dài' },
+            minLength: { value: MIN.PASSWORD, message: 'Mật khẩu quá ngắn' },
+            pattern: { value: REGEX.PASSWORD, message: 'Mật khẩu không hợp lệ' }
+          })}
         />
+        <Typography variant="caption" sx={{ width: 0.4 }}>
+          Mật khẩu từ {MIN.PASSWORD} đến {MAX.PASSWORD} ký tự,
+          <br />
+          chứa ít nhất một ký tự in thường, một ký tự in hoa, một ký tự số
+        </Typography>
       </Grid>
       <Grid item>
         <Button type="submit" variant="outlined">
@@ -40,6 +52,7 @@ function PasswordForm(props) {
 
 function UpdatePasswordPage() {
   const [isMatchPassword, setIsMatchPassword] = useState(false);
+  const [isPasswordExist, setIsPasswordExist] = useState(true);
   const {
     register,
     handleSubmit,
@@ -47,10 +60,24 @@ function UpdatePasswordPage() {
     formState: { errors }
   } = useForm();
   const dispatch = useDispatch();
+
   const handleLogout = () => {
     localStorage.removeItem(LS_KEY.ACCESS_TOKEN);
     dispatch(updateUserInfo({ isAuth: false }));
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const PasswordExist = await accountApi.checkPasswordExists();
+        setIsPasswordExist(PasswordExist.data.message);
+        if (!PasswordExist.data.message)
+          toast.warning('Bạn chưa có mật khẩu, hãy đặt mật khẩu mới');
+      } catch (error) {
+        return false;
+      }
+    })();
+  }, []);
 
   const onSubmitOldPassword = async () => {
     try {
@@ -80,10 +107,9 @@ function UpdatePasswordPage() {
       toast.error(error.response?.data?.message);
     }
   };
-
   return (
-    <Flex center sx={{ h: 1 }}>
-      {!isMatchPassword ? (
+    <Flex center sx={{ h: 1 }} direction="column">
+      {!isMatchPassword && isPasswordExist ? (
         <PasswordForm
           onSubmit={handleSubmit(onSubmitOldPassword)}
           title="Nhập mật khẩu hiện tại của bạn để tiếp tục"
@@ -101,6 +127,11 @@ function UpdatePasswordPage() {
           register={register}
           error={errors.newPassword}
         />
+      )}
+      {Object.keys(errors).length > 0 && (
+        <Alert variant="standard" type="error">
+          {errors[Object.keys(errors)[0]].message}
+        </Alert>
       )}
     </Flex>
   );

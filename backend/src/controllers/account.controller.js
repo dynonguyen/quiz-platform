@@ -86,6 +86,20 @@ exports.checkIsMatchPassword = async (req, res) => {
   }
 };
 
+exports.checkIsPasswordExist = async (req, res) => {
+  try {
+    const { email } = req.user;
+    const user = await service.findAccount(email);
+    if (Boolean(user.password)) {
+      return res.status(200).json({ message: true });
+    } else return res.status(200).json({ message: false });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: 'Có lỗi xảy ra, vui lòng kiểm tra lại' });
+  }
+};
+
 exports.postUpdatePassword = async (req, res) => {
   try {
     const { newPassword } = req.body;

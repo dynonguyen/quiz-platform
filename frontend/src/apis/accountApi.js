@@ -18,6 +18,9 @@ const accountApi = {
   },
   postUpdatePassword: (data) => {
     return axiosClient.post(`${endpoint}/updatepassword`, data);
+  },
+  checkPasswordExists: () => {
+    return axiosClient.get(`${endpoint}/checkpassword`);
   }
 };
 

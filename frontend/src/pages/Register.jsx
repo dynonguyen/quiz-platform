@@ -22,7 +22,7 @@ import * as yup from 'yup';
 import authApi from '~/apis/authApi';
 import GoogleLoginButton from '~/components/GoogleLoginButton';
 import { PATH } from '~/constant/path';
-import { MAX, MIN } from '~/constant/validation';
+import { MAX, MIN, REGEX } from '~/constant/validation';
 
 // -----------------------------
 const useStyles = makeStyles((_) => ({
@@ -49,8 +49,17 @@ const useStyles = makeStyles((_) => ({
 // -----------------------------
 const schema = yup.object({
   email: yup.string().required().email().max(MAX.EMAIL),
-  name: yup.string().required().max(MAX.NAME),
-  password: yup.string().required().min(MIN.PASSWORD).max(MAX.PASSWORD),
+  name: yup
+    .string()
+    .required()
+    .max(MAX.NAME)
+    .matches(REGEX.NAME, 'Tên không hợp lệ'),
+  password: yup
+    .string()
+    .required()
+    .min(MIN.PASSWORD)
+    .max(MAX.PASSWORD)
+    .matches(REGEX.PASSWORD, 'Mật khẩu không hợp lệ'),
   confirmPwd: yup
     .string()
     .required('Vui lòng nhập lại mật khẩu')
@@ -141,6 +150,10 @@ function RegisterPage() {
           error={Boolean(errors.password)}
           {...register('password')}
         />
+        <Typography variant="caption">
+          Mật khẩu từ {MIN.PASSWORD} đến {MAX.PASSWORD} ký tự, chứa ít nhất một
+          ký tự in thường, một ký tự in hoa, một ký tự số
+        </Typography>
         <InputPassword
           placeholder="Nhập lại mật khẩu"
           fullWidth

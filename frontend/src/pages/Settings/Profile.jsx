@@ -24,19 +24,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import userApi from '~/apis/userApi';
-import { MAX } from '~/constant/validation';
+import { MAX, REGEX } from '~/constant/validation';
 import { updateUserInfo } from '~/redux/slices/userSlice';
-
-const usernameRegExp = /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
 
 const usernameSchema = yup.object({
   username: yup
     .string()
     .required()
-    .matches(usernameRegExp, 'Username không hợp lệ')
+    .matches(REGEX.USER_NAME, 'Username không hợp lệ')
 });
 const nameSchema = yup.object({
-  name: yup.string().required().max(MAX.NAME)
+  name: yup
+    .string()
+    .required()
+    .matches(REGEX.NAME, 'Tên không hợp lệ')
+    .max(MAX.NAME)
 });
 
 const avtSchema = yup.object({
