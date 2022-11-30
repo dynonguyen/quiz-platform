@@ -13,10 +13,12 @@ import { MAX } from '~/constant/validation';
 const schema = yup.object({
   name: yup
     .string()
+    .trim()
     .required('Tên lớp là bắt buộc')
     .max(MAX.GROUP_NAME, `Tên lớp không được quá ${MAX.GROUP_NAME} ký tự`),
   desc: yup
     .string()
+    .trim()
     .required('Mô tả là bắt buộc')
     .max(MAX.GROUP_DESC, `Mô tả không được quá ${MAX.GROUP_DESC} ký tự`)
 });

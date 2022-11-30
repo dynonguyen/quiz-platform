@@ -51,6 +51,7 @@ const schema = yup.object({
   email: yup.string().required().email().max(MAX.EMAIL),
   name: yup
     .string()
+    .trim()
     .required()
     .max(MAX.NAME)
     .matches(REGEX.NAME, 'Tên không hợp lệ'),

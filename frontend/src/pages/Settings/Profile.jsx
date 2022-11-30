@@ -30,19 +30,21 @@ import { updateUserInfo } from '~/redux/slices/userSlice';
 const usernameSchema = yup.object({
   username: yup
     .string()
+    .trim()
     .required()
     .matches(REGEX.USER_NAME, 'Username không hợp lệ')
 });
 const nameSchema = yup.object({
   name: yup
     .string()
+    .trim()
     .required()
     .matches(REGEX.NAME, 'Tên không hợp lệ')
     .max(MAX.NAME)
 });
 
 const avtSchema = yup.object({
-  name: yup.string().url()
+  name: yup.string().trim().url()
 });
 
 const useStyles = makeStyles((_) => ({
@@ -224,7 +226,7 @@ function ProfilePage() {
           </Badge>
         </Grid>
         <Grid item xs={true}>
-          <Grid container direction="column" spacing={6}>
+          <Grid container direction="column" spacing={4}>
             <UserInfo title="Họ tên" content={name} />
             <UserInfo title="Tài khoản" content={username} />
             <UserInfo title="Email" content={email} />
