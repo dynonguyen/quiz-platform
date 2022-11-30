@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { getUserInfo } from '~/redux/slices/userSlice';
-import TokenExpired from './TokenExpired';
 
 function InitWrapper({ children }) {
   const dispatch = useDispatch();
@@ -10,12 +9,7 @@ function InitWrapper({ children }) {
     dispatch(getUserInfo());
   }, []);
 
-  return (
-    <>
-      <TokenExpired />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }
 
 export default InitWrapper;

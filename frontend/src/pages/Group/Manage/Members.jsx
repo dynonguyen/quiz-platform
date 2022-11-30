@@ -246,13 +246,7 @@ function MemberItem({ member, data = {}, mutate }) {
         isOpen={confirmState.isOpen}
         handleClose={confirmState.handleClose}
       />
-      <Divider
-        sx={{
-          pt: 3,
-          _before: { borderColor: 'secondary.main' },
-          _after: { borderColor: 'secondary.main' }
-        }}
-      />
+      <Divider spacing={3} />
     </Box>
   );
 }

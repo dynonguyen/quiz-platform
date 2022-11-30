@@ -49,7 +49,7 @@ const useStyles = makeStyles((_) => ({
 // -----------------------------
 const schema = yup.object({
   email: yup.string().required().email().max(MAX.EMAIL),
-  name: yup.string().required().max(MAX.NAME),
+  name: yup.string().trim().required().max(MAX.NAME),
   password: yup.string().required().min(MIN.PASSWORD).max(MAX.PASSWORD),
   confirmPwd: yup
     .string()

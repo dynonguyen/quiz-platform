@@ -32,15 +32,16 @@ const usernameRegExp = /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
 const usernameSchema = yup.object({
   username: yup
     .string()
+    .trim()
     .required()
     .matches(usernameRegExp, 'Username không hợp lệ')
 });
 const nameSchema = yup.object({
-  name: yup.string().required().max(MAX.NAME)
+  name: yup.string().trim().required().max(MAX.NAME)
 });
 
 const avtSchema = yup.object({
-  name: yup.string().url()
+  name: yup.string().trim().url()
 });
 
 const useStyles = makeStyles((_) => ({
@@ -222,7 +223,7 @@ function ProfilePage() {
           </Badge>
         </Grid>
         <Grid item xs={true}>
-          <Grid container direction="column" spacing={6}>
+          <Grid container direction="column" spacing={4}>
             <UserInfo title="Họ tên" content={name} />
             <UserInfo title="Tài khoản" content={username} />
             <UserInfo title="Email" content={email} />
