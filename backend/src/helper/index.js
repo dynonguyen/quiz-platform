@@ -16,7 +16,7 @@ function createUsername(email = '', id = '') {
 }
 
 async function hashPassword(password = '') {
-  const saltRounds = parseInt(this.getEnv('SALT_ROUND'));
+  const saltRounds = parseInt(getEnv('SALT_ROUND'));
   const hashPassword = await bcrypt.hash(password, saltRounds);
   return hashPassword;
 }

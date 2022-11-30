@@ -17,17 +17,18 @@ import {
   TextField,
   Typography
 } from '@mui/material';
+import moment from 'moment';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import userApi from '~/apis/userApi';
 import { MAX } from '~/constant/validation';
+import { updateUserInfo } from '~/redux/slices/userSlice';
 
 const usernameRegExp = /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
-// const avatarRegExp =
-// /^((ftp|http|https):\/\/)(www.)[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm;
+
 const usernameSchema = yup.object({
   username: yup
     .string()
@@ -57,38 +58,6 @@ const useStyles = makeStyles((_) => ({
   }
 }));
 
-const testImage = (url, timeout) =>
-  new Promise((res) => {
-    timeout = timeout || 5000;
-    let timedOut = false;
-    let timer;
-    const img = new Image();
-
-    img.onerror = img.onabort = function () {
-      if (!timedOut) {
-        clearTimeout(timer);
-        res('error');
-      }
-    };
-
-    img.onload = function () {
-      if (!timedOut) {
-        clearTimeout(timer);
-        res('success');
-      }
-    };
-
-    img.src = url;
-
-    timer = setTimeout(function () {
-      timedOut = true;
-      // reset .src to invalid URL so it stops previous
-      // loading, but doesn't trigger new load
-      img.src = '//!!!!/test.jpg';
-      res('timeout');
-    }, timeout);
-  });
-
 function FormDialog({
   isOpen,
   onCancel,
@@ -101,7 +70,6 @@ function FormDialog({
     register,
     getValues,
     handleSubmit,
-    setError,
     formState: { errors }
   } = useForm({
     resolver: yupResolver(
@@ -112,6 +80,9 @@ function FormDialog({
         : usernameSchema
     )
   });
+
+  const dispatch = useDispatch();
+
   const onSubmit = async () => {
     try {
       const res = await userApi.postUpdateUser({
@@ -120,11 +91,12 @@ function FormDialog({
       });
       if (res.status === 200) {
         toast.success('Cập nhật thông tin thành công');
+        dispatch(updateUserInfo({ [fieldName]: getValues(fieldName) }));
         onCancel();
       }
     } catch (error) {
       toast.error(
-        `Có lỗi xảy ra, vui lòng kiểm tra lại: ${error.response.data.message}`
+        `Có lỗi xảy ra, vui lòng kiểm tra lại: ${error.response?.data?.message}`
       );
     }
   };
@@ -178,7 +150,7 @@ function UserInfo({ title, content }) {
           <Typography variant="h5">{title}</Typography>
         </Grid>
         <Grid item>
-          {title === 'Email' ? (
+          {title === 'Email' || title === 'Ngày đăng ký' ? (
             content
           ) : (
             <Link href="#" underline="none" onClick={handleClickOpen}>
@@ -221,7 +193,9 @@ function ProfilePage() {
   const handleClose = () => {
     setOpen(false);
   };
-  const { username, name, email, avt } = useSelector((state) => state.user);
+  const { username, name, email, avt, createdAt } = useSelector(
+    (state) => state.user
+  );
   const classes = useStyles();
   return (
     <Container maxWidth="md">
@@ -252,6 +226,10 @@ function ProfilePage() {
             <UserInfo title="Họ tên" content={name} />
             <UserInfo title="Tài khoản" content={username} />
             <UserInfo title="Email" content={email} />
+            <UserInfo
+              title="Ngày đăng ký"
+              content={moment(createdAt).format('DD/MM/YYYY')}
+            />
           </Grid>
         </Grid>
       </Grid>

@@ -12,6 +12,12 @@ const accountApi = {
   },
   postActivateAccount: (code) => {
     return axiosClient.post(`${endpoint}/activate`, { code });
+  },
+  checkPassword: (data) => {
+    return axiosClient.post(`${endpoint}/checkpassword`, data);
+  },
+  postUpdatePassword: (data) => {
+    return axiosClient.post(`${endpoint}/updatepassword`, data);
   }
 };
 

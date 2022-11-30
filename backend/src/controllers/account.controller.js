@@ -1,7 +1,8 @@
 const { verifyToken, encodedToken } = require('~/configs/jwt.config');
 const { sendEmail, activateAccountMail } = require('~/configs/mail.config');
 const { APP_NAME } = require('~/constant');
-const { generateActivateLink } = require('~/helper');
+const bcrypt = require('bcryptjs');
+const { generateActivateLink, hashPassword } = require('~/helper');
 const service = require('~/services/account.service');
 
 exports.checkVerified = async (req, res) => {
@@ -62,5 +63,51 @@ exports.postActivateAccount = async (req, res) => {
   } catch (error) {
     console.log('postActivateAccount ERROR: ', error);
     return res.status(400).json({ message: 'Failed' });
+  }
+};
+
+exports.checkIsMatchPassword = async (req, res) => {
+  try {
+    const { oldPassword } = req.body;
+    const { email } = req.user;
+    const userPassword = await service
+      .findAccount(email)
+      .then((res) => res.password);
+
+    const isMatch = await bcrypt.compare(oldPassword, userPassword);
+
+    if (isMatch) {
+      return res.status(200).json({ message: 'Mật khẫu cũ trùng khớp' });
+    } else return res.status(400).json({ message: 'Mật khẩu cũ không đúng' });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: 'Có lỗi xảy ra, vui lòng kiểm tra lại' });
+  }
+};
+
+exports.postUpdatePassword = async (req, res) => {
+  try {
+    const { newPassword } = req.body;
+    const { accountId, email } = req.user;
+    const userPassword = await service
+      .findAccount(email)
+      .then((res) => res.password);
+    const isMatch = await bcrypt.compare(newPassword, userPassword);
+    if (isMatch) {
+      return res
+        .status(400)
+        .json({ message: 'Mật khẩu mới trùng với mật khẩu cũ' });
+    } else {
+      const password = await hashPassword(newPassword);
+      await service.updateAccountById(accountId, {
+        password: password,
+      });
+      return res.status(200).json({ message: 'Thay đổi mật khẩu thành công' });
+    }
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: 'Có lỗi xảy ra, vui lòng kiểm tra lại' });
   }
 };
