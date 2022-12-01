@@ -14,13 +14,13 @@ const accountApi = {
     return axiosClient.post(`${endpoint}/activate`, { code });
   },
   checkPassword: (data) => {
-    return axiosClient.post(`${endpoint}/checkpassword`, data);
+    return axiosClient.post(`${endpoint}/check-password`, data);
   },
   postUpdatePassword: (data) => {
-    return axiosClient.post(`${endpoint}/updatepassword`, data);
+    return axiosClient.post(`${endpoint}/update-password`, data);
   },
   checkPasswordExists: () => {
-    return axiosClient.get(`${endpoint}/checkpassword`);
+    return axiosClient.get(`${endpoint}/check-password`);
   }
 };
 

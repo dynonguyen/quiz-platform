@@ -14,8 +14,8 @@ function PasswordForm(props) {
     <Flex
       direction="column"
       justifyContent="center"
-      alignItems="center"
       spacing={3}
+      sx={{ maxW: 400 }}
       component="form"
       onSubmit={props.onSubmit}
     >
@@ -24,7 +24,7 @@ function PasswordForm(props) {
         autoFocus
         type="password"
         fullWidth
-        defaultValue=""
+        placeholder="Mật khẩu"
         error={Boolean(props.error)}
         {...props.register(props.registerName, {
           required: 'Mật khẩu không được bỏ trống',
@@ -33,10 +33,17 @@ function PasswordForm(props) {
           pattern: { value: REGEX.PASSWORD, message: 'Mật khẩu không hợp lệ' }
         })}
       />
-      <Typography variant="caption" sx={{ width: 0.7 }}>
-        Mật khẩu từ {MIN.PASSWORD} đến {MAX.PASSWORD} ký tự, chứa ít nhất một ký
-        tự in thường, một ký tự in hoa, một ký tự số
-      </Typography>
+      {props.registerName === 'newPassword' ? (
+        <Typography variant="caption">
+          Mật khẩu từ {MIN.PASSWORD} đến {MAX.PASSWORD} ký tự, chứa ít nhất một
+          ký tự in thường, một ký tự in hoa, một ký tự số.
+        </Typography>
+      ) : (
+        <Typography variant="caption">
+          Vì lý do an ninh, vui lòng nhập mật khẩu của bạn để tiếp tục.
+        </Typography>
+      )}
+
       <Button type="submit" variant="outlined">
         {props.buttonValue}
       </Button>

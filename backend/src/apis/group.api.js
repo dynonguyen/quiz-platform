@@ -9,10 +9,16 @@ groupApi.post('/invite', controller.postInviteJoinGroup);
 groupApi.post('/new', controller.postCreateGroup);
 groupApi.post('/:groupId/members', controller.postTransferOwner);
 groupApi.post(
-  '/:groupId/members/addmorecoowner',
+  '/:groupId/members/add-more-co-owner',
   controller.postAddMoreCoOwner,
 );
-groupApi.post('/:groupId/members/removecoowner', controller.postRemoveCoOwner);
-groupApi.post('/:groupId/members/kickoutmember', controller.postKickOutMember);
+groupApi.post(
+  '/:groupId/members/remove-co-owner',
+  controller.postRemoveCoOwner,
+);
+groupApi.post(
+  '/:groupId/members/kick-out-member',
+  controller.postKickOutMember,
+);
 
 module.exports = groupApi;

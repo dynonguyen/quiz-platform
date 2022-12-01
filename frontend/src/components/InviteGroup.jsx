@@ -56,7 +56,12 @@ function InviteGroup({ groupCode, groupId }) {
           <Typography color="grey.600" component="label" htmlFor="email">
             Email
           </Typography>
-          <Input placeholder="example@gmail.com" id="email" ref={emailRef} />
+          <Input
+            placeholder="example@gmail.com"
+            id="email"
+            sx={{ w: 1 }}
+            ref={emailRef}
+          />
         </Flex>
         <Box sx={{ alignSelf: 'flex-end' }} onClick={handleSendMail}>
           <Button
