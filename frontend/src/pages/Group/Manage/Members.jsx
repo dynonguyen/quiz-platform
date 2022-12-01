@@ -84,51 +84,67 @@ function MemberItem({ member, data = {}, mutate }) {
   const { owner = {}, coOwners = [] } = data;
 
   const onConfirmTransferOwner = async () => {
-    if (owner.username === user.username) {
-      const res = await groupApi.postTransferOwner(groupId, {
-        oldOwnerId: owner._id,
-        newOwnerId: member._id
-      });
-      if (res.status === 200) {
-        toast.success('Chuyển trưởng nhóm thành công');
-        setConfirmState({ ...confirmState, isOpen: false });
-        mutate();
+    try {
+      if (owner.username === user.username) {
+        const res = await groupApi.postTransferOwner(groupId, {
+          oldOwnerId: owner._id,
+          newOwnerId: member._id
+        });
+        if (res.status === 200) {
+          toast.success('Chuyển trưởng nhóm thành công');
+          setConfirmState({ ...confirmState, isOpen: false });
+          mutate();
+        }
       }
+    } catch (error) {
+      toast.error(error.response?.data?.message);
     }
   };
 
   const onConfirmAddMoreCoOwner = async () => {
-    if (owner.username === user.username) {
-      const res = await groupApi.postAddMoreCoOwner(groupId, {
-        coOwnerId: member._id
-      });
-      if (res.status === 200) {
-        toast.success('Thêm Co-Owner thành công');
-        mutate();
+    try {
+      if (owner.username === user.username) {
+        const res = await groupApi.postAddMoreCoOwner(groupId, {
+          coOwnerId: member._id
+        });
+        if (res.status === 200) {
+          toast.success('Thêm Co-Owner thành công');
+          mutate();
+        }
       }
+    } catch (error) {
+      toast.error(error.response?.data?.message);
     }
   };
 
   const onConfirmRemoveCoOwner = async () => {
-    if (owner.username === user.username) {
-      const res = await groupApi.postRemoveCoOwner(groupId, {
-        coOwnerId: member._id
-      });
-      if (res.status === 200) {
-        toast.success('Xóa Co-Owner thành công');
-        mutate();
+    try {
+      if (owner.username === user.username) {
+        const res = await groupApi.postRemoveCoOwner(groupId, {
+          coOwnerId: member._id
+        });
+        if (res.status === 200) {
+          toast.success('Xóa Co-Owner thành công');
+          mutate();
+        }
       }
+    } catch (error) {
+      toast.error(error.response?.data?.message);
     }
   };
 
   const onConfirmKickOutMember = async () => {
-    const res = await groupApi.postKichOutMember(groupId, {
-      memberId: member._id
-    });
-    if (res.status === 200) {
-      toast.success('Xóa Member thành công');
-      setConfirmState({ ...confirmState, isOpen: false });
-      mutate();
+    try {
+      const res = await groupApi.postKichOutMember(groupId, {
+        memberId: member._id
+      });
+      if (res.status === 200) {
+        toast.success('Xóa Member thành công');
+        setConfirmState({ ...confirmState, isOpen: false });
+        mutate();
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message);
     }
   };
 
@@ -188,20 +204,20 @@ function MemberItem({ member, data = {}, mutate }) {
         icon: <Icon icon="material-symbols:admin-panel-settings" />,
         onItemClick: handleTransferOwner
       });
-    if (isUserOwner)
-      moreMenu.push(
-        isCoOwner
-          ? {
-              primary: 'Rút quyền đồng sở hữu nhóm',
-              icon: <Icon icon="subway:admin-2" />,
-              onItemClick: handleRemoveCoOwner
-            }
-          : {
-              primary: 'Chuyển thành đồng sở hữu nhóm',
-              icon: <Icon icon="subway:admin-1" />,
-              onItemClick: handleAddCoOwner
-            }
-      );
+    // if (isUserOwner)
+    moreMenu.push(
+      isCoOwner
+        ? {
+            primary: 'Rút quyền đồng sở hữu nhóm',
+            icon: <Icon icon="subway:admin-2" />,
+            onItemClick: handleRemoveCoOwner
+          }
+        : {
+            primary: 'Chuyển thành đồng sở hữu nhóm',
+            icon: <Icon icon="subway:admin-1" />,
+            onItemClick: handleAddCoOwner
+          }
+    );
     if ((isCoOwner && isUserOwner) || (!isOwner && !isCoOwner)) {
       moreMenu.push({
         primary: 'Xoá khỏi nhóm',
@@ -278,21 +294,23 @@ function GroupMembersPage() {
       )}
 
       {/* Owner, co-owners */}
-      <Title title="Chủ sở hữu" numOfMembers={coOwners.length + 1} />
-      <Flex spacing={3} direction="column" sx={{ mb: 20 }}>
-        <MemberItem member={owner} data={data} mutate={mutate} />
-        {coOwners.length > 0 &&
-          coOwners.map((user) => {
-            return (
-              <MemberItem
-                member={user}
-                key={user.accountId}
-                data={data}
-                mutate={mutate}
-              />
-            );
-          })}
-      </Flex>
+      <Box sx={{ my: 10 }}>
+        <Title title="Chủ sở hữu" numOfMembers={coOwners.length + 1} />
+        <Flex spacing={3} direction="column">
+          <MemberItem member={owner} data={data} mutate={mutate} />
+          {coOwners.length > 0 &&
+            coOwners.map((user) => {
+              return (
+                <MemberItem
+                  member={user}
+                  key={user.accountId}
+                  data={data}
+                  mutate={mutate}
+                />
+              );
+            })}
+        </Flex>
+      </Box>
 
       {/* Members */}
       <Title title="Thành viên" numOfMembers={members.length} />
