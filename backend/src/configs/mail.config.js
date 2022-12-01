@@ -42,10 +42,10 @@ const activateAccountMail = (link) => {
   <div style="max-width: 776px; margin: 0 auto; font-family: sans-serif;">
     <h2 style="color: #444">Xin chào,</h2>
 
-    <p style="color: #666;line-height: 1.5;margin: 12px auto;">
-      Bạn có một lời mời tham gia vào nhóm <strong>ABC</strong> trong <strong>${APP_NAME}</strong> từ người dùng
-      <b>xyz</b>. Bạn có thể tham gia nhóm bằng các nhấn vào nút <b>"Tham gia"</b> bên dưới.
-      <br />
+    <p style="color:#666;line-height:1.5;margin:12px auto">
+      Chúng tôi nhận được yêu cầu xác minh tài khoản của bạn tại ứng dụng <strong>${APP_NAME}</strong>. Để kích hoạt tài khoản, vui lòng nhấn nút <b>"Xác minh tài khoản"</b> bên dưới.
+      <br>
+      Liên kết sẽ hết hạn sau 10 phút.
     </p>
 
 

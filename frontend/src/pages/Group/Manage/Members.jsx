@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 import groupApi from '~/apis/groupApi';
 import ComponentLoading from '~/components/ComponentLoading';
 import ConfirmDialog from '~/components/ConfirmDialog';
+import InviteGroup from '~/components/InviteGroup';
 import ENDPOINTS from '~/constant/endpoints';
 import { PATH } from '~/constant/path';
 import useFetch from '~/hooks/useFetch';
@@ -221,7 +222,7 @@ function MemberItem({ member, data = {}, mutate }) {
         </Flex>
 
         {/* More menu */}
-        {isShowMore && !isOwner && (
+        {isShowMore && !isOwner && moreMenu.length > 0 && (
           <>
             <Icon
               className={classes.moreIcon}
@@ -258,14 +259,24 @@ function GroupMembersPage() {
   const { data, error, isValidating, mutate } = useFetch(
     `${ENDPOINTS.GROUP}/${groupId}/members`
   );
+  const user = useSelector((state) => state.user);
 
   if (isValidating) return <ComponentLoading />;
 
   if (error || !data) return <Navigate to={PATH.NOTFOUND} />;
 
   const { owner = {}, coOwners = [], members = [] } = data;
+  const isOwner = owner.username === user.username;
+  const isCoOwner =
+    coOwners.findIndex((co) => co.username === user.username) !== -1;
+
   return (
     <Container maxWidth="md">
+      <Title title="Mời vào nhóm" />
+      {(isOwner || isCoOwner) && (
+        <InviteGroup groupCode={data.code} groupId={groupId} />
+      )}
+
       {/* Owner, co-owners */}
       <Title title="Chủ sở hữu" numOfMembers={coOwners.length + 1} />
       <Flex spacing={3} direction="column" sx={{ mb: 20 }}>

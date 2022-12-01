@@ -8,6 +8,17 @@ exports.getUserByAccountId = async (accountId) => {
   }
 };
 
+exports.getUserByEmail = async (email) => {
+  try {
+    return await UserModel.findOne({}).populate({
+      path: 'accountId',
+      match: { email },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 exports.createUser = async (accountId, username, name, avt = '') => {
   try {
     const newUser = await UserModel.create({ accountId, name, username, avt });

@@ -10,8 +10,8 @@ const groupApi = {
   postJoinGroup: (code) => {
     return axiosClient.post(`${endpoint}/join`, { code });
   },
-  postInviteJoinGroup: (emails, groupId) => {
-    return axiosClient.post(`${endpoint}/invite`, { emails, groupId });
+  postInviteJoinGroup: (email, groupId) => {
+    return axiosClient.post(`${endpoint}/invite`, { email, groupId });
   },
   postCreateGroup: (form) => {
     return axiosClient.post(`${endpoint}/new`, form);

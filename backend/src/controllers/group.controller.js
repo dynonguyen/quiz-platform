@@ -14,7 +14,11 @@ const {
   removeCoOwner,
   kickOutMember,
 } = require('~/services/group.service');
-const { getUserByAccountId } = require('~/services/user.service');
+const {
+  getUserByAccountId,
+  getUserByQuery,
+  getUserByEmail,
+} = require('~/services/user.service');
 
 exports.getGroupMembers = async (req, res) => {
   try {
@@ -97,11 +101,11 @@ exports.postJoinGroupByCode = async (req, res) => {
 
 exports.postInviteJoinGroup = async (req, res) => {
   try {
-    const { emails = [], groupId } = req.body;
+    const { email, groupId } = req.body;
     const { accountId } = req.user;
 
-    if (!emails || emails.length === 0) {
-      throw new Error('Emails is empty');
+    if (!email) {
+      return res.status(400).json({ message: 'Email không được trống' });
     }
 
     const group = await getGroupById(groupId, true);
@@ -110,19 +114,27 @@ exports.postInviteJoinGroup = async (req, res) => {
     }
     const user = await getUserByAccountId(accountId);
 
+    const userEmail = await getUserByEmail(email);
+    if (userEmail.accountId) {
+      const isUserExist = await checkUserExistInGroup(userEmail._id);
+      if (isUserExist) {
+        return res
+          .status(400)
+          .json({ message: 'Người dùng đã là thành viên trong nhóm' });
+      }
+    }
+
     const clientUrl = `${getEnv('CLIENT_URL')}/group/join?code=${group.code}`;
-    emails.forEach((email) => {
-      sendEmail({
-        subject: `Mời tham gia nhóm trên ${APP_NAME}`,
-        to: email,
-        html: inviteJoinGroupMail(clientUrl, group.name, user.name),
-      });
+    await sendEmail({
+      subject: `Mời tham gia nhóm trên ${APP_NAME}`,
+      to: email,
+      html: inviteJoinGroupMail(clientUrl, group.name, user.name),
     });
 
     return res.status(200).json({ message: 'Success' });
   } catch (error) {
     console.log('postInviteJoinGroup ERROR: ', error);
-    return res.status(400).json({ msg: 'Failed' });
+    return res.status(400).json({ message: 'Failed' });
   }
 };
 

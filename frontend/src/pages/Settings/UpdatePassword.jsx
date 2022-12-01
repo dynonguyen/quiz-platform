@@ -108,7 +108,7 @@ function UpdatePasswordPage() {
     }
   };
   return (
-    <Flex center sx={{ h: 1 }} direction="column">
+    <Flex center sx={{ h: 1 }} spacing={2} direction="column">
       {!isMatchPassword && isPasswordExist ? (
         <PasswordForm
           onSubmit={handleSubmit(onSubmitOldPassword)}

@@ -15,3 +15,7 @@ export function getToken() {
 export function getOriginPath(path = '') {
   return `${window.location.origin}${path}`;
 }
+
+export function generateGroupInviteLink(groupCode) {
+  return `${window.location.origin}/group/join?code=${groupCode}`;
+}
