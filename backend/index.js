@@ -60,6 +60,9 @@ app.use(`${BASE_URL}/auth`, authApi);
 app.use(`${BASE_URL}/group`, authorization, groupApi);
 app.use(`${BASE_URL}/user`, authorization, userApi);
 app.use(`${BASE_URL}/account`, authorization, accountApi);
+app.get(`${BASE_URL}/test`, (_, res) => {
+  res.status(200).json({ msg: 'Success' });
+});
 
 // ================== Listening ... ==================
 app.listen(PORT, () => {
