@@ -1,5 +1,5 @@
 import { Alert, Flex, InputPassword } from '@cads-ui/core';
-import { Button, Grid, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
@@ -11,42 +11,36 @@ import { updateUserInfo } from '~/redux/slices/userSlice';
 
 function PasswordForm(props) {
   return (
-    <Grid
-      container
+    <Flex
       direction="column"
       justifyContent="center"
       alignItems="center"
-      spacing={2}
+      spacing={3}
       component="form"
       onSubmit={props.onSubmit}
     >
-      <Grid item>{props.title}</Grid>
-      <Grid item>
-        <InputPassword
-          autoFocus
-          type="password"
-          fullWidth
-          defaultValue=""
-          error={Boolean(props.error)}
-          {...props.register(props.registerName, {
-            required: 'Mật khẩu không được bỏ trống',
-            maxLength: { value: MAX.PASSWORD, message: 'Mật khẩu quá dài' },
-            minLength: { value: MIN.PASSWORD, message: 'Mật khẩu quá ngắn' },
-            pattern: { value: REGEX.PASSWORD, message: 'Mật khẩu không hợp lệ' }
-          })}
-        />
-        <Typography variant="caption" sx={{ width: 0.4 }}>
-          Mật khẩu từ {MIN.PASSWORD} đến {MAX.PASSWORD} ký tự,
-          <br />
-          chứa ít nhất một ký tự in thường, một ký tự in hoa, một ký tự số
-        </Typography>
-      </Grid>
-      <Grid item>
-        <Button type="submit" variant="outlined">
-          {props.buttonValue}
-        </Button>
-      </Grid>
-    </Grid>
+      <Typography variant="subtitle1"> {props.title}</Typography>
+      <InputPassword
+        autoFocus
+        type="password"
+        fullWidth
+        defaultValue=""
+        error={Boolean(props.error)}
+        {...props.register(props.registerName, {
+          required: 'Mật khẩu không được bỏ trống',
+          maxLength: { value: MAX.PASSWORD, message: 'Mật khẩu quá dài' },
+          minLength: { value: MIN.PASSWORD, message: 'Mật khẩu quá ngắn' },
+          pattern: { value: REGEX.PASSWORD, message: 'Mật khẩu không hợp lệ' }
+        })}
+      />
+      <Typography variant="caption" sx={{ width: 0.7 }}>
+        Mật khẩu từ {MIN.PASSWORD} đến {MAX.PASSWORD} ký tự, chứa ít nhất một ký
+        tự in thường, một ký tự in hoa, một ký tự số
+      </Typography>
+      <Button type="submit" variant="outlined">
+        {props.buttonValue}
+      </Button>
+    </Flex>
   );
 }
 
@@ -108,7 +102,7 @@ function UpdatePasswordPage() {
     }
   };
   return (
-    <Flex center sx={{ h: 1 }} direction="column">
+    <Flex center sx={{ h: 1 }} direction="column" spacing={3}>
       {!isMatchPassword && isPasswordExist ? (
         <PasswordForm
           onSubmit={handleSubmit(onSubmitOldPassword)}

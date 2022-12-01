@@ -16,6 +16,12 @@ const {
 } = require('~/services/group.service');
 const { getUserByAccountId } = require('~/services/user.service');
 
+const MESSAGE = {
+  GROUP_NOT_FOUND: 'Nhóm không tồn tại',
+  USER_NOT_FOUND: 'Bạn không thuộc nhóm này',
+  NOT_PERMITTED: 'Bạn không có quyền thực hiện hành động này',
+};
+
 exports.getGroupMembers = async (req, res) => {
   try {
     const { groupId } = req.params;
@@ -160,16 +166,16 @@ exports.postTransferOwner = async (req, res) => {
     const { userId } = req.user;
 
     if (!userId || !groupId) {
-      throw new Error('groupId not found');
+      return res.status(400).json({ message: MESSAGE.GROUP_NOT_FOUND });
     }
 
     const group = await getGroupById(groupId);
     if (!group) {
-      throw new Error('Group not found');
+      return res.status(400).json({ message: MESSAGE.GROUP_NOT_FOUND });
     }
 
     if (group.owner?._id.toString() !== userId || userId !== oldOwnerId) {
-      throw new Error('User is not a Owner');
+      return res.status(400).json({ message: MESSAGE.NOT_PERMITTED });
     }
     const response = transferOwner(groupId, oldOwnerId, newOwnerId);
     if (response) return res.status(200).json({ message: 'Success' });
@@ -186,16 +192,16 @@ exports.postAddMoreCoOwner = async (req, res) => {
     const { userId } = req.user;
 
     if (!userId || !groupId) {
-      throw new Error('groupId not found');
+      return res.status(400).json({ message: MESSAGE.GROUP_NOT_FOUND });
     }
 
     const group = await getGroupById(groupId);
     if (!group) {
-      throw new Error('Group not found');
+      return res.status(400).json({ message: MESSAGE.GROUP_NOT_FOUND });
     }
 
     if (group.owner?._id.toString() !== userId) {
-      throw new Error('User is not a Owner');
+      return res.status(400).json({ message: MESSAGE.NOT_PERMITTED });
     }
     const response = addMoreCoOwner(groupId, coOwnerId);
     if (response) return res.status(200).json({ message: 'Success' });
@@ -212,16 +218,16 @@ exports.postRemoveCoOwner = async (req, res) => {
     const { userId } = req.user;
 
     if (!userId || !groupId) {
-      throw new Error('groupId not found');
+      return res.status(400).json({ message: MESSAGE.GROUP_NOT_FOUND });
     }
 
     const group = await getGroupById(groupId);
     if (!group) {
-      throw new Error('Group not found');
+      return res.status(400).json({ message: MESSAGE.GROUP_NOT_FOUND });
     }
 
     if (group.owner?._id.toString() !== userId) {
-      throw new Error('User is not a Owner');
+      return res.status(400).json({ message: MESSAGE.NOT_PERMITTED });
     }
     const response = removeCoOwner(groupId, coOwnerId);
     if (response) return res.status(200).json({ message: 'Success' });
@@ -238,12 +244,12 @@ exports.postKickOutMember = async (req, res) => {
     const { userId } = req.user;
 
     if (!userId || !groupId) {
-      throw new Error('groupId not found');
+      return res.status(400).json({ message: MESSAGE.GROUP_NOT_FOUND });
     }
 
     const group = await getGroupById(groupId);
     if (!group) {
-      throw new Error('Group not found');
+      return res.status(400).json({ message: MESSAGE.GROUP_NOT_FOUND });
     }
 
     const Owner = group.owner?._id.toString();
@@ -253,7 +259,7 @@ exports.postKickOutMember = async (req, res) => {
       coOwner.includes(userId) &&
       (Owner === memberId || coOwner.includes(memberId))
     ) {
-      throw new Error('User is not permitted');
+      return res.status(400).json({ message: MESSAGE.NOT_PERMITTED });
     }
     const response = kickOutMember(groupId, memberId);
     if (response) return res.status(200).json({ message: 'Success' });

@@ -1,4 +1,4 @@
-import { Alert, makeStyles } from '@cads-ui/core';
+import { Alert, Flex, makeStyles } from '@cads-ui/core';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Icon } from '@iconify/react';
 import {
@@ -12,7 +12,6 @@ import {
   DialogContentText,
   DialogTitle,
   FormControl,
-  Grid,
   Link,
   TextField,
   Typography
@@ -148,33 +147,24 @@ function UserInfo({ title, content }) {
   };
 
   return (
-    <Grid item xs={true}>
-      <Grid container direction="column" spacing={2}>
-        <Grid item>
-          <Typography variant="h5">{title}</Typography>
-        </Grid>
-        <Grid item>
-          {title === 'Email' || title === 'Ngày đăng ký' ? (
-            content
-          ) : (
-            <Link href="#" underline="none" onClick={handleClickOpen}>
-              <Grid
-                container
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-                spacing={5}
-                onClick={handleClickOpen}
-              >
-                <Grid item>{content}</Grid>
-                <Grid item>
-                  <Icon icon="material-symbols:edit" />
-                </Grid>
-              </Grid>
-            </Link>
-          )}
-        </Grid>
-      </Grid>
+    <Flex direction="column" spacing={2}>
+      <Typography variant="h5">{title}</Typography>
+      {title === 'Email' || title === 'Ngày đăng ký' ? (
+        content
+      ) : (
+        <Link href="#" underline="none" onClick={handleClickOpen}>
+          <Flex
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            spacing={5}
+            onClick={handleClickOpen}
+          >
+            {content}
+            <Icon icon="material-symbols:edit" />
+          </Flex>
+        </Link>
+      )}
       <FormDialog
         isOpen={open}
         onCancel={handleClose}
@@ -183,7 +173,7 @@ function UserInfo({ title, content }) {
         defaultValue={content}
         fieldName={title === 'Tài khoản' ? 'username' : 'name'}
       />
-    </Grid>
+    </Flex>
   );
 }
 
@@ -203,14 +193,13 @@ function ProfilePage() {
   const classes = useStyles();
   return (
     <Container maxWidth="md">
-      <Grid
-        container
+      <Flex
         direction="row"
         justifyContent="flex-start"
         alignItems="stretch"
         spacing={5}
       >
-        <Grid item>
+        <div>
           <Badge
             overlap="circular"
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
@@ -224,19 +213,17 @@ function ProfilePage() {
           >
             <Avatar alt={name} src={avt} sx={{ width: 96, height: 96 }} />
           </Badge>
-        </Grid>
-        <Grid item xs={true}>
-          <Grid container direction="column" spacing={4}>
-            <UserInfo title="Họ tên" content={name} />
-            <UserInfo title="Tài khoản" content={username} />
-            <UserInfo title="Email" content={email} />
-            <UserInfo
-              title="Ngày đăng ký"
-              content={moment(createdAt).format('DD/MM/YYYY')}
-            />
-          </Grid>
-        </Grid>
-      </Grid>
+        </div>
+        <Flex direction="column" spacing={4} sx={{ w: 1 }}>
+          <UserInfo title="Họ tên" content={name} />
+          <UserInfo title="Tài khoản" content={username} />
+          <UserInfo title="Email" content={email} />
+          <UserInfo
+            title="Ngày đăng ký"
+            content={moment(createdAt).format('DD/MM/YYYY')}
+          />
+        </Flex>
+      </Flex>
       <FormDialog
         isOpen={open}
         onCancel={handleClose}
