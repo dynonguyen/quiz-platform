@@ -51,15 +51,15 @@ function InviteGroup({ groupCode, groupId }) {
 
   return (
     <Flex direction="column" spacing={2}>
-      <Flex spacing={4} wrap wrapSpace="both">
-        <Flex spacing={1} direction="column">
+      <Flex spacing={4}>
+        <Flex spacing={1} sx={{ flexGrow: 1 }} direction="column">
           <Typography color="grey.600" component="label" htmlFor="email">
             Email
           </Typography>
           <Input
+            fullWidth
             placeholder="example@gmail.com"
             id="email"
-            sx={{ w: 1 }}
             ref={emailRef}
           />
         </Flex>
