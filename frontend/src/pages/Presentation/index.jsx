@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Container,
+  Dialog,
   Flex,
   List,
   makeStyles,
@@ -48,6 +49,7 @@ function PresentationPage() {
   const classes = useStyles();
   const [moreMenuAnchor, setMoreMenuAnchor] = React.useState(null);
   const [openNewEditModal, setOpenNewEditModal] = React.useState(false);
+  const [showDelPrompt, setShowDelPrompt] = React.useState(false);
   const presentInfo = React.useRef(null);
   const navigate = useNavigate();
 
@@ -139,7 +141,7 @@ function PresentationPage() {
       primary: 'Xoá',
       icon: <Icon icon="material-symbols:delete-rounded" />,
       itemProps: { className: classes.delIcon },
-      onItemClick: handleDelete
+      onItemClick: () => setShowDelPrompt(true)
     }
   ];
 
@@ -199,6 +201,31 @@ function PresentationPage() {
             presentInfo.current = null;
           }}
           presentInfo={presentInfo.current}
+        />
+      )}
+
+      {/* Delete prompt */}
+      {isAuth && presentInfo.current && (
+        <Dialog
+          header="Xoá trình chiếu"
+          body={
+            <div>
+              Bạn có chắc muốn xoá bản trình chiếu{' '}
+              <b>"{presentInfo.current?.name}"</b>
+            </div>
+          }
+          action={
+            <Flex spacing={2}>
+              <Button color="grey" onClick={() => setShowDelPrompt(false)}>
+                Huỷ bỏ
+              </Button>
+              <Button color="error" onClick={handleDelete}>
+                Xoá
+              </Button>
+            </Flex>
+          }
+          onClose={() => setShowDelPrompt(false)}
+          open={showDelPrompt}
         />
       )}
     </Container>

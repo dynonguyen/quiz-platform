@@ -37,6 +37,7 @@ if (!isDevMode) {
 
 // ================== Connect mongodb with mongoose ==================
 const mongoose = require('mongoose');
+const { whitelist } = require('~/middleware/whitelist.middleware');
 const MONGO_URL = getEnv('MONGO_URL');
 
 mongoose
@@ -60,7 +61,12 @@ app.use(`${BASE_URL}/auth`, authApi);
 app.use(`${BASE_URL}/group`, authorization, groupApi);
 app.use(`${BASE_URL}/user`, authorization, userApi);
 app.use(`${BASE_URL}/account`, authorization, accountApi);
-app.use(`${BASE_URL}/presentation`, authorization, presentationApi);
+app.use(
+  `${BASE_URL}/presentation`,
+  whitelist(['check-code']),
+  authorization,
+  presentationApi,
+);
 app.get(`${BASE_URL}/test`, (_, res) => {
   res.status(200).json({ msg: 'Success' });
 });
