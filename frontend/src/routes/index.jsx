@@ -22,6 +22,7 @@ const ListGroupPage = lazy(() => import('~/pages/Group/List'));
 const ManageGroupPage = lazy(() => import('~/pages/Group/Manage'));
 const GroupNewsPage = lazy(() => import('~/pages/Group/Manage/News'));
 const DeleteGroupPage = lazy(() => import('~/pages/Group/Manage/Delete'));
+const LeaveGroupPage = lazy(() => import('~/pages/Group/Manage/Leave'));
 const GroupMembersPage = lazy(() => import('~/pages/Group/Manage/Members'));
 const GroupPracticesPage = lazy(() => import('~/pages/Group/Manage/Practices'));
 const GroupGeneralPage = lazy(() => import('~/pages/Group/Manage/General'));
@@ -142,6 +143,12 @@ const routes = [
       {
         path: PATH.MANAGE_GROUP.DELETE,
         element: <DeleteGroupPage />,
+        exact: true,
+        isNested: true
+      },
+      {
+        path: PATH.MANAGE_GROUP.LEAVE,
+        element: <LeaveGroupPage />,
         exact: true,
         isNested: true
       }

@@ -1,5 +1,5 @@
 const { sendEmail, inviteJoinGroupMail } = require('~/configs/mail.config');
-const { APP_NAME, MAX } = require('~/constant');
+const { APP_NAME, MAX, GROUP_ROLES } = require('~/constant');
 const { getEnv, generateUniqueString } = require('~/helper');
 const {
   getGroupById,
@@ -77,6 +77,35 @@ exports.getJoinedGroups = async (req, res) => {
   } catch (error) {
     console.log('getMyGroups ERROR: ', error);
     return res.status(400).json({ message: 'Failed' });
+  }
+};
+
+exports.getRoleInGroup = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const { userId } = req.user;
+
+    const group = await getGroupById(groupId);
+    if (!group) {
+      throw new Error('Group is not exists');
+    }
+
+    if (group.owner._id.toString() === userId) {
+      return res.status(200).json({ role: GROUP_ROLES.OWNER });
+    }
+
+    if (group.coOwners.findIndex((co) => co._id.toString() === userId) !== -1) {
+      return res.status(200).json({ role: GROUP_ROLES.CO_OWNER });
+    }
+
+    if (group.members.findIndex((m) => m._id.toString() === userId) !== -1) {
+      return res.status(200).json({ role: GROUP_ROLES.MEMBER });
+    }
+
+    throw new Error('User is not exists in group');
+  } catch (error) {
+    console.log('getRoleInGroup ERROR: ', error);
+    return res.status(400).json({ msg: 'Failed' });
   }
 };
 

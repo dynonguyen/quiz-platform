@@ -60,7 +60,10 @@ const schema = yup.object({
     .required()
     .min(MIN.PASSWORD)
     .max(MAX.PASSWORD)
-    .matches(REGEX.PASSWORD, 'Mật khẩu không hợp lệ'),
+    .matches(
+      REGEX.PASSWORD,
+      `Mật khẩu từ ${MIN.PASSWORD} đến ${MAX.PASSWORD} ký tự, chứa ít nhất 1 ký tự in thường, 1 ký tự in hoa, 1 ký tự số`
+    ),
   confirmPwd: yup
     .string()
     .required('Vui lòng nhập lại mật khẩu')
@@ -151,10 +154,6 @@ function RegisterPage() {
           error={Boolean(errors.password)}
           {...register('password')}
         />
-        <Typography variant="caption">
-          Mật khẩu từ {MIN.PASSWORD} đến {MAX.PASSWORD} ký tự, chứa ít nhất một
-          ký tự in thường, một ký tự in hoa, một ký tự số
-        </Typography>
         <InputPassword
           placeholder="Nhập lại mật khẩu"
           fullWidth

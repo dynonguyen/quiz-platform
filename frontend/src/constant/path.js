@@ -2,7 +2,7 @@ export const PATH = {
   HOME: '/',
   LOGIN: '/login',
   REGISTER: '/register',
-  ACTIVITY: '/activity',
+  PRESENTATION: '/presentation',
   GROUP: {
     ROOT: '/group',
     NEW: '/group/new',
@@ -14,6 +14,7 @@ export const PATH = {
     ROOT: '/group/manage',
     GENERAL: '/group/manage/:groupId',
     DELETE: '/group/manage/:groupId/delete',
+    LEAVE: '/group/manage/:groupId/leave',
     MEMBERS: '/group/manage/:groupId/members',
     NEWS: '/group/manage/:groupId/news',
     PRACTICES: '/group/manage/:groupId/practices'

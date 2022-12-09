@@ -41,9 +41,9 @@ const useStyles = makeStyles((theme) => ({
 const MENU = [
   { to: PATH.HOME, text: 'Trang Chủ', icon: <Icon icon="ic:round-home" /> },
   {
-    to: PATH.ACTIVITY,
-    text: 'Hoạt Động',
-    icon: <Icon icon="ic:baseline-history" />
+    to: PATH.PRESENTATION,
+    text: 'Trình chiếu',
+    icon: <Icon icon="material-symbols:pause-presentation-rounded" />
   },
   { to: PATH.GROUP.ROOT, text: 'Nhóm', icon: <Icon icon="mdi:account-group" /> }
 ];

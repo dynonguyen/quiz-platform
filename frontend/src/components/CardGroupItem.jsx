@@ -6,7 +6,6 @@ import {
   makeStyles,
   Typography
 } from '@cads-ui/core';
-import { Icon } from '@iconify/react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { PATH } from '~/constant/path';
@@ -31,13 +30,20 @@ function CardGroupItem({ group = {} }) {
 
   return (
     <Link to={`${PATH.MANAGE_GROUP.ROOT}/${_id}`}>
-      <Box sx={{ borderRadius: 2, shadow: 4, p: 4, _hover: { shadow: 8 } }}>
+      <Box
+        sx={{ borderRadius: 2, shadow: 4, p: 4, w: 1, _hover: { shadow: 8 } }}
+      >
         {/* Card top */}
         <Flex justifyContent="space-between">
-          <Flex spacing={2}>
+          <Flex spacing={4}>
             <Avatar src={avt} alt={ownerName} sx={{ flexShrink: 0 }} />
-            <Flex direction="column">
-              <Typography fs={24} color="secondary.main">
+            <Flex direction="column" spacing={1}>
+              <Typography
+                fs={24}
+                sx={{ wordBreak: 'break-all' }}
+                color="secondary.main"
+                maxLine={1}
+              >
                 {name}
               </Typography>
               <Typography fs={14} color="text.secondary">
@@ -45,12 +51,15 @@ function CardGroupItem({ group = {} }) {
               </Typography>
             </Flex>
           </Flex>
-          <Icon className={classes.icon} icon="material-symbols:more-vert" />
         </Flex>
 
-        <Divider spacing={2} />
         {/* Card body */}
-        <Typography color="text.secondary">{desc}</Typography>
+        {desc && (
+          <>
+            <Divider spacing={2} />
+            <Typography color="text.secondary">{desc}</Typography>
+          </>
+        )}
       </Box>
     </Link>
   );

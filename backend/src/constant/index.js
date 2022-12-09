@@ -28,3 +28,9 @@ exports.MAX = {
 exports.MIN = {
   PASSWORD_LEN: 6,
 };
+
+exports.GROUP_ROLES = {
+  OWNER: 'owner',
+  CO_OWNER: 'co-owner',
+  MEMBER: 'member',
+};
