@@ -27,6 +27,11 @@ const GroupMembersPage = lazy(() => import('~/pages/Group/Manage/Members'));
 const GroupPracticesPage = lazy(() => import('~/pages/Group/Manage/Practices'));
 const GroupGeneralPage = lazy(() => import('~/pages/Group/Manage/General'));
 
+const PresentationPage = lazy(() => import('~/pages/Presentation'));
+const PresentationManagePage = lazy(() =>
+  import('~/pages/Presentation/Manage')
+);
+
 const routes = [
   // Home page
   {
@@ -153,6 +158,20 @@ const routes = [
         isNested: true
       }
     ]
+  },
+  // Presentation
+  {
+    path: PATH.PRESENTATION.ROOT,
+    element: <PresentationPage />,
+    exact: true,
+    isProtect: false
+  },
+  {
+    path: PATH.PRESENTATION.MANAGE,
+    element: <PresentationManagePage />,
+    exact: false,
+    isProtect: true,
+    layout: false
   },
   // 404
   {

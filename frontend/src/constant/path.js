@@ -2,7 +2,10 @@ export const PATH = {
   HOME: '/',
   LOGIN: '/login',
   REGISTER: '/register',
-  PRESENTATION: '/presentation',
+  PRESENTATION: {
+    ROOT: '/presentation',
+    MANAGE: '/presentation/:presentId'
+  },
   GROUP: {
     ROOT: '/group',
     NEW: '/group/new',
@@ -25,10 +28,6 @@ export const PATH = {
     UPDATE_PASSWORD: '/settings/update-password',
     ACTIVATION: '/settings/activation',
     PROFILE: '/settings/profile'
-  },
-  QUIZ: {
-    ROOT: '/quiz',
-    NEW: '/quiz/new'
   },
   NOTFOUND: '/not-found'
 };
