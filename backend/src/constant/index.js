@@ -23,6 +23,12 @@ exports.MAX = {
   GROUP_NAME: 100,
   GROUP_DESC: 250,
   GROUP_CODE: 10,
+
+  PRESENTATION_NAME: 100,
+  PRESENTATION_DESC: 150,
+  PRESENTATION_CODE: 15,
+  SLIDE_NAME: 150,
+  SLIDE_DESC: 250,
 };
 
 exports.MIN = {
@@ -33,4 +39,11 @@ exports.GROUP_ROLES = {
   OWNER: 'owner',
   CO_OWNER: 'co-owner',
   MEMBER: 'member',
+};
+
+exports.CHART_TYPES = {
+  BAR: 'bar',
+  DONUT: 'donut',
+  PIE: 'pie',
+  DOTS: 'dots',
 };
