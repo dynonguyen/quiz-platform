@@ -18,6 +18,7 @@ const authApi = require('~/apis/auth.api');
 const userApi = require('~/apis/user.api');
 const accountApi = require('~/apis/account.api');
 const groupApi = require('~/apis/group.api');
+const presentationApi = require('~/apis/presentation.api');
 
 // ================== set port ==================
 const app = express();
@@ -36,7 +37,6 @@ if (!isDevMode) {
 
 // ================== Connect mongodb with mongoose ==================
 const mongoose = require('mongoose');
-const GroupModel = require('~/models/group.model');
 const MONGO_URL = getEnv('MONGO_URL');
 
 mongoose
@@ -60,6 +60,7 @@ app.use(`${BASE_URL}/auth`, authApi);
 app.use(`${BASE_URL}/group`, authorization, groupApi);
 app.use(`${BASE_URL}/user`, authorization, userApi);
 app.use(`${BASE_URL}/account`, authorization, accountApi);
+app.use(`${BASE_URL}/presentation`, authorization, presentationApi);
 app.get(`${BASE_URL}/test`, (_, res) => {
   res.status(200).json({ msg: 'Success' });
 });

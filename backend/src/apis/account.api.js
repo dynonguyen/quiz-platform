@@ -7,4 +7,5 @@ accountApi.post('/activate', controller.postActivateAccount);
 accountApi.get('/check-password', controller.checkIsPasswordExist);
 accountApi.post('/check-password', controller.checkIsMatchPassword);
 accountApi.post('/update-password', controller.postUpdatePassword);
+
 module.exports = accountApi;

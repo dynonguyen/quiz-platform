@@ -38,11 +38,7 @@ function PasswordForm(props) {
           Mật khẩu từ {MIN.PASSWORD} đến {MAX.PASSWORD} ký tự, chứa ít nhất một
           ký tự in thường, một ký tự in hoa, một ký tự số.
         </Typography>
-      ) : (
-        <Typography variant="caption">
-          Vì lý do an ninh, vui lòng nhập mật khẩu của bạn để tiếp tục.
-        </Typography>
-      )}
+      ) : null}
 
       <Button type="submit" variant="outlined">
         {props.buttonValue}

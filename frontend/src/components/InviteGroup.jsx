@@ -16,7 +16,7 @@ function InviteGroup({ groupCode, groupId }) {
   const handleCopyLink = () => {
     if (!copied) {
       const inviteLink = generateGroupInviteLink(groupCode);
-      navigator?.clipboard.writeText(inviteLink);
+      navigator?.clipboard?.writeText(inviteLink);
       setCopied(true);
     }
   };
