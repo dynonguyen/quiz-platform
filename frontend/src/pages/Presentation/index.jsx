@@ -17,6 +17,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import presentationApi from '~/apis/presentationApi';
 import JoinPresentation from '~/components/JoinPresentation';
 import NewOrEditPresentation from '~/components/NewOrEditPresentation';
 import ENDPOINTS from '~/constant/endpoints';
@@ -43,13 +44,16 @@ const useStyles = makeStyles((_) => ({
 // -----------------------------
 function PresentationPage() {
   const { isAuth } = useSelector((state) => state.user);
-  const { data: presentationList = [], isValidating } = useFetch(
-    isAuth ? `${ENDPOINTS.PRESENTATION}/list` : null
-  );
+  const {
+    data: presentationList = [],
+    isValidating,
+    mutate: refetch
+  } = useFetch(isAuth ? `${ENDPOINTS.PRESENTATION}/list` : null);
   const classes = useStyles();
   const [moreMenuAnchor, setMoreMenuAnchor] = React.useState(null);
   const [openNewEditModal, setOpenNewEditModal] = React.useState(false);
   const [showDelPrompt, setShowDelPrompt] = React.useState(false);
+  const [deleting, setDeleting] = React.useState(false);
   const presentInfo = React.useRef(null);
   const navigate = useNavigate();
 
@@ -75,9 +79,22 @@ function PresentationPage() {
     toast.success('Đã sao chép liên kết chia sẻ vào clipboard');
   };
 
-  const handleDelete = () => {
-    // TODO: Delete presentation
-    console.log('DELETE: ', presentInfo.current);
+  const handleDelete = async () => {
+    setDeleting(true);
+    try {
+      const presentationId = presentInfo.current?._id;
+      if (!presentationId) throw new Error();
+      const apiRes = await presentationApi.deletePresentation(presentationId);
+      if (apiRes.status === 200) {
+        refetch();
+        toast.success('Xoá bản trình chiếu thành công');
+      }
+    } catch (error) {
+      toast.error('Xoá bản trình chiếu thất bại, thử lại !');
+    } finally {
+      setDeleting(false);
+      setShowDelPrompt(false);
+    }
   };
 
   const columns = [
@@ -219,7 +236,7 @@ function PresentationPage() {
               <Button color="grey" onClick={() => setShowDelPrompt(false)}>
                 Huỷ bỏ
               </Button>
-              <Button color="error" onClick={handleDelete}>
+              <Button color="error" onClick={handleDelete} loading={deleting}>
                 Xoá
               </Button>
             </Flex>

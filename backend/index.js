@@ -38,6 +38,7 @@ if (!isDevMode) {
 // ================== Connect mongodb with mongoose ==================
 const mongoose = require('mongoose');
 const { whitelist } = require('~/middleware/whitelist.middleware');
+const PresentationModel = require('~/models/presentation.model');
 const MONGO_URL = getEnv('MONGO_URL');
 
 mongoose
@@ -69,6 +70,14 @@ app.use(
 );
 app.get(`${BASE_URL}/test`, (_, res) => {
   res.status(200).json({ msg: 'Success' });
+  for (let i = 2; i < 10; ++i) {
+    PresentationModel.create({
+      code: '123456' + i,
+      name: 'Bản trình chiếu ' + i,
+      owner: '637902b3fe1f46d7c44cb8c3',
+      desc: 'Mô tả bản thuyết trình ' + i,
+    });
+  }
 });
 
 // ================== Listening ... ==================

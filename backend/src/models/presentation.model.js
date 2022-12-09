@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 
 // -----------------------------
 const slideOptionSchema = new Schema({
-  label: { type: String, required: true, trim: true, unique: true },
-  value: { type: String, required: true, trim: true, unique: true },
+  label: { type: String, required: true, trim: true },
+  value: { type: String, required: true, trim: true },
   photo: String,
   isCorrect: { type: Boolean, default: false },
   order: { type: Number, default: 1 },
@@ -20,13 +20,13 @@ const slideSettingSchema = new Schema({
 
 const slideAnswerSchema = new Schema({
   // userId or ip to detect user
-  userId: { type: String, required: true, unique: true },
+  userId: { type: String, required: true },
   // Map to value in slide options
-  answers: [{ type: String, required: true, trim: true, unique: true }],
+  answers: [{ type: String, required: true, trim: true }],
 });
 
 const slideSchema = new Schema({
-  id: { type: String, required: true, unique: true, trim: true },
+  id: { type: String, required: true, trim: true },
   type: { type: String, required: true },
   question: {
     type: String,

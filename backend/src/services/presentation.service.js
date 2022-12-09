@@ -7,3 +7,7 @@ exports.getPresentationByUserId = async (userId) => {
 exports.checkPresentationExistByCode = async (code) => {
   return await PresentationModel.exists({ code });
 };
+
+exports.deletePresentationById = async (_id) => {
+  return await PresentationModel.deleteOne({ _id });
+};

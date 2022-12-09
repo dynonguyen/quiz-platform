@@ -1,5 +1,4 @@
 exports.whitelist = (paths = []) => {
-  console.log(paths);
   return (req, res, next) => {
     const fullPath = req.baseUrl + req.path;
     req.isWhitelist = false;

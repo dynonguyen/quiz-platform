@@ -24,3 +24,17 @@ exports.getCheckCode = async (req, res) => {
     return res.status(400).json({ msg: 'Failed' });
   }
 };
+
+exports.deletePresentation = async (req, res) => {
+  try {
+    const { presentationId } = req.params;
+    const delRes = await service.deletePresentationById(presentationId);
+    if (delRes) {
+      return res.status(200).json({ msg: 'success' });
+    }
+    throw new Error('Delete failed');
+  } catch (error) {
+    console.log('deletePresentation ERROR: ', error);
+    return res.status(400).json({ msg: 'Failed' });
+  }
+};
