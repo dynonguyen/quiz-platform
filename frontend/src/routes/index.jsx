@@ -170,7 +170,7 @@ const routes = [
     path: PATH.PRESENTATION.MANAGE,
     element: <PresentationManagePage />,
     exact: false,
-    isProtect: true,
+    isProtect: false,
     layout: false
   },
   // 404

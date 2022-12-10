@@ -4,7 +4,7 @@ export const PATH = {
   REGISTER: '/register',
   PRESENTATION: {
     ROOT: '/presentation',
-    MANAGE: '/presentation/:presentId'
+    MANAGE: '/presentation/:presentationId'
   },
   GROUP: {
     ROOT: '/group',

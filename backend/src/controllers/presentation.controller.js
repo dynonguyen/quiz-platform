@@ -25,6 +25,21 @@ exports.getCheckCode = async (req, res) => {
   }
 };
 
+exports.getPresentationByCode = async (req, res) => {
+  try {
+    const { code } = req.query;
+    if (!code) {
+      throw new Error('code not found');
+    }
+
+    const presentation = await service.getPresentationByCode(code);
+    return res.status(200).json(presentation.toObject());
+  } catch (error) {
+    console.log('getPresentationByCode ERROR: ', error);
+    return res.status(400).json({ msg: 'presentation not found' });
+  }
+};
+
 exports.deletePresentation = async (req, res) => {
   try {
     const { presentationId } = req.params;

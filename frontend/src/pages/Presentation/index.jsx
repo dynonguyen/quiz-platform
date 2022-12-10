@@ -15,7 +15,7 @@ import { Icon } from '@iconify/react';
 import moment from 'moment';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import presentationApi from '~/apis/presentationApi';
 import JoinPresentation from '~/components/JoinPresentation';
@@ -100,7 +100,10 @@ function PresentationPage() {
   const columns = [
     {
       key: 'name',
-      title: 'Tên'
+      title: 'Tên',
+      render: (name, record) => (
+        <Link to={`${PATH.PRESENTATION.ROOT}/${record.code}`}>{name}</Link>
+      )
     },
     { key: 'code', title: 'Mã tham dự' },
     {
@@ -171,6 +174,10 @@ function PresentationPage() {
 
       {/* My presentation */}
       <Table
+        columns={columns}
+        rows={presentationList}
+        loading={isValidating}
+        keyField="_id"
         header={
           <Flex justifyContent="space-between" wrap wrapSpace="row">
             <Typography variant="h4">Trình chiếu của tôi</Typography>
@@ -182,10 +189,6 @@ function PresentationPage() {
             </Button>
           </Flex>
         }
-        columns={columns}
-        rows={presentationList}
-        loading={isValidating}
-        keyField="_id"
         allowExport
         searchControl={{ fields: ['name', 'code'] }}
         rowFilterControl={{

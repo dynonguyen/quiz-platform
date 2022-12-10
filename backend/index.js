@@ -64,20 +64,12 @@ app.use(`${BASE_URL}/user`, authorization, userApi);
 app.use(`${BASE_URL}/account`, authorization, accountApi);
 app.use(
   `${BASE_URL}/presentation`,
-  whitelist(['check-code']),
+  whitelist(['check-code', 'get-by-code']),
   authorization,
   presentationApi,
 );
 app.get(`${BASE_URL}/test`, (_, res) => {
   res.status(200).json({ msg: 'Success' });
-  for (let i = 2; i < 10; ++i) {
-    PresentationModel.create({
-      code: '123456' + i,
-      name: 'Bản trình chiếu ' + i,
-      owner: '637902b3fe1f46d7c44cb8c3',
-      desc: 'Mô tả bản thuyết trình ' + i,
-    });
-  }
 });
 
 // ================== Listening ... ==================

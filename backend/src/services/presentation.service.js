@@ -4,6 +4,10 @@ exports.getPresentationByUserId = async (userId) => {
   return await PresentationModel.find({ owner: userId });
 };
 
+exports.getPresentationByCode = async (code) => {
+  return await PresentationModel.findOne({ code }).populate('owner');
+};
+
 exports.checkPresentationExistByCode = async (code) => {
   return await PresentationModel.exists({ code });
 };

@@ -31,10 +31,12 @@ function NewOrEditPresentation({
   const isEdit = Boolean(presentId);
 
   const handleCreate = (form) => {
+    // TODO: Handle logic here
     console.log('NEW: ', form);
   };
 
   const handleEdit = (form) => {
+    // TODO: Handle logic here
     console.log('EDIT: ', form);
   };
 
