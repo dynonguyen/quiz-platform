@@ -30,6 +30,7 @@
   - Google Identify Service (https://developers.google.com/identity/gsi/web/guides/overview)
   - Icon - Iconify + MUI icon (https://icon-sets.iconify.design/)
   - React-toastify (https://www.npmjs.com/package/react-toastify)
+  - chart.js react-chartjs-2 (https://react-chartjs-2.js.org/)
   - Build tool: ViteJS (https://vitejs.dev/)
 
 - Storage, Hosting, Cloud:
