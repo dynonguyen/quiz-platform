@@ -27,11 +27,12 @@ export const savePresentation = createAsyncThunk(
 // -----------------------------
 const initialState = {
   _id: null,
-  slices: [],
+  slides: [],
   saving: false,
   isPresenting: false,
   activeSlide: 1,
-  openMobileSetting: false
+  openMobileSetting: false,
+  loading: true
 };
 
 // -----------------------------
@@ -43,7 +44,7 @@ const presentationSlice = createSlice({
       return { ...state, ...action.payload };
     },
     addPresentation(_, action) {
-      return { ...initialState, ...action.payload };
+      return { ...initialState, loading: false, ...action.payload };
     },
     removePresentation() {
       return { ...initialState };

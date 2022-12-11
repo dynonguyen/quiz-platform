@@ -11,6 +11,7 @@ import {
   Typography
 } from '@cads-ui/core';
 import clsx from 'clsx';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import Icon from '~/components/Icon';
 import { CHART_TYPES, SLIDE_TYPE_OPTIONS } from '~/constant/presentation';
@@ -87,6 +88,11 @@ function SlideOption({
 function SlideSettings() {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const questionRef = React.useRef(null);
+  const descRef = React.useRef(null);
+  const prevSlideId = React.useRef('');
+
   const { slides = [], activeSlide } = useSelectorOnly('presentation', [
     'slides',
     'code',
@@ -95,13 +101,14 @@ function SlideSettings() {
   ]);
 
   const slide = slides[activeSlide - 1] || {};
-  const { type, question, desc, options = [], settings = {} } = slide;
+  const { id, type, question, desc, options = [], settings = {} } = slide;
   const { showCorrectAnswer, chartType, showPercentage, multipleChoice } =
     settings;
 
-  console.log(slide);
-
   const saveUpdatedSlices = (key, value) => {
+    // Prevent update when switch slide
+    if (prevSlideId.current !== id) return;
+
     const updateSlides = JSON.parse(JSON.stringify(slides));
     updateSlides[activeSlide - 1][key] = value;
     dispatch(savePresentation({ slides: updateSlides }));
@@ -130,6 +137,20 @@ function SlideSettings() {
     saveUpdatedSlices('settings', { ...settings, [field]: value });
   };
 
+  // Update value input
+  React.useEffect(() => {
+    questionRef.current.value = question;
+  }, [question]);
+
+  React.useEffect(() => {
+    descRef.current.value = desc;
+  }, [desc]);
+
+  // Prevent update when switch slide
+  React.useEffect(() => {
+    prevSlideId.current = id;
+  }, [id]);
+
   return (
     <Flex direction="column" spacing={5} sx={{ p: 4, overflowY: 'auto', h: 1 }}>
       {/* Slide type */}
@@ -152,15 +173,13 @@ function SlideSettings() {
           Câu hỏi
         </Typography>
         <Input
+          ref={questionRef}
           id="question"
-          defaultValue={question}
           fullWidth
           placeholder="Nhập câu hỏi"
-          maxLength={MAX.PRESENTATION_NAME}
           debounceTime={500}
-          onChange={(e) =>
-            saveUpdatedSlices('question', e.target.value?.trim())
-          }
+          maxLength={MAX.PRESENTATION_NAME}
+          onChange={(e) => saveUpdatedSlices('question', e.target.value.trim())}
         />
       </Flex>
 
@@ -170,14 +189,14 @@ function SlideSettings() {
           Mô tả
         </Typography>
         <Input
+          ref={descRef}
           id="desc"
-          defaultValue={desc}
           fullWidth
           multiple
           placeholder="Nhập mô tả (nếu có)"
-          maxLength={MAX.PRESENTATION_DESC}
           debounceTime={500}
-          onChange={(e) => saveUpdatedSlices('desc', e.target.value?.trim())}
+          maxLength={MAX.PRESENTATION_DESC}
+          onChange={(e) => saveUpdatedSlices('desc', e.target.value.trim())}
         />
       </Flex>
 

@@ -19,3 +19,16 @@ export function getOriginPath(path = '') {
 export function generateGroupInviteLink(groupCode) {
   return `${window.location.origin}/group/join?code=${groupCode}`;
 }
+
+export function generateUniqueString(length = 8) {
+  let res = '';
+  const alphabet =
+    'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const alLength = alphabet.length;
+
+  for (let i = 0; i < length; i++) {
+    res += alphabet[~~(Math.random() * alLength)];
+  }
+
+  return res;
+}

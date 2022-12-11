@@ -12,7 +12,10 @@ import { useDispatch } from 'react-redux';
 import Icon from '~/components/Icon';
 import { SLIDE_TYPE_ICONS } from '~/constant/presentation';
 import useSelectorOnly from '~/hooks/useOnlySelector';
-import { updatePresentation } from '~/redux/slices/presentationSlice';
+import {
+  savePresentation,
+  updatePresentation
+} from '~/redux/slices/presentationSlice';
 
 const THUMB_HEIGHT = 108;
 
@@ -117,8 +120,16 @@ const useStyles = makeStyles((theme) => ({
 
 // -----------------------------
 function SlideThumbItem(props) {
-  const { slide, order, isActive, isPresent, classes, moveSlide, onClick } =
-    props;
+  const {
+    slide,
+    order,
+    isActive,
+    isPresent,
+    classes,
+    moveSlide,
+    onClick,
+    onDelete
+  } = props;
   const {
     id,
     type,
@@ -129,11 +140,6 @@ function SlideThumbItem(props) {
     answers = []
   } = slide;
   const [openDelModal, setOpenDelModal] = React.useState(false);
-
-  const handleDeleteSlide = () => {
-    // TODO: delete slide
-    console.log('DELETE slide: ', slide.id);
-  };
 
   return (
     <Flex className={clsx(classes.thumbWrap, { active: isActive })} spacing={2}>
@@ -217,7 +223,13 @@ function SlideThumbItem(props) {
             <Button color="grey" onClick={() => setOpenDelModal(false)}>
               Huỷ bỏ
             </Button>
-            <Button color="error" onClick={handleDeleteSlide}>
+            <Button
+              color="error"
+              onClick={() => {
+                setOpenDelModal(false);
+                onDelete();
+              }}
+            >
               Xoá
             </Button>
           </Flex>
@@ -244,13 +256,26 @@ function SlideThumbs() {
 
   const moveSlide = (isUp = false, slideId, order) => {
     if ((isUp && order > 1) || (!isUp && order < totalSlides)) {
-      // TODO: move slide
-      console.log('TODO move slide: ', slideId, isUp);
+      const updateSlides = JSON.parse(JSON.stringify(slides));
+      const swapIndex = isUp ? order - 2 : order;
+
+      [updateSlides[order - 1], updateSlides[swapIndex]] = [
+        updateSlides[swapIndex],
+        updateSlides[order - 1]
+      ];
+
+      dispatch(savePresentation({ slides: updateSlides }));
     }
   };
 
   const handleSlideClick = (order) => {
     dispatch(updatePresentation({ activeSlide: order }));
+  };
+
+  const handleDeleteSlide = (slideId) => {
+    dispatch(
+      savePresentation({ slides: slides.filter((s) => s.id !== slideId) })
+    );
   };
 
   return (
@@ -270,6 +295,7 @@ function SlideThumbs() {
             totalSlides={totalSlides}
             moveSlide={(isUp) => moveSlide(isUp, slideId, order)}
             onClick={() => handleSlideClick(order)}
+            onDelete={() => handleDeleteSlide(slideId)}
           />
         );
       })}

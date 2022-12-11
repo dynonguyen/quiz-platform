@@ -1,4 +1,5 @@
 import { makeStyles, useMediaQuery } from '@cads-ui/core';
+import ComponentLoading from '~/components/ComponentLoading';
 import useSelectorOnly from '~/hooks/useOnlySelector';
 import Control from './Control';
 import SlideSettings from './SlideSettings';
@@ -56,9 +57,12 @@ const useStyles = makeStyles((theme) => ({
 function PresentHostView() {
   const classes = useStyles();
   const isMobile = useMediaQuery({ down: 'md' });
-  const { openMobileSetting } = useSelectorOnly('presentation', [
-    'openMobileSetting'
+  const { openMobileSetting, loading } = useSelectorOnly('presentation', [
+    'openMobileSetting',
+    'loading'
   ]);
+
+  if (loading) return <ComponentLoading />;
 
   return (
     <div className={classes.root}>

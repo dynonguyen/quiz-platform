@@ -77,7 +77,7 @@ exports.postNewPresentation = async (req, res) => {
       desc,
       code,
       owner: userId,
-      slides: [DEFAULTS.SLIDE],
+      slides: [DEFAULTS.SLIDE()],
     });
     if (newPresentation) {
       return res.status(201).json({ msg: 'Success' });

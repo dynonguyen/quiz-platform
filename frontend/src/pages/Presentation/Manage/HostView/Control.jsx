@@ -1,8 +1,12 @@
 import { Button, Flex, makeStyles } from '@cads-ui/core';
 import { useDispatch } from 'react-redux';
 import Icon from '~/components/Icon';
+import { DEFAULTS } from '~/constant/default';
 import useSelectorOnly from '~/hooks/useOnlySelector';
-import { updatePresentation } from '~/redux/slices/presentationSlice';
+import {
+  savePresentation,
+  updatePresentation
+} from '~/redux/slices/presentationSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,13 +20,13 @@ const useStyles = makeStyles((theme) => ({
 function HostViewControl() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { openMobileSetting } = useSelectorOnly('presentation', [
-    'openMobileSetting'
+  const { openMobileSetting, slides } = useSelectorOnly('presentation', [
+    'openMobileSetting',
+    'slides'
   ]);
 
   const handleCreateSlide = () => {
-    // TODO: create slide
-    console.log('TODO create slide');
+    dispatch(savePresentation({ slides: [...slides, DEFAULTS.SLIDE()] }));
   };
 
   return (

@@ -1,7 +1,7 @@
-const { generateUniqueString } = require('~/helper');
-const { CHART_TYPES, SLIDE_TYPES } = require('.');
+import { generateUniqueString } from '~/helper';
+import { CHART_TYPES, SLIDE_TYPES } from './presentation';
 
-const DEFAULTS = {
+export const DEFAULTS = {
   SLIDE: () => ({
     id: generateUniqueString(20),
     type: SLIDE_TYPES.MULTIPLE_CHOICE,
@@ -13,9 +13,7 @@ const DEFAULTS = {
       chartType: CHART_TYPES.BAR,
       showCorrectAnswer: false,
       showPercentage: false,
-      multipleChoice: 1,
-    },
-  }),
+      multipleChoice: 1
+    }
+  })
 };
-
-module.exports = DEFAULTS;
