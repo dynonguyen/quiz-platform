@@ -61,10 +61,6 @@ function PresentationPage() {
     setMoreMenuAnchor(null);
   });
 
-  const handlePresent = () => {
-    console.log('PRESENT: ', presentInfo.current);
-  };
-
   const handleOpenNewPresentation = () => {
     if (!isAuth) {
       return navigate(PATH.LOGIN);
@@ -77,6 +73,7 @@ function PresentationPage() {
       `${window.location.origin}/${PATH.PRESENTATION.ROOT}/${presentInfo.current?.code}`
     );
     toast.success('Đã sao chép liên kết chia sẻ vào clipboard');
+    presentInfo.current = null;
   };
 
   const handleDelete = async () => {
@@ -94,6 +91,7 @@ function PresentationPage() {
     } finally {
       setDeleting(false);
       setShowDelPrompt(false);
+      presentInfo.current = null;
     }
   };
 
@@ -142,11 +140,6 @@ function PresentationPage() {
   ];
 
   const moreMenu = [
-    {
-      primary: 'Trình chiếu',
-      icon: <Icon icon="material-symbols:play-arrow-rounded" />,
-      onItemClick: handlePresent
-    },
     {
       primary: 'Chia sẻ',
       icon: <Icon icon="material-symbols:share" />,

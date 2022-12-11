@@ -1,4 +1,5 @@
-import { makeStyles } from '@cads-ui/core';
+import { makeStyles, useMediaQuery } from '@cads-ui/core';
+import useSelectorOnly from '~/hooks/useOnlySelector';
 import Control from './Control';
 import SlideSettings from './SlideSettings';
 import SlideShow from './SlideShow';
@@ -11,8 +12,8 @@ const HEIGHT = {
   CONTROL: 64
 };
 const WIDTH = {
-  THUMBS: 220,
-  SETTING: 400
+  THUMBS: 200,
+  SETTING: 380
 };
 
 // -----------------------------
@@ -54,6 +55,10 @@ const useStyles = makeStyles((theme) => ({
 // -----------------------------
 function PresentHostView() {
   const classes = useStyles();
+  const isMobile = useMediaQuery({ down: 'md' });
+  const { openMobileSetting } = useSelectorOnly('presentation', [
+    'openMobileSetting'
+  ]);
 
   return (
     <div className={classes.root}>
@@ -64,15 +69,21 @@ function PresentHostView() {
         <Control />
       </div>
       <div className={classes.main}>
-        <div className={classes.slideThumbs}>
-          <SlideThumbs />
-        </div>
-        <div className={classes.slideShow}>
-          <SlideShow />
-        </div>
-        <div className={classes.slideSettings}>
-          <SlideSettings />
-        </div>
+        {!openMobileSetting && (
+          <div className={classes.slideThumbs}>
+            <SlideThumbs />
+          </div>
+        )}
+        {!isMobile && (
+          <div className={classes.slideShow}>
+            <SlideShow />
+          </div>
+        )}
+        {(!isMobile || openMobileSetting) && (
+          <div className={classes.slideSettings}>
+            <SlideSettings />
+          </div>
+        )}
       </div>
     </div>
   );

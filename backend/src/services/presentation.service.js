@@ -12,10 +12,18 @@ exports.checkPresentationExistByCode = async (code) => {
   return await PresentationModel.exists({ code });
 };
 
+exports.checkPresentationExistByQuery = async (query) => {
+  return await PresentationModel.exists(query);
+};
+
 exports.deletePresentationById = async (_id) => {
   return await PresentationModel.deleteOne({ _id });
 };
 
 exports.createNewPresentation = async (presentation = {}) => {
   return await PresentationModel.create({ ...presentation });
+};
+
+exports.updatePresentation = async (query, setFields) => {
+  return await PresentationModel.updateOne(query, { $set: setFields });
 };

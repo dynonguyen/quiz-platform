@@ -1,6 +1,18 @@
-import { alpha, Flex, makeStyles, Typography } from '@cads-ui/core';
+import {
+  alpha,
+  Button,
+  Dialog,
+  Flex,
+  makeStyles,
+  Typography
+} from '@cads-ui/core';
 import clsx from 'clsx';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import Icon from '~/components/Icon';
+import { SLIDE_TYPE_ICONS } from '~/constant/presentation';
+import useSelectorOnly from '~/hooks/useOnlySelector';
+import { updatePresentation } from '~/redux/slices/presentationSlice';
 
 const THUMB_HEIGHT = 108;
 
@@ -46,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
       transition: 'opacity 0.3s',
       fs: 20,
       cursor: 'pointer',
+      zIndex: 3,
       _hover: {
         color: 'text.secondary'
       }
@@ -103,11 +116,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // -----------------------------
-function SlideThumbItem({ active, slide = {}, classes }) {
-  const { id, question = '', type, order = 1 } = slide;
+function SlideThumbItem(props) {
+  const { slide, order, isActive, isPresent, classes, moveSlide, onClick } =
+    props;
+  const {
+    id,
+    type,
+    question = '',
+    name,
+    settings = {},
+    options = [],
+    answers = []
+  } = slide;
+  const [openDelModal, setOpenDelModal] = React.useState(false);
+
+  const handleDeleteSlide = () => {
+    // TODO: delete slide
+    console.log('DELETE slide: ', slide.id);
+  };
 
   return (
-    <Flex className={clsx(classes.thumbWrap, { active })} spacing={2}>
+    <Flex className={clsx(classes.thumbWrap, { active: isActive })} spacing={2}>
       {/* Order */}
       <Flex
         direction="column"
@@ -116,39 +145,84 @@ function SlideThumbItem({ active, slide = {}, classes }) {
       >
         <Flex direction="column" center>
           <span>{order}</span>
-          {active && (
+          {isPresent && (
             <Icon
               sx={{ color: 'primary.main', fs: 18 }}
               icon="material-symbols:play-arrow-rounded"
             />
           )}
         </Flex>
+
         <Flex direction="column" center>
           <Icon
             className="move-icon"
             icon="material-symbols:keyboard-arrow-up-rounded"
+            onClick={() => moveSlide(true)}
           />
           <Icon
             className="move-icon"
             icon="material-symbols:keyboard-arrow-down-rounded"
+            onClick={() => moveSlide(false)}
           />
         </Flex>
       </Flex>
 
       {/* Thumb box */}
-      <Flex center direction="column" spacing={2} className={classes.thumbBox}>
+      <Flex
+        center
+        direction="column"
+        spacing={2}
+        className={classes.thumbBox}
+        onClick={onClick}
+      >
         <Icon
           className="delete-slide-icon"
           icon="material-symbols:delete-forever"
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpenDelModal(true);
+          }}
         />
-        <Icon
-          sx={{ fs: 20, color: 'text.secondary' }}
-          icon="bi:bar-chart-line-fill"
-        />
+        {SLIDE_TYPE_ICONS[type] && (
+          <Icon
+            sx={{ fs: 20, color: 'text.secondary' }}
+            icon={SLIDE_TYPE_ICONS[type]}
+          />
+        )}
         <Typography maxLine={1} fs={13} color="text.secondary" align="center">
           {question}
         </Typography>
       </Flex>
+
+      {/* Delete slide modal */}
+      <Dialog
+        open={openDelModal}
+        alertType="warning"
+        header="Xoá slide"
+        hideDivider
+        onClose={() => setOpenDelModal(false)}
+        body={
+          <Typography
+            align="center"
+            color="text.secondary"
+            sx={{ lineHeight: 1.75 }}
+          >
+            Bạn có chắc muốn xoá slide <b>{question}</b> ?
+            <br />
+            Thao tác này không thể phục hồi.
+          </Typography>
+        }
+        action={
+          <Flex spacing={2}>
+            <Button color="grey" onClick={() => setOpenDelModal(false)}>
+              Huỷ bỏ
+            </Button>
+            <Button color="error" onClick={handleDeleteSlide}>
+              Xoá
+            </Button>
+          </Flex>
+        }
+      />
     </Flex>
   );
 }
@@ -156,14 +230,49 @@ function SlideThumbItem({ active, slide = {}, classes }) {
 // -----------------------------
 function SlideThumbs() {
   const classes = useStyles();
+  const {
+    slides = [],
+    currentSlide,
+    activeSlide
+  } = useSelectorOnly('presentation', [
+    'slides',
+    'currentSlide',
+    'activeSlide'
+  ]);
+  const totalSlides = slides.length;
+  const dispatch = useDispatch();
+
+  const moveSlide = (isUp = false, slideId, order) => {
+    if ((isUp && order > 1) || (!isUp && order < totalSlides)) {
+      // TODO: move slide
+      console.log('TODO move slide: ', slideId, isUp);
+    }
+  };
+
+  const handleSlideClick = (order) => {
+    dispatch(updatePresentation({ activeSlide: order }));
+  };
 
   return (
     <Flex spacing={4} direction="column" className={classes.root}>
-      {Array(20)
-        .fill(1)
-        .map((_, i) => (
-          <SlideThumbItem key={i} classes={classes} />
-        ))}
+      {slides.map((slide, index) => {
+        const order = index + 1;
+        const slideId = slide.id;
+
+        return (
+          <SlideThumbItem
+            key={slideId}
+            slide={slide}
+            order={order}
+            isActive={activeSlide === order}
+            isPresent={currentSlide === slideId}
+            classes={classes}
+            totalSlides={totalSlides}
+            moveSlide={(isUp) => moveSlide(isUp, slideId, order)}
+            onClick={() => handleSlideClick(order)}
+          />
+        );
+      })}
     </Flex>
   );
 }

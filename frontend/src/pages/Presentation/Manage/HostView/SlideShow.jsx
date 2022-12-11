@@ -1,5 +1,6 @@
 import { Badge, Box, Flex, makeStyles, Typography } from '@cads-ui/core';
 import {
+  ArcElement,
   BarElement,
   CategoryScale,
   Chart as ChartJS,
@@ -8,22 +9,75 @@ import {
   Title,
   Tooltip
 } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import React from 'react';
-import { Bar } from 'react-chartjs-2';
+import { Chart } from 'react-chartjs-2';
 import Icon from '~/components/Icon';
+import { CHART_COLORS, CHART_TYPES } from '~/constant/presentation';
+import useSelectorOnly from '~/hooks/useOnlySelector';
 
+// -----------------------------
 ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
+  ArcElement,
+  ChartDataLabels,
   Title,
-  Tooltip,
-  Legend
+  Legend,
+  Tooltip
 );
+
+const chartOptions = (type, showLabel = false, showPercent = false) => {
+  const options = { responsive: true, maintainAspectRatio: false };
+  const plugins = {};
+
+  if (type === CHART_TYPES.BAR) {
+    Object.assign(options, {
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 18 } } },
+        y: { display: false }
+      }
+    });
+  }
+
+  // Legend
+  const showLegend = type === CHART_TYPES.PIE || type === CHART_TYPES.DONUT;
+  Object.assign(plugins, {
+    legend: showLegend
+      ? { position: 'top', align: 'center', font: { size: 20 } }
+      : { display: false }
+  });
+
+  // data label
+  Object.assign(plugins, {
+    datalabels: showLabel
+      ? {
+          anchor: 'center',
+          align: 'center',
+          color: '#fff',
+          font: { size: 18, weight: 500 },
+          formatter: showPercent
+            ? (value, context) => {
+                const data = Array.from(context.dataset?.data) || [];
+                const total = data.reduce((s, d) => s + d, 0);
+                return `${((value * 100) / total).toFixed(0)}%`;
+              }
+            : null
+        }
+      : { display: false }
+  });
+
+  // Add plugin option
+  Object.assign(options, { plugins });
+
+  return options;
+};
 
 // -----------------------------
 const useStyles = makeStyles((theme) => ({
-  root: { p: 8, bgColor: 'grey.300', h: 1 },
+  root: { p: 6, bgColor: 'grey.300', h: 1 },
+
   slide: {
     bgColor: 'background.default',
     w: 1,
@@ -32,6 +86,17 @@ const useStyles = makeStyles((theme) => ({
     p: 4,
     position: 'relative'
   },
+
+  chartWrap: {
+    p: 4,
+    w: '80%',
+    margin: '0px auto',
+    flexGrow: 1,
+    maxH: 1,
+    overflow: 'hidden',
+    position: 'relative'
+  },
+
   userOnlineWrap: {
     position: 'absolute',
     bottom: '16px',
@@ -50,44 +115,59 @@ const useStyles = makeStyles((theme) => ({
 const SLIDE_RATIO = 16 / 9;
 
 // -----------------------------
-function SlideResultChart() {
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top'
-      }
-    }
-  };
+function calcResult(options = [], answers = []) {
+  const result = Array(options.length).fill(0);
 
-  const labels = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July'
-  ];
+  answers.forEach((ans) => {
+    const { choices = [] } = ans;
+    choices.forEach((choice) => {
+      const optionIndex = options.findIndex((o) => o.value === choice);
+      if (optionIndex !== -1) {
+        result[optionIndex]++;
+      }
+    });
+  });
+
+  return result;
+}
+
+// -----------------------------
+function SlideResultChart({ slide }) {
+  const { options = [], answers = [], settings = {} } = slide;
+  const { chartType = CHART_TYPES.BAR, showPercentage } = settings;
+  const showResult = true;
+  const result = calcResult(options, answers);
 
   const data = {
-    labels,
-    datasets: [
-      {
-        label: 'Dataset 2',
-        data: [1, 4, 5, 6, 7, 2, 4],
-        backgroundColor: 'rgba(53, 162, 235, 0.5)'
-      }
-    ]
+    labels: options.map((o) => o.value),
+    datasets: [{ data: result, backgroundColor: CHART_COLORS }]
   };
 
-  return <Bar options={options} data={data} />;
+  return (
+    <Chart
+      type={chartType}
+      options={chartOptions(chartType, showResult, showPercentage)}
+      data={data}
+    />
+  );
 }
 
 // -----------------------------
 function SlideShow() {
   const classes = useStyles();
   const slideRef = React.useRef(null);
+  const {
+    slides = [],
+    code,
+    activeSlide,
+    onlineCount
+  } = useSelectorOnly('presentation', [
+    'slides',
+    'code',
+    'activeSlide',
+    'onlineCount'
+  ]);
+  const slide = slides[activeSlide - 1] || {};
 
   // Change size when window resize
   React.useEffect(() => {
@@ -107,28 +187,42 @@ function SlideShow() {
 
   return (
     <div className={classes.root}>
-      <div className={classes.slide} ref={slideRef}>
-        <Typography fs={20} align="center">
-          Mã tham dự trình chiếu <strong>19210143</strong>
+      <Flex
+        spacing={4}
+        direction="column"
+        className={classes.slide}
+        ref={slideRef}
+      >
+        <Typography fs={20} align="center" color="text.secondary">
+          Mã tham dự trình chiếu <strong>{code}</strong>
         </Typography>
 
-        <Typography fs={20} sx={{ my: 3 }} align="center">
-          Test slide
-        </Typography>
+        <Box>
+          <Typography fs={20} align="center">
+            {slide.question}
+          </Typography>
 
-        <Flex center sx={{ p: 4, w: '80%', margin: '0px auto' }}>
-          <SlideResultChart />
+          {slide.desc && (
+            <Typography fs={15} color="text.secondary" align="center">
+              {slide.desc}
+            </Typography>
+          )}
+        </Box>
+
+        {/* Chart result */}
+        <Flex center className={classes.chartWrap}>
+          <SlideResultChart slide={slide} />
         </Flex>
 
         {/* Online user */}
         <Box className={classes.userOnlineWrap}>
-          <Badge content={1}>
+          <Badge content={onlineCount}>
             <Flex center className={classes.userOnline}>
               <Icon sx={{ fs: 20 }} icon="mdi:user" />
             </Flex>
           </Badge>
         </Box>
-      </div>
+      </Flex>
     </div>
   );
 }

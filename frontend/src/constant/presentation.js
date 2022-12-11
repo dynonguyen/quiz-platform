@@ -1,2 +1,0 @@
-const PRESENTATION_TYPES = {};
-const PRESENT_TYPE_ICONS = {};

@@ -52,7 +52,7 @@ function NewOrEditPresentation({
   };
 
   const handleEdit = (form) => {
-    // TODO: Handle logic here
+    // TODO: edit presentation
     console.log('EDIT: ', form);
   };
 

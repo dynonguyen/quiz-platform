@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 
 // -----------------------------
 const slideOptionSchema = new Schema({
-  label: { type: String, required: true, trim: true },
   value: { type: String, required: true, trim: true },
   photo: String,
   isCorrect: { type: Boolean, default: false },
@@ -22,17 +21,17 @@ const slideAnswerSchema = new Schema({
   // userId or ip to detect user
   userId: { type: String, required: true },
   // Map to value in slide options
-  answers: [{ type: String, required: true, trim: true }],
+  choices: [{ type: String, required: true, trim: true }],
 });
 
 const slideSchema = new Schema({
   id: { type: String, required: true, trim: true },
-  type: { type: String, required: true },
+  type: { type: String, default: '' },
   question: {
     type: String,
-    required: true,
     trim: true,
     maxLength: MAX.SLIDE_NAME,
+    default: '',
   },
   desc: {
     type: String,
@@ -40,8 +39,8 @@ const slideSchema = new Schema({
     maxLength: MAX.SLIDE_DESC,
   },
   options: { type: [slideOptionSchema], default: [] },
-  settings: slideSettingSchema,
   answers: { type: [slideAnswerSchema], default: [] },
+  settings: slideSettingSchema,
 });
 
 // -----------------------------

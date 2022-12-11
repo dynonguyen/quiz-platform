@@ -12,6 +12,9 @@ const presentationApi = {
   },
   postCreateNewTicket: (form) => {
     return axiosClient.post(`${endpoint}/new`, form);
+  },
+  putUpdatePresentation: (query, fields) => {
+    return axiosClient.put(`${endpoint}/update`, { query, fields });
   }
 };
 

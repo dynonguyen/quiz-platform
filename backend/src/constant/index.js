@@ -43,7 +43,10 @@ exports.GROUP_ROLES = {
 
 exports.CHART_TYPES = {
   BAR: 'bar',
-  DONUT: 'donut',
+  DONUT: 'doughnut',
   PIE: 'pie',
-  DOTS: 'dots',
+};
+
+exports.SLIDE_TYPES = {
+  MULTIPLE_CHOICE: 'multiple',
 };

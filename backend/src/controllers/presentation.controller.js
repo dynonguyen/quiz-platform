@@ -1,4 +1,5 @@
 const { MAX } = require('~/constant');
+const DEFAULTS = require('~/constant/default');
 const { generateUniqueString } = require('~/helper');
 const service = require('~/services/presentation.service');
 
@@ -76,6 +77,7 @@ exports.postNewPresentation = async (req, res) => {
       desc,
       code,
       owner: userId,
+      slides: [DEFAULTS.SLIDE],
     });
     if (newPresentation) {
       return res.status(201).json({ msg: 'Success' });
@@ -84,6 +86,27 @@ exports.postNewPresentation = async (req, res) => {
     return res.status(400).json({ msg: 'Failed' });
   } catch (error) {
     console.log('postNewPresentation ERROR: ', error);
+    return res.status(400).json({ msg: 'Failed' });
+  }
+};
+
+exports.putUpdatePresentation = async (req, res) => {
+  try {
+    const { query, fields } = req.body;
+    const { userId } = req.user;
+
+    const isExist = await service.checkPresentationExistByQuery({
+      ...query,
+      owner: userId,
+    });
+
+    if (!isExist) return res.status(403).json({ msg: 'No permission' });
+
+    await service.updatePresentation(query, fields);
+
+    return res.status(200).json({ msg: 'Success' });
+  } catch (error) {
+    console.log('updatePresentation ERROR: ', error);
     return res.status(400).json({ msg: 'Failed' });
   }
 };

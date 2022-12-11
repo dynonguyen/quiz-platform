@@ -34,7 +34,7 @@ function PresentationManagePage() {
     return () => {
       dispatch(removePresentation());
     };
-  }, [presentation]);
+  }, [presentation, isValidating]);
 
   if (isValidating) {
     return <LoadingScreen />;
