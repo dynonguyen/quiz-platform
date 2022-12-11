@@ -1,7 +1,10 @@
 import { Alert, Button, Dialog, Flex, Input, useId } from '@cads-ui/core';
 import { yupResolver } from '@hookform/resolvers/yup';
+import React from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
+import presentationApi from '~/apis/presentationApi';
 import { MAX } from '~/constant/validation';
 
 // -----------------------------
@@ -19,7 +22,8 @@ const schema = yup.object({
 function NewOrEditPresentation({
   onClose = () => {},
   // If passed, this form will be the edit form
-  presentInfo
+  presentInfo,
+  onRefetch = () => {}
 }) {
   const {
     register,
@@ -28,11 +32,23 @@ function NewOrEditPresentation({
   } = useForm({ resolver: yupResolver(schema) });
   const formId = useId({ deps: [] });
   const { _id: presentId, name = '', desc = '' } = presentInfo || {};
+  const [loading, setLoading] = React.useState(false);
   const isEdit = Boolean(presentId);
 
-  const handleCreate = (form) => {
-    // TODO: Handle logic here
-    console.log('NEW: ', form);
+  const handleCreate = async (form) => {
+    setLoading(true);
+    try {
+      const apiRes = await presentationApi.postCreateNewTicket(form);
+      if (apiRes.status === 201) {
+        toast.success('Tạo bản trình chiếu thành công');
+        onClose();
+        onRefetch();
+      }
+    } catch (error) {
+      return toast.error('Tạo bản trình chiếu thất bại, thử lại');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleEdit = (form) => {
@@ -78,7 +94,7 @@ function NewOrEditPresentation({
           <Button color="grey" onClick={onClose}>
             Huỷ bỏ
           </Button>
-          <Button type="submit" form={formId}>
+          <Button type="submit" form={formId} loading={loading}>
             Tạo mới
           </Button>
         </Flex>

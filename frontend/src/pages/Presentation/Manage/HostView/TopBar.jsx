@@ -9,10 +9,13 @@ import {
   Typography
 } from '@cads-ui/core';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Icon from '~/components/Icon';
 import { PATH } from '~/constant/path';
+import useSelectorOnly from '~/hooks/useOnlySelector';
+import { updatePresentation } from '~/redux/slices/presentationSlice';
 
 // -----------------------------
 const useStyles = makeStyles((theme) => ({
@@ -41,8 +44,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // -----------------------------
-function Saved({ saving = false }) {
+function Saved() {
   const classes = useStyles();
+  const { saving } = useSelectorOnly('presentation', ['saving']);
 
   return (
     <Flex spacing={2}>
@@ -70,8 +74,23 @@ function Saved({ saving = false }) {
 function HostViewTopBar() {
   const classes = useStyles();
   const user = useSelector((state) => state.user);
-  const presentation = useSelector((state) => state.presentation);
-  const { name, createdAt } = presentation;
+  const { name, createdAt, code } = useSelectorOnly('presentation', [
+    'name',
+    'createdAt',
+    'code'
+  ]);
+  const dispatch = useDispatch();
+
+  const handleCopyCode = () => {
+    navigator?.clipboard?.writeText(
+      `${window.location.origin}/${PATH.PRESENTATION.ROOT}/${code}`
+    );
+    toast.success('Đã sao chép liên kết chia sẻ vào clipboard');
+  };
+
+  const startPresent = () => {
+    dispatch(updatePresentation({ isPresenting: true }));
+  };
 
   return (
     <Flex justifyContent="space-between" className={classes.root}>
@@ -113,6 +132,7 @@ function HostViewTopBar() {
           className={classes.actionBtn}
           startIcon={<Icon icon="material-symbols:share" />}
           color="grey"
+          onClick={handleCopyCode}
         >
           Chia sẻ
         </Button>
@@ -122,6 +142,7 @@ function HostViewTopBar() {
           className={classes.actionBtn}
           startIcon={<Icon icon="material-symbols:play-arrow-rounded" />}
           color="primary"
+          onClick={startPresent}
         >
           Trình chiếu
         </Button>

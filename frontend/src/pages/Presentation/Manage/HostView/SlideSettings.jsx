@@ -123,14 +123,14 @@ function SlideSettings() {
               className={clsx(classes.chartType, 'active')}
             >
               <Icon sx={{ fs: 28 }} icon="ic:baseline-bar-chart" />
-              <Typography variant="h5">Bars</Typography>
+              <Typography>Bars</Typography>
             </Flex>
           </Grid>
 
           <Grid item xs={4}>
             <Flex center direction="column" className={clsx(classes.chartType)}>
               <Icon sx={{ fs: 28 }} icon="ic:round-donut-small" />
-              <Typography variant="h5">Donut</Typography>
+              <Typography>Donut</Typography>
             </Flex>
           </Grid>
         </Grid>

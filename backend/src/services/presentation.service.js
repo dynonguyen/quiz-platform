@@ -15,3 +15,7 @@ exports.checkPresentationExistByCode = async (code) => {
 exports.deletePresentationById = async (_id) => {
   return await PresentationModel.deleteOne({ _id });
 };
+
+exports.createNewPresentation = async (presentation = {}) => {
+  return await PresentationModel.create({ ...presentation });
+};

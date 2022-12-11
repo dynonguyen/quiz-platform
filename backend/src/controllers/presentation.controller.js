@@ -1,3 +1,5 @@
+const { MAX } = require('~/constant');
+const { generateUniqueString } = require('~/helper');
 const service = require('~/services/presentation.service');
 
 exports.getMyPresentation = async (req, res) => {
@@ -50,6 +52,38 @@ exports.deletePresentation = async (req, res) => {
     throw new Error('Delete failed');
   } catch (error) {
     console.log('deletePresentation ERROR: ', error);
+    return res.status(400).json({ msg: 'Failed' });
+  }
+};
+
+exports.postNewPresentation = async (req, res) => {
+  try {
+    const { name, desc } = req.body;
+    const { userId } = req.user;
+
+    let code = generateUniqueString(MAX.PRESENTATION_CODE);
+    let count = 0;
+    while (count <= 10) {
+      const isExist = await service.checkPresentationExistByCode(code);
+      if (isExist) {
+        count++;
+        code = generateUniqueString(MAX.PRESENTATION_CODE);
+      } else break;
+    }
+
+    const newPresentation = await service.createNewPresentation({
+      name,
+      desc,
+      code,
+      owner: userId,
+    });
+    if (newPresentation) {
+      return res.status(201).json({ msg: 'Success' });
+    }
+
+    return res.status(400).json({ msg: 'Failed' });
+  } catch (error) {
+    console.log('postNewPresentation ERROR: ', error);
     return res.status(400).json({ msg: 'Failed' });
   }
 };

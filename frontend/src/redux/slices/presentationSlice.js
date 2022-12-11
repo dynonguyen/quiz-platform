@@ -1,8 +1,19 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
+// -----------------------------
+export const savePresentation = createAsyncThunk(
+  'presentation/savePresentation',
+  async (_, thunkAPI) => {
+    const state = thunkAPI.getState();
+    console.log(state);
+  }
+);
 
 // -----------------------------
 const initialState = {
-  _id: null
+  _id: null,
+  saving: false,
+  isPresenting: false
 };
 
 // -----------------------------
@@ -10,15 +21,23 @@ const presentationSlice = createSlice({
   name: 'presentation',
   initialState,
   reducers: {
-    addPresentation(_, action) {
-      return action.payload;
+    updatePresentation(state, action) {
+      return { ...state, ...action.payload };
+    },
+    addPresentation(state, action) {
+      return {
+        ...action.payload,
+        saving: state.saving,
+        isPresenting: state.isPresenting
+      };
     },
     removePresentation() {
-      return { _id: null };
+      return { ...initialState };
     }
   }
 });
 
 const { reducer, actions } = presentationSlice;
-export const { addPresentation, removePresentation } = actions;
+export const { addPresentation, removePresentation, updatePresentation } =
+  actions;
 export default reducer;

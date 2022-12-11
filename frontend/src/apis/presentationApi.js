@@ -9,6 +9,9 @@ const presentationApi = {
   },
   deletePresentation: (id) => {
     return axiosClient.delete(`${endpoint}/${id}`);
+  },
+  postCreateNewTicket: (form) => {
+    return axiosClient.post(`${endpoint}/new`, form);
   }
 };
 

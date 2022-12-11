@@ -221,6 +221,7 @@ function PresentationPage() {
             presentInfo.current = null;
           }}
           presentInfo={presentInfo.current}
+          onRefetch={refetch}
         />
       )}
 
