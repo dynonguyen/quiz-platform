@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import presentationApi from '~/apis/presentationApi';
+import { SOCKET_EVENTS } from '~/constant/socket';
+import { socket } from '~/socket';
 
 // -----------------------------
 export const savePresentation = createAsyncThunk(
@@ -17,6 +19,7 @@ export const savePresentation = createAsyncThunk(
       );
       if (apiRes.status === 200) {
         thunkAPI.dispatch(updatePresentation(updateFields));
+        socket.emit(SOCKET_EVENTS.UPDATE_PRESENTATION, updateFields);
       }
     } catch (error) {
       toast.error('Cập nhật bản trình chiếu đã xảy ra lỗi, thử lại');

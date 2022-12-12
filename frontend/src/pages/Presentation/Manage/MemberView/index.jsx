@@ -5,8 +5,8 @@ import useSelectorOnly from '~/hooks/useOnlySelector';
 
 function PresentMemberView() {
   // Handle logic trong getPresentationByCode trước khi implement
-  const { slides } = useSelectorOnly('presentation', ['slides']);
-  console.log(slides);
+  const presentation = useSelectorOnly('presentation', [], true);
+  console.log(presentation);
 
   return <div>PresentMemberView</div>;
 }

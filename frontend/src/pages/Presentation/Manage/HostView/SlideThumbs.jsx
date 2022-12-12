@@ -195,7 +195,13 @@ function SlideThumbItem(props) {
             icon={SLIDE_TYPE_ICONS[type]}
           />
         )}
-        <Typography maxLine={1} fs={13} color="text.secondary" align="center">
+        <Typography
+          maxLine={1}
+          sx={{ wordBreak: 'break-all' }}
+          fs={13}
+          color="text.secondary"
+          align="center"
+        >
           {question}
         </Typography>
       </Flex>

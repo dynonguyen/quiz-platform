@@ -7,18 +7,23 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const morgan = require('morgan');
+const http = require('http');
+const { Server: SocketServer } = require('socket.io');
 
 // import local file
 const corsConfig = require('~/configs/cors.config');
 const { MAX, BASE_URL } = require('~/constant');
 const { authorization } = require('~/middleware/authorize.middleware');
 const { getEnv } = require('~/helper');
+const { SOCKET_EVENTS, IO_EVENTS } = require('~/constant/socket');
 
 const authApi = require('~/apis/auth.api');
 const userApi = require('~/apis/user.api');
 const accountApi = require('~/apis/account.api');
 const groupApi = require('~/apis/group.api');
 const presentationApi = require('~/apis/presentation.api');
+
+const { whitelist } = require('~/middleware/whitelist.middleware');
 
 // ================== set port ==================
 const app = express();
@@ -37,8 +42,6 @@ if (!isDevMode) {
 
 // ================== Connect mongodb with mongoose ==================
 const mongoose = require('mongoose');
-const { whitelist } = require('~/middleware/whitelist.middleware');
-const PresentationModel = require('~/models/presentation.model');
 const MONGO_URL = getEnv('MONGO_URL');
 
 mongoose
@@ -50,6 +53,40 @@ mongoose
     console.log(`MongoDB connect failed: ${error}`);
     process.exit(-1);
   });
+
+// ================== socket ==================
+const httpServer = http.createServer(app);
+const io = new SocketServer(httpServer, { cors: '*' });
+
+// Presentation Io
+io.on('connection', (socket) => {
+  let presentationId = '',
+    isHost = false;
+
+  const presentRoomWithHost = () =>
+    `present-${isHost ? 'host' : 'member'}-${presentationId}`;
+  const presentRoom = () => `present-${presentationId}`;
+
+  // Join presentation
+  socket.on(SOCKET_EVENTS.JOIN_PRESENTATION, (data) => {
+    presentationId = data.presentationId;
+    isHost = data.isHost;
+    socket.join([presentRoomWithHost(), presentRoom()]);
+  });
+
+  // Leave presentation
+  socket.on(SOCKET_EVENTS.LEAVE_PRESENTATION, () => {
+    socket.leave([presentRoomWithHost(), presentRoom()]);
+  });
+
+  // Update presentation
+  socket.on(SOCKET_EVENTS.UPDATE_PRESENTATION, (updateFields) => {
+    io.to(presentRoom()).emit(IO_EVENTS.UPDATE_PRESENTATION, {
+      from: socket.id,
+      updateFields,
+    });
+  });
+});
 
 // ================== config ==================
 app.use(express.json({ limit: MAX.SIZE_JSON_REQUEST }));
@@ -73,6 +110,6 @@ app.get(`${BASE_URL}/test`, (_, res) => {
 });
 
 // ================== Listening ... ==================
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT} !`);
 });
