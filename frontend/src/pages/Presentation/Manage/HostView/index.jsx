@@ -1,5 +1,4 @@
-import { makeStyles, useMediaQuery } from '@cads-ui/core';
-import ComponentLoading from '~/components/ComponentLoading';
+import { GlobalLoading, makeStyles, useMediaQuery } from '@cads-ui/core';
 import useSelectorOnly from '~/hooks/useOnlySelector';
 import Control from './Control';
 import SlideSettings from './SlideSettings';
@@ -62,7 +61,7 @@ function PresentHostView() {
     'loading'
   ]);
 
-  if (loading) return <ComponentLoading />;
+  if (loading) return <GlobalLoading />;
 
   return (
     <div className={classes.root}>

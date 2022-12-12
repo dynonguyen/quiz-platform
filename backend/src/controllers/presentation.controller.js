@@ -35,6 +35,13 @@ exports.getPresentationByCode = async (req, res) => {
       throw new Error('code not found');
     }
 
+    // userId can be undefined if user is not logged in
+    const userId = req.user?.id;
+
+    // TODO: Handle logic
+    // Kiểm tra người dùng = owner của presentation thì trả về dòng bên dưới
+    // Nếu userId không có hoặc user != owner thì chỉ trả về những gì cần thiết cho MemberView
+
     const presentation = await service.getPresentationByCode(code);
     return res.status(200).json(presentation.toObject());
   } catch (error) {

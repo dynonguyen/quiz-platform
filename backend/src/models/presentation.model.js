@@ -62,7 +62,7 @@ const presentationSchema = new Schema(
     owner: { type: Schema.Types.ObjectId, required: true, ref: 'user' },
     slides: { type: [slideSchema], default: [] },
     isPresenting: { type: Boolean, default: false },
-    // slide is being shown
+    // slide is being shown (slide.id)
     currentSlide: { type: String, default: '' },
     onlineCount: { type: Number, default: 0 },
   },

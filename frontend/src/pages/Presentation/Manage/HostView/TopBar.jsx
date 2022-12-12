@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 import Icon from '~/components/Icon';
 import { PATH } from '~/constant/path';
 import useSelectorOnly from '~/hooks/useOnlySelector';
-import { updatePresentation } from '~/redux/slices/presentationSlice';
+import { savePresentation } from '~/redux/slices/presentationSlice';
 
 // -----------------------------
 const useStyles = makeStyles((theme) => ({
@@ -74,11 +74,10 @@ function Saved() {
 function HostViewTopBar() {
   const classes = useStyles();
   const user = useSelector((state) => state.user);
-  const { name, createdAt, code } = useSelectorOnly('presentation', [
-    'name',
-    'createdAt',
-    'code'
-  ]);
+  const { name, createdAt, code, slides, activeSlide } = useSelectorOnly(
+    'presentation',
+    ['name', 'createdAt', 'code', 'slides', 'activeSlide']
+  );
   const dispatch = useDispatch();
 
   const handleCopyCode = () => {
@@ -89,7 +88,24 @@ function HostViewTopBar() {
   };
 
   const startPresent = () => {
-    dispatch(updatePresentation({ isPresenting: true }));
+    const isMobile = window.innerWidth < 767;
+    if (isMobile) {
+      return toast.error(
+        'Xin lỗi, ứng dụng chưa hỗ trợ chế độ trình chiều trên thiết bị di động !'
+      );
+    }
+    if (!slides || !slides.length) {
+      return toast.warning(
+        'Bạn chưa có slide nào, vui lòng tạo slide trước khi trình chiếu !'
+      );
+    }
+
+    dispatch(
+      savePresentation({
+        isPresenting: true,
+        currentSlide: slides[activeSlide - 1]?.id || slides[0].id
+      })
+    );
   };
 
   return (
