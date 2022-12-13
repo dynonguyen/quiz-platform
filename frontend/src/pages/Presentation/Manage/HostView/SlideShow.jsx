@@ -185,10 +185,33 @@ function SlideShowControl({ activeSlide, currentSlide, slides }) {
 
   const handleNextSlide = () => {
     // TODO: handle next slide
+    const slideLength = slides.length;
+    const nextSlide = activeSlide < slideLength ? slides[activeSlide] : '';
+
+    if (nextSlide) {
+      dispatch(
+        savePresentation({
+          currentSlide: nextSlide.id,
+          activeSlide: activeSlide + 1
+        })
+      );
+    } else {
+      handleStopPresentation();
+    }
   };
 
   const handlePrevSlide = () => {
     // TODO: handle prev slide
+    if (activeSlide === 1) {
+      return;
+    }
+    const prevSlide = slides[activeSlide - 2];
+    dispatch(
+      savePresentation({
+        currentSlide: prevSlide.id,
+        activeSlide: activeSlide - 1
+      })
+    );
   };
 
   const handleStopPresentation = () => {
