@@ -51,9 +51,24 @@ function NewOrEditPresentation({
     }
   };
 
-  const handleEdit = (form) => {
-    // TODO: edit presentation
-    console.log('EDIT: ', form);
+  const handleEdit = async (form) => {
+    // DONE: edit presentation
+    setLoading(true);
+    try {
+      const apiRes = await presentationApi.putUpdatePresentation(
+        { _id: presentId },
+        form
+      );
+      if (apiRes.status === 200) {
+        toast.success('Chỉnh sửa bản trình chiếu thành công');
+        onClose();
+        onRefetch();
+      }
+    } catch (error) {
+      return toast.error('Chỉnh bản trình chiếu thất bại, thử lại');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -94,9 +109,16 @@ function NewOrEditPresentation({
           <Button color="grey" onClick={onClose}>
             Huỷ bỏ
           </Button>
-          <Button type="submit" form={formId} loading={loading}>
-            Tạo mới
-          </Button>
+          {!isEdit && (
+            <Button type="submit" form={formId} loading={loading}>
+              Tạo mới
+            </Button>
+          )}
+          {isEdit && (
+            <Button type="submit" form={formId} loading={loading}>
+              Chỉnh sửa
+            </Button>
+          )}
         </Flex>
       }
       onClose={onClose}

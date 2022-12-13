@@ -7,5 +7,4 @@ presentationApi.get('/check-code', controller.getCheckCode);
 presentationApi.post('/new', controller.postNewPresentation);
 presentationApi.put('/update', controller.putUpdatePresentation);
 presentationApi.delete('/:presentationId', controller.deletePresentation);
-
 module.exports = presentationApi;
