@@ -201,15 +201,15 @@ function SlideShowControl({ activeSlide, currentSlide, slides }) {
 
   const handlePrevSlide = () => {
     if (activeSlide === 1) {
-      return;
+    } else {
+      const prevSlide = slides[activeSlide - 2];
+      dispatch(
+        savePresentation({
+          currentSlide: prevSlide.id,
+          activeSlide: activeSlide - 1
+        })
+      );
     }
-    const prevSlide = slides[activeSlide - 2];
-    dispatch(
-      savePresentation({
-        currentSlide: prevSlide.id,
-        activeSlide: activeSlide - 1
-      })
-    );
   };
 
   const handleStopPresentation = () => {
@@ -241,13 +241,37 @@ function SlideShowControl({ activeSlide, currentSlide, slides }) {
         <Icon icon="material-symbols:close-rounded" />
       </Button>
       <Flex spacing={4}>
-        <Button isFab size="large" color="#444" onClick={handlePrevSlide}>
+        <Button
+          disabled={activeSlide === 1}
+          isFab
+          size="large"
+          color="#444"
+          onClick={handlePrevSlide}
+        >
           <Icon icon="material-symbols:chevron-left-rounded" />
         </Button>
         <Button isFab size="large" color="#444" onClick={handleNextSlide}>
           <Icon icon="material-symbols:chevron-right-rounded" />
         </Button>
       </Flex>
+    </Flex>
+  );
+}
+
+// ------- Show End Slide
+function EndSlide() {
+  return (
+    <Flex
+      width={1}
+      height={1}
+      sx={{ textAlign: 'center', mt: 8 }}
+      direction="column"
+      backgroundColor="black"
+    >
+      <Typography variant="h3">Đây là slide cuối cùng!</Typography>
+      <Typography variant="h3">
+        Cảm ơn bạn đã tham gia khảo sát trên nền tảng Quiz Platform ❤
+      </Typography>
     </Flex>
   );
 }
@@ -328,12 +352,7 @@ function SlideShow() {
 
   return (
     <div className={classes.root} ref={wrapper}>
-      <Flex
-        spacing={4}
-        direction="column"
-        className={classes.slide}
-        ref={slideRef}
-      >
+      <Flex spacing={4} direction="column" ref={slideRef}>
         <Box>
           <Typography fs={isPresenting ? 40 : 28} align="center">
             {slide.question}
