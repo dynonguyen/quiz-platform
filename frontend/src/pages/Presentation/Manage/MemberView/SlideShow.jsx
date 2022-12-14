@@ -13,6 +13,7 @@ import {
   FormGroup,
   Radio
 } from '@mui/material';
+import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -20,7 +21,6 @@ import presentationApi from '~/apis/presentationApi';
 import goodSrc from '~/assets/img/good.png';
 import useSelectorOnly from '~/hooks/useOnlySelector';
 import { savePresentation } from '~/redux/slices/presentationSlice';
-
 // -----------------------------
 const useStyles = makeStyles((_) => ({
   slide: {
@@ -180,6 +180,19 @@ function MemberSlideShow() {
   const [selected, setSelected] = useState(
     isMultipleChoice(slide.settings.multipleChoice)
   );
+  const [user, setUser] = useState('');
+
+  //creating function to load ip address from the API
+  const getData = async () => {
+    const res = await axios.get('https://geolocation-db.com/json/');
+    if (userId) setUser(userId);
+    else setUser(res.data.IPv4);
+  };
+
+  useEffect(() => {
+    //passing getData method to the lifecycle method
+    getData();
+  }, []);
 
   const handleChange = (event) => {
     let choices = selected;
@@ -198,26 +211,14 @@ function MemberSlideShow() {
 
       const updateSlides = JSON.parse(JSON.stringify(slides));
       updateSlides[activeSlide - 1][key] = value;
-      // const res = await presentationApi.putUpdateAnswers(
-      //   { _id: _id },
-      //   { slides: updateSlides },
-      //   code,
-      //   slide.id
-      // );
       dispatch(
         savePresentation({
           slides: updateSlides,
           slideId: slide.id,
+          userId: user,
           updateAnswers: true
         })
       );
-      // dispatch(
-      //   saveAnswers({
-      //     slides: updateSlides,
-      //     code: code,
-      //     slideId: slide.id
-      //   })
-      // );
       setIsAnswered(true);
       toast.success(res.data?.msg);
     } catch (error) {
@@ -231,7 +232,7 @@ function MemberSlideShow() {
     else choices = [selected];
     saveUpdatedSlices('answers', [
       ...slide.answers,
-      { userId: userId, choices: choices }
+      { userId: user, choices: choices }
     ]);
   };
 
@@ -240,13 +241,16 @@ function MemberSlideShow() {
   }, [slide.id]);
 
   useEffect(() => {
-    setListChoices(
-      slide.answers?.filter((answer) => answer.userId === userId)[0]?.choices
-    );
+    const choices = slide.answers?.filter((answer) => answer.userId === user)[0]
+      ?.choices;
+    setListChoices(choices);
+    if (Boolean(choices)) setIsAnswered(true);
+    else setIsAnswered(false);
   });
+
   useEffect(() => {
     (async () => {
-      const res = await presentationApi.checkUserAnswered(code, slide.id);
+      const res = await presentationApi.checkUserAnswered(code, slide.id, user);
       setIsAnswered(res.data.answered);
     })();
   }, [currentSlide]);

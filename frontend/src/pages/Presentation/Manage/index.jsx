@@ -24,7 +24,7 @@ function PresentationManagePage() {
     error
   } = useFetch(
     presentationId
-      ? `${ENDPOINTS.PRESENTATION}/get-by-code?code=${presentationId}`
+      ? `${ENDPOINTS.PRESENTATION}/get-by-code?code=${presentationId}&userid=${userId}`
       : null
   );
   const navigate = useNavigate();

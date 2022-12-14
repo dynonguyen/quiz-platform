@@ -30,20 +30,46 @@ exports.getCheckCode = async (req, res) => {
 
 exports.getPresentationByCode = async (req, res) => {
   try {
-    const { code } = req.query;
+    const { code, userid } = req.query;
     if (!code) {
       throw new Error('code not found');
     }
 
     // userId can be undefined if user is not logged in
-    const userId = req.user?.userId;
-    console.log(req.user);
+    console.log(userid);
     // TODO: Handle logic
     // Kiểm tra người dùng = owner của presentation thì trả về dòng bên dưới
     // Nếu userId không có hoặc user != owner thì chỉ trả về những gì cần thiết cho MemberView
 
     const presentation = await service.getPresentationByCode(code);
-    return res.status(200).json(presentation.toObject());
+    if (userid === presentation.owner._id.toString()) {
+      return res.status(200).json(presentation.toObject());
+    } else {
+      const slides = presentation.slides.map(
+        (slide) =>
+          (slide = {
+            id: slide.id,
+            question: slide.question,
+            desc: slide.desc,
+            options: slide.options.map((option) => {
+              return {
+                value: option.value,
+                order: option.order,
+              };
+            }),
+            answers: slide.answers,
+            settings: slide.settings,
+          }),
+      );
+      const result = {
+        _id: presentation._id,
+        name: presentation.name,
+        code: presentation.code,
+        slides: slides,
+        currentSlide: presentation.currentSlide,
+      };
+      return res.status(200).json(result);
+    }
   } catch (error) {
     console.log('getPresentationByCode ERROR: ', error);
     return res.status(400).json({ msg: 'presentation not found' });
@@ -104,11 +130,12 @@ exports.putUpdatePresentation = async (req, res) => {
     if (fields.updateAnswers) {
       const isAnswer = await service.getAnswerOfUser(
         query,
-        userId,
+        fields.userId,
         fields.slideId,
       );
       delete fields.updateAnswers;
       delete fields.slideId;
+      delete fields.userId;
       if (isAnswer.length !== 0)
         return res.status(409).json({ msg: 'Bạn đã trả lời câu này' });
     } else {
@@ -130,8 +157,7 @@ exports.putUpdatePresentation = async (req, res) => {
 
 exports.checkUserAnswered = async (req, res) => {
   try {
-    const { presentationId, slideId } = req.params;
-    const { userId } = req.user;
+    const { presentationId, slideId, userId } = req.params;
     const isExist = await service.getAnswerOfUser(
       { presentationId },
       userId,
