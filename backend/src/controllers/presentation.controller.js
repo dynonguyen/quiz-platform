@@ -36,8 +36,8 @@ exports.getPresentationByCode = async (req, res) => {
     }
 
     // userId can be undefined if user is not logged in
-    const userId = req.user?.id;
-
+    const userId = req.user?.userId;
+    console.log(req.user);
     // TODO: Handle logic
     // Kiểm tra người dùng = owner của presentation thì trả về dòng bên dưới
     // Nếu userId không có hoặc user != owner thì chỉ trả về những gì cần thiết cho MemberView
@@ -101,17 +101,47 @@ exports.putUpdatePresentation = async (req, res) => {
   try {
     const { query, fields } = req.body;
     const { userId } = req.user;
-
-    const isExist = await service.checkPresentationExistByQuery({
-      ...query,
-      owner: userId,
-    });
-
-    if (!isExist) return res.status(403).json({ msg: 'No permission' });
+    if (fields.updateAnswers) {
+      const isAnswer = await service.getAnswerOfUser(
+        query,
+        userId,
+        fields.slideId,
+      );
+      delete fields.updateAnswers;
+      delete fields.slideId;
+      if (isAnswer.length !== 0)
+        return res.status(409).json({ msg: 'Bạn đã trả lời câu này' });
+    } else {
+      const isExist = await service.checkPresentationExistByQuery({
+        ...query,
+        owner: userId,
+      });
+      if (!isExist) return res.status(403).json({ msg: 'No permission' });
+    }
 
     await service.updatePresentation(query, fields);
 
     return res.status(200).json({ msg: 'Success' });
+  } catch (error) {
+    console.log('updatePresentation ERROR: ', error);
+    return res.status(400).json({ msg: 'Failed' });
+  }
+};
+
+exports.checkUserAnswered = async (req, res) => {
+  try {
+    const { presentationId, slideId } = req.params;
+    const { userId } = req.user;
+    const isExist = await service.getAnswerOfUser(
+      { presentationId },
+      userId,
+      slideId,
+    );
+    if (isExist.length === 0) {
+      return res.status(200).json({ answered: false });
+    } else {
+      return res.status(200).json({ answered: true });
+    }
   } catch (error) {
     console.log('updatePresentation ERROR: ', error);
     return res.status(400).json({ msg: 'Failed' });

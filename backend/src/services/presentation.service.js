@@ -27,3 +27,9 @@ exports.createNewPresentation = async (presentation = {}) => {
 exports.updatePresentation = async (query, setFields) => {
   return await PresentationModel.updateOne(query, { $set: setFields });
 };
+
+exports.getAnswerOfUser = async (query, userId, slideId) => {
+  const presentation = await PresentationModel.findOne(query);
+  const slide = presentation.slides.filter((slide) => slide.id === slideId);
+  return slide[0].answers.filter((answer) => answer.userId === userId);
+};

@@ -184,7 +184,6 @@ function SlideShowControl({ activeSlide, currentSlide, slides }) {
   const dispatch = useDispatch();
 
   const handleNextSlide = () => {
-    // TODO: handle next slide
     const slideLength = slides.length;
     const nextSlide = activeSlide < slideLength ? slides[activeSlide] : '';
 
@@ -201,7 +200,6 @@ function SlideShowControl({ activeSlide, currentSlide, slides }) {
   };
 
   const handlePrevSlide = () => {
-    // TODO: handle prev slide
     if (activeSlide === 1) {
       return;
     }

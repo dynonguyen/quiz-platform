@@ -15,6 +15,9 @@ const presentationApi = {
   },
   putUpdatePresentation: (query, fields) => {
     return axiosClient.put(`${endpoint}/update`, { query, fields });
+  },
+  checkUserAnswered: (code, slideId) => {
+    return axiosClient.get(`${endpoint}/${code}/${slideId}`);
   }
 };
 
