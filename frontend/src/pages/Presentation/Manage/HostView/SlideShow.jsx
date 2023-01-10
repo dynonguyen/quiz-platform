@@ -23,7 +23,11 @@ import { Chart } from 'react-chartjs-2';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import Icon from '~/components/Icon';
-import { CHART_COLORS, CHART_TYPES } from '~/constant/presentation';
+import {
+  CHART_COLORS,
+  CHART_TYPES,
+  SLIDE_TYPES
+} from '~/constant/presentation';
 import { openFullscreen } from '~/helper';
 import useSelectorOnly from '~/hooks/useOnlySelector';
 import { savePresentation } from '~/redux/slices/presentationSlice';
@@ -50,6 +54,19 @@ const useStyles = makeStyles((_) => ({
     w: (props) => (props.fullscreen ? '50%' : '65%'),
     margin: '0px auto',
     flexGrow: 1,
+    maxH: 1,
+    overflow: 'hidden',
+    position: 'relative'
+  },
+
+  notChart: {
+    p: 4,
+    w: (props) => (props.fullscreen ? '50%' : '65%'),
+    margin: 'auto auto',
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
     maxH: 1,
     overflow: 'hidden',
     position: 'relative'
@@ -161,7 +178,7 @@ function calcResult(options = [], answers = []) {
 
 // -----------------------------
 function SlideResultChart({ slide, isPresenting }) {
-  const { options = [], answers = [], settings = {} } = slide;
+  const { options = [], answers = [], settings = {}, type } = slide;
   const { chartType = CHART_TYPES.BAR, showPercentage } = settings;
   const result = calcResult(options, answers);
 
@@ -298,6 +315,7 @@ function SlideShow() {
   const wrapper = React.useRef(null);
   const dispatch = useDispatch();
   const slide = slides[activeSlide - 1] || {};
+  const { type } = slide;
 
   const calcRatioHeight = () => {
     if (slideRef.current) {
@@ -305,6 +323,10 @@ function SlideShow() {
       const height = width / SLIDE_RATIO;
       slideRef.current.style.height = `${height}px`;
     }
+  };
+
+  const isMultipleSlide = (type) => {
+    return type === SLIDE_TYPES.MULTIPLE_CHOICE ? true : false;
   };
 
   // Change size when window resize
@@ -358,7 +380,7 @@ function SlideShow() {
         className={classes.slide}
         ref={slideRef}
       >
-        <Box>
+        <Box className={!isMultipleSlide(type) ? classes.notChart : ''}>
           <Typography fs={isPresenting ? 40 : 28} align="center">
             {slide.question}
           </Typography>
@@ -375,9 +397,11 @@ function SlideShow() {
         </Box>
 
         {/* Chart result */}
-        <Flex center className={classes.chartWrap}>
-          <SlideResultChart slide={slide} isPresenting={isPresenting} />
-        </Flex>
+        {isMultipleSlide(type) && (
+          <Flex center className={classes.chartWrap}>
+            <SlideResultChart slide={slide} isPresenting={isPresenting} />
+          </Flex>
+        )}
 
         {/* Presentation code */}
         <Typography

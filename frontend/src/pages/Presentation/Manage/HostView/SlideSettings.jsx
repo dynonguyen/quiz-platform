@@ -14,8 +14,18 @@ import clsx from 'clsx';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import Icon from '~/components/Icon';
-import { CHART_TYPES, SLIDE_TYPE_OPTIONS } from '~/constant/presentation';
+import {
+  CHART_TYPES,
+  SLIDE_TYPES,
+  SLIDE_TYPE_OPTIONS
+} from '~/constant/presentation';
 import { MAX } from '~/constant/validation';
+import {
+  getDesPlaceHolderName,
+  getDesTitleName,
+  getPlaceHolderName,
+  getTitleName
+} from '~/helper';
 import useSelectorOnly from '~/hooks/useOnlySelector';
 import { savePresentation } from '~/redux/slices/presentationSlice';
 
@@ -170,13 +180,13 @@ function SlideSettings() {
       {/* question */}
       <Flex spacing={1} direction="column">
         <Typography fs={16} fw={500} component="label" htmlFor="question">
-          Câu hỏi
+          {getTitleName(type)}
         </Typography>
         <Input
           ref={questionRef}
           id="question"
           fullWidth
-          placeholder="Nhập câu hỏi"
+          placeholder={getPlaceHolderName(type)}
           debounceTime={500}
           maxLength={MAX.PRESENTATION_NAME}
           onChange={(e) => saveUpdatedSlices('question', e.target.value.trim())}
@@ -186,14 +196,14 @@ function SlideSettings() {
       {/* desc */}
       <Flex spacing={1} direction="column">
         <Typography fs={16} fw={500} component="label" htmlFor="desc">
-          Mô tả
+          {getDesTitleName(type)}
         </Typography>
         <Input
           ref={descRef}
           id="desc"
           fullWidth
           multiple
-          placeholder="Nhập mô tả (nếu có)"
+          placeholder={getDesPlaceHolderName(type)}
           debounceTime={500}
           maxLength={MAX.PRESENTATION_DESC}
           onChange={(e) => saveUpdatedSlices('desc', e.target.value.trim())}
@@ -201,120 +211,127 @@ function SlideSettings() {
       </Flex>
 
       {/* options */}
-      <Flex spacing={2} direction="column">
-        <Typography fs={16} fw={500}>
-          Câu trả lời
-        </Typography>
+      {type === SLIDE_TYPES.MULTIPLE_CHOICE && (
+        <Flex spacing={2} direction="column">
+          <Typography fs={16} fw={500}>
+            Câu trả lời
+          </Typography>
 
-        {options.map((option) => (
-          <SlideOption
-            key={option.order}
-            option={option}
-            classes={classes}
-            showCorrectAnswer={showCorrectAnswer}
-            onDelete={() => handleDeleteOption(option.order)}
-            onChange={(field, value) =>
-              handleOptionValueChange(option.order, field, value)
-            }
-          />
-        ))}
+          {options.map((option) => (
+            <SlideOption
+              key={option.order}
+              option={option}
+              classes={classes}
+              showCorrectAnswer={showCorrectAnswer}
+              onDelete={() => handleDeleteOption(option.order)}
+              onChange={(field, value) =>
+                handleOptionValueChange(option.order, field, value)
+              }
+            />
+          ))}
 
-        <Button
-          startIcon={<Icon icon="mdi:plus" />}
-          color="grey"
-          onClick={handleAddOption}
-        >
-          Thêm tuỳ chọn
-        </Button>
+          <Button
+            startIcon={<Icon icon="mdi:plus" />}
+            color="grey"
+            onClick={handleAddOption}
+          >
+            Thêm tuỳ chọn
+          </Button>
 
-        {showCorrectAnswer && (
-          <Alert type="info">
-            Nhấp vào hộp bên cạnh một tùy chọn để đánh dấu nó là chính xác.
-          </Alert>
-        )}
-      </Flex>
+          {showCorrectAnswer && (
+            <Alert type="info">
+              Nhấp vào hộp bên cạnh một tùy chọn để đánh dấu nó là chính xác.
+            </Alert>
+          )}
+        </Flex>
+      )}
 
       {/* result layout */}
-      <Flex sx={{ __mt: 10 }} spacing={1} direction="column">
-        <Typography fs={16} fw={500}>
-          Loại biểu đồ cho kết quả
-        </Typography>
-        <Grid container spacing={2}>
-          {Object.keys(CHART_TYPES).map((key) => (
-            <Grid item xs={4} key={key}>
-              <Flex
-                center
-                direction="column"
-                className={clsx(classes.chartType, {
-                  active: CHART_TYPES[key] === chartType
-                })}
-                onClick={() =>
-                  handleSettingChange('chartType', CHART_TYPES[key])
-                }
-              >
-                <Icon sx={{ fs: 28 }} icon="ic:baseline-bar-chart" />
-                <Typography sx={{ textTransform: 'capitalize' }}>
-                  {CHART_TYPES[key]}
-                </Typography>
-              </Flex>
-            </Grid>
-          ))}
-        </Grid>
-      </Flex>
+      {type === SLIDE_TYPES.MULTIPLE_CHOICE && (
+        <Flex sx={{ __mt: 10 }} spacing={1} direction="column">
+          <Typography fs={16} fw={500}>
+            Loại biểu đồ cho kết quả
+          </Typography>
+          <Grid container spacing={2}>
+            {Object.keys(CHART_TYPES).map((key) => (
+              <Grid item xs={4} key={key}>
+                <Flex
+                  center
+                  direction="column"
+                  className={clsx(classes.chartType, {
+                    active: CHART_TYPES[key] === chartType
+                  })}
+                  onClick={() =>
+                    handleSettingChange('chartType', CHART_TYPES[key])
+                  }
+                >
+                  <Icon sx={{ fs: 28 }} icon="ic:baseline-bar-chart" />
+                  <Typography sx={{ textTransform: 'capitalize' }}>
+                    {CHART_TYPES[key]}
+                  </Typography>
+                </Flex>
+              </Grid>
+            ))}
+          </Grid>
+        </Flex>
+      )}
 
       {/* Extras */}
-      <Flex sx={{ __mt: 10 }} spacing={2} direction="column">
-        <Typography fs={16} fw={500}>
-          Tuỳ chỉnh nâng cao
-        </Typography>
+      {type === SLIDE_TYPES.MULTIPLE_CHOICE && (
+        <Flex sx={{ __mt: 10 }} spacing={2} direction="column">
+          <Typography fs={16} fw={500}>
+            Tuỳ chỉnh nâng cao
+          </Typography>
 
-        <Flex spacing={1} justifyContent="space-between">
-          <Typography>Hiển thị câu trả lời đúng?</Typography>
-          <Switch
-            onChange={(checked) =>
-              handleSettingChange('showCorrectAnswer', checked)
-            }
-            checked={showCorrectAnswer}
-          />
-        </Flex>
-
-        <Flex spacing={1} justifyContent="space-between">
-          <Typography>Hiển thị kết quả theo tỷ lệ phần trăm?</Typography>
-          <Switch
-            onChange={(checked) =>
-              handleSettingChange('showPercentage', checked)
-            }
-            checked={showPercentage}
-          />
-        </Flex>
-
-        <Flex spacing={1} justifyContent="space-between">
-          <Typography>Cho phép chọn nhiều đáp án?</Typography>
-          <Flex spacing={1}>
-            {multipleChoice > 1 && (
-              <Input
-                type="number"
-                sx={{ w: 60 }}
-                min={2}
-                max={options.length}
-                defaultValue={multipleChoice}
-                debounceTime={500}
-                onChange={(e) => {
-                  const value = Number(e.target.value);
-                  if (value >= 2) handleSettingChange('multipleChoice', value);
-                  else e.target.value = 2;
-                }}
-              />
-            )}
+          <Flex spacing={1} justifyContent="space-between">
+            <Typography>Hiển thị câu trả lời đúng?</Typography>
             <Switch
               onChange={(checked) =>
-                handleSettingChange('multipleChoice', checked ? 2 : 1)
+                handleSettingChange('showCorrectAnswer', checked)
               }
-              checked={multipleChoice > 1}
+              checked={showCorrectAnswer}
             />
           </Flex>
+
+          <Flex spacing={1} justifyContent="space-between">
+            <Typography>Hiển thị kết quả theo tỷ lệ phần trăm?</Typography>
+            <Switch
+              onChange={(checked) =>
+                handleSettingChange('showPercentage', checked)
+              }
+              checked={showPercentage}
+            />
+          </Flex>
+
+          <Flex spacing={1} justifyContent="space-between">
+            <Typography>Cho phép chọn nhiều đáp án?</Typography>
+            <Flex spacing={1}>
+              {multipleChoice > 1 && (
+                <Input
+                  type="number"
+                  sx={{ w: 60 }}
+                  min={2}
+                  max={options.length}
+                  defaultValue={multipleChoice}
+                  debounceTime={500}
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    if (value >= 2)
+                      handleSettingChange('multipleChoice', value);
+                    else e.target.value = 2;
+                  }}
+                />
+              )}
+              <Switch
+                onChange={(checked) =>
+                  handleSettingChange('multipleChoice', checked ? 2 : 1)
+                }
+                checked={multipleChoice > 1}
+              />
+            </Flex>
+          </Flex>
         </Flex>
-      </Flex>
+      )}
     </Flex>
   );
 }

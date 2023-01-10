@@ -1,4 +1,5 @@
 import { LS_KEY } from '~/constant/key';
+import { SLIDE_TYPES } from '~/constant/presentation';
 
 export function getEnv(key = '') {
   return import.meta.env[key] || process.env[key];
@@ -40,6 +41,7 @@ export function getOptionValue(options, choices) {
   });
   return _choices;
 }
+
 export function openFullscreen(elem) {
   if (elem) {
     if (elem.requestFullscreen) {
@@ -52,4 +54,72 @@ export function openFullscreen(elem) {
       elem.msRequestFullscreen();
     }
   }
+}
+
+export function getTitleName(type) {
+  let res = 'Câu hỏi';
+  switch (type) {
+    case SLIDE_TYPES.HEADING:
+      res = 'Heading';
+      break;
+    case SLIDE_TYPES.PARAGRAPH:
+      res = 'Heading';
+      break;
+    default:
+      res = 'Câu hỏi';
+      break;
+  }
+
+  return res;
+}
+
+export function getPlaceHolderName(type) {
+  let res = 'Nhập câu hỏi';
+  switch (type) {
+    case SLIDE_TYPES.HEADING:
+      res = 'Nhập tiêu đề';
+      break;
+    case SLIDE_TYPES.PARAGRAPH:
+      res = 'Nhập tiêu đề cho đoạn văn bản';
+      break;
+    default:
+      res = 'Nhập câu hỏi';
+      break;
+  }
+
+  return res;
+}
+
+export function getDesTitleName(type) {
+  let res = 'Mô tả';
+  switch (type) {
+    case SLIDE_TYPES.HEADING:
+      res = 'Subheading';
+      break;
+    case SLIDE_TYPES.PARAGRAPH:
+      res = 'Paragraph';
+      break;
+    default:
+      res = 'Mô tả';
+      break;
+  }
+
+  return res;
+}
+
+export function getDesPlaceHolderName(type) {
+  let res = 'Nhập mô tả (nếu có)';
+  switch (type) {
+    case SLIDE_TYPES.HEADING:
+      res = 'Nhập tiêu đề phụ (nếu có)';
+      break;
+    case SLIDE_TYPES.PARAGRAPH:
+      res = 'Nhập đoạn văn bản';
+      break;
+    default:
+      res = 'Nhập mô tả (nếu có)';
+      break;
+  }
+
+  return res;
 }

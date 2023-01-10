@@ -49,4 +49,6 @@ exports.CHART_TYPES = {
 
 exports.SLIDE_TYPES = {
   MULTIPLE_CHOICE: 'multiple',
+  PARAGRAPH: 'paragraph',
+  HEADING: 'heading',
 };

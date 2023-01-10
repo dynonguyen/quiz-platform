@@ -20,6 +20,7 @@ import goodSrc from '~/assets/img/good.png';
 import useSelectorOnly from '~/hooks/useOnlySelector';
 import { savePresentation } from '~/redux/slices/presentationSlice';
 
+import { SLIDE_TYPES } from '~/constant/presentation';
 import { getOptionValue } from '~/helper';
 // -----------------------------
 const useStyles = makeStyles((_) => ({
@@ -36,6 +37,19 @@ const useStyles = makeStyles((_) => ({
     m: 3,
     border: '1px solid #dddddd',
     borderRadius: '5px'
+  },
+
+  notChart: {
+    p: 4,
+    w: '65%',
+    margin: 'auto auto',
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    maxH: 1,
+    overflow: 'hidden',
+    position: 'relative'
   },
 
   checked: {
@@ -182,6 +196,7 @@ function MemberSlideShow() {
   const [selected, setSelected] = useState(
     isMultipleChoice(slide.settings.multipleChoice)
   );
+  const { type = SLIDE_TYPES.MULTIPLE_CHOICE } = slide;
 
   //creating function to load ip address from the API
   // const getData = async () => {
@@ -263,6 +278,10 @@ function MemberSlideShow() {
     ]);
   };
 
+  const isMultipleSlide = (type) => {
+    return type === SLIDE_TYPES.MULTIPLE_CHOICE ? true : false;
+  };
+
   const isEnd = currentSlide === slides[slides.length - 1].id;
   return (
     <Flex
@@ -271,7 +290,7 @@ function MemberSlideShow() {
       className={classes.slide}
       alignItems="center"
     >
-      <Box>
+      <Box className={!isMultipleSlide(type) ? classes.notChart : ''}>
         <Typography fs={28} align="center">
           {slide.question}
         </Typography>
@@ -282,45 +301,47 @@ function MemberSlideShow() {
           </Typography>
         )}
       </Box>
-      {isAnswered ? (
-        <WaitingForNextSlide
-          classes={classes}
-          isEndOfPresentation={isEnd}
-          listChoices={listChoices}
-          slide={slide}
-        />
-      ) : (
-        <Flex
-          sx={{ flex: 1, w: 1, maxW: 500 }}
-          direction="column"
-          alignItems="stretch"
-        >
-          <FormGroup>
-            {slide.options.map((option) => (
-              <SlideOption
-                key={option.order}
-                option={option}
-                selected={selected}
-                classes={classes}
-                onChange={handleChange}
-                name={slide.question}
-                multipleChoice={slide.settings.multipleChoice}
-              />
-            ))}
-          </FormGroup>
-          <Button
-            sx={{ m: 3 }}
-            size="large"
-            variant="contained"
-            onClick={handleAddAnswer}
-            endIcon={
-              <Icon icon="material-symbols:arrow-circle-right-outline-rounded" />
-            }
-          >
-            Chọn
-          </Button>
-        </Flex>
-      )}
+      {isAnswered
+        ? isMultipleSlide(type) && (
+            <WaitingForNextSlide
+              classes={classes}
+              isEndOfPresentation={isEnd}
+              listChoices={listChoices}
+              slide={slide}
+            />
+          )
+        : isMultipleSlide(type) && (
+            <Flex
+              sx={{ flex: 1, w: 1, maxW: 500 }}
+              direction="column"
+              alignItems="stretch"
+            >
+              <FormGroup>
+                {slide.options.map((option) => (
+                  <SlideOption
+                    key={option.order}
+                    option={option}
+                    selected={selected}
+                    classes={classes}
+                    onChange={handleChange}
+                    name={slide.question}
+                    multipleChoice={slide.settings.multipleChoice}
+                  />
+                ))}
+              </FormGroup>
+              <Button
+                sx={{ m: 3 }}
+                size="large"
+                variant="contained"
+                onClick={handleAddAnswer}
+                endIcon={
+                  <Icon icon="material-symbols:arrow-circle-right-outline-rounded" />
+                }
+              >
+                Chọn
+              </Button>
+            </Flex>
+          )}
       {/* Presentation code */}
       <Typography fs={20} align="center" color="text.secondary">
         Mã tham dự trình chiếu <strong>{code}</strong>

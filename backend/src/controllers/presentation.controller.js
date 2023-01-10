@@ -46,6 +46,7 @@ exports.getPresentationByCode = async (req, res) => {
           (slide = {
             id: slide.id,
             question: slide.question,
+            type: slide.type,
             desc: slide.desc,
             options: slide.options,
             answers: slide.answers,
