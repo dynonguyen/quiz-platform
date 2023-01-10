@@ -101,7 +101,7 @@ app.use(`${BASE_URL}/user`, authorization, userApi);
 app.use(`${BASE_URL}/account`, authorization, accountApi);
 app.use(
   `${BASE_URL}/presentation`,
-  whitelist(['check-code', 'get-by-code']),
+  whitelist(['check-code', 'get-by-code', 'update-answers']),
   authorization,
   presentationApi,
 );

@@ -13,14 +13,14 @@ import {
   FormGroup,
   Radio
 } from '@mui/material';
-import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import presentationApi from '~/apis/presentationApi';
 import goodSrc from '~/assets/img/good.png';
 import useSelectorOnly from '~/hooks/useOnlySelector';
 import { savePresentation } from '~/redux/slices/presentationSlice';
+
+import { getOptionValue } from '~/helper';
 // -----------------------------
 const useStyles = makeStyles((_) => ({
   slide: {
@@ -89,18 +89,18 @@ function SlideOption({
       control={
         multipleChoice > 1 ? (
           <Checkbox
-            checked={selected[option.value]}
+            checked={selected[option._id]}
             onChange={onChange}
-            value={option.value}
+            value={option._id}
             name={option.value}
             size="medium"
             color="primary"
           />
         ) : (
           <Radio
-            checked={selected === option.value}
+            checked={selected === option._id}
             onChange={onChange}
-            value={option.value}
+            value={option._id}
             name={name}
             size="medium"
             color="primary"
@@ -133,11 +133,11 @@ function WaitingForNextSlide({
           Câu trả lời của bạn
         </Typography>
         <FormGroup>
-          {listChoices?.map((value) => (
+          {listChoices?.map((choice) => (
             <Answer
-              key={value}
+              key={choice._id}
               classes={classes}
-              value={value}
+              value={choice.value}
               multipleChoice={slide.settings.multipleChoice}
             />
           ))}
@@ -163,14 +163,16 @@ function MemberSlideShow() {
     slides = [],
     code,
     activeSlide,
-    currentSlide
+    currentSlide,
+    userId
   } = useSelectorOnly('presentation', [
     'slides',
     'code',
     'activeSlide',
-    'currentSlide'
+    'currentSlide',
+    'userId'
   ]);
-  const { userId } = useSelector((state) => state.user);
+
   const [isAnswered, setIsAnswered] = useState(false);
   const [listChoices, setListChoices] = useState([]);
   const classes = useStyles();
@@ -180,26 +182,51 @@ function MemberSlideShow() {
   const [selected, setSelected] = useState(
     isMultipleChoice(slide.settings.multipleChoice)
   );
-  const [user, setUser] = useState('');
 
   //creating function to load ip address from the API
-  const getData = async () => {
-    const res = await axios.get('https://geolocation-db.com/json/');
-    if (userId) setUser(userId);
-    else setUser(res.data.IPv4);
+  // const getData = async () => {
+  //   const res = await axios.get('https://geolocation-db.com/json/');
+  //   if (userId) setUser(userId);
+  //   else setUser(res.data.IPv4);
+  // };
+
+  const checkAnswered = () => {
+    const choices = slides[activeSlide - 1].answers?.filter(
+      (answer) => answer.userId === userId
+    )[0]?.choices;
+    if (choices?.length > 0)
+      setListChoices(getOptionValue(slide.options, choices));
+    if (Boolean(choices)) setIsAnswered(true);
+    else setIsAnswered(false);
   };
 
+  // useEffect(() => {
+  //   //passing getData method to the lifecycle method
+  //   getData();
+  // }, []);
+
   useEffect(() => {
-    //passing getData method to the lifecycle method
-    getData();
+    prevSlideId.current = slide.id;
+  }, [slide.id]);
+
+  useEffect(() => {
+    checkAnswered();
   }, []);
+
+  useEffect(() => {
+    checkAnswered();
+  }, [currentSlide]);
+
+  useEffect(() => {
+    checkAnswered();
+  }, [slide.answers]);
 
   const handleChange = (event) => {
     let choices = selected;
     if (slide.settings.multipleChoice > 1) {
-      if (choices.size > 0 && choices.has(event.target.name))
-        choices.delete(event.target.name);
-      else choices.add(event.target.name);
+      if (choices.size > 0 && choices.has(event.target.value))
+        choices.delete(event.target.value);
+      else choices.add(event.target.value);
     } else choices = event.target.value;
     setSelected(choices);
   };
@@ -215,7 +242,7 @@ function MemberSlideShow() {
         savePresentation({
           slides: updateSlides,
           slideId: slide.id,
-          userId: user,
+          userId: userId,
           updateAnswers: true
         })
       );
@@ -232,28 +259,9 @@ function MemberSlideShow() {
     else choices = [selected];
     saveUpdatedSlices('answers', [
       ...slide.answers,
-      { userId: user, choices: choices }
+      { userId: userId, choices: choices }
     ]);
   };
-
-  useEffect(() => {
-    prevSlideId.current = slide.id;
-  }, [slide.id]);
-
-  useEffect(() => {
-    const choices = slide.answers?.filter((answer) => answer.userId === user)[0]
-      ?.choices;
-    setListChoices(choices);
-    if (Boolean(choices)) setIsAnswered(true);
-    else setIsAnswered(false);
-  });
-
-  useEffect(() => {
-    (async () => {
-      const res = await presentationApi.checkUserAnswered(code, slide.id, user);
-      setIsAnswered(res.data.answered);
-    })();
-  }, [currentSlide]);
 
   const isEnd = currentSlide === slides[slides.length - 1].id;
   return (

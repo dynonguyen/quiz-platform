@@ -19,7 +19,6 @@ function PresentMemberView() {
   const isMobile = useMediaQuery({ down: 'md' });
   // Handle logic trong getPresentationByCode trước khi implement
   const presentation = useSelectorOnly('presentation', [], true);
-  console.log(presentation);
   if (presentation.loading) return <GlobalLoading />;
 
   return (

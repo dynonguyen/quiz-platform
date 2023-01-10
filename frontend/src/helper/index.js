@@ -33,6 +33,13 @@ export function generateUniqueString(length = 8) {
   return res;
 }
 
+export function getOptionValue(options, choices) {
+  const _choices = choices.slice();
+  _choices.forEach((choice, idx) => {
+    _choices[idx] = options.find((o) => o._id === choice);
+  });
+  return _choices;
+}
 export function openFullscreen(elem) {
   if (elem) {
     if (elem.requestFullscreen) {

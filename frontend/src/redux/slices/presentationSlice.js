@@ -13,10 +13,15 @@ export const savePresentation = createAsyncThunk(
     if (!_id) return;
 
     try {
-      const apiRes = await presentationApi.putUpdatePresentation(
-        { _id },
-        updateFields
-      );
+      let apiRes;
+      if (updateFields.updateAnswers) {
+        apiRes = await presentationApi.putUpdateAnswers({ _id }, updateFields);
+      } else {
+        apiRes = await presentationApi.putUpdatePresentation(
+          { _id },
+          updateFields
+        );
+      }
       if (apiRes.status === 200) {
         thunkAPI.dispatch(updatePresentation(updateFields));
         socket.emit(SOCKET_EVENTS.UPDATE_PRESENTATION, updateFields);

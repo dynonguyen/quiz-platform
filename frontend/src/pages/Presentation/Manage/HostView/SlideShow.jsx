@@ -149,7 +149,7 @@ function calcResult(options = [], answers = []) {
   answers.forEach((ans) => {
     const { choices = [] } = ans;
     choices.forEach((choice) => {
-      const optionIndex = options.findIndex((o) => o.value === choice);
+      const optionIndex = options.findIndex((o) => o._id === choice);
       if (optionIndex !== -1) {
         result[optionIndex]++;
       }
@@ -352,7 +352,12 @@ function SlideShow() {
 
   return (
     <div className={classes.root} ref={wrapper}>
-      <Flex spacing={4} direction="column" ref={slideRef}>
+      <Flex
+        spacing={4}
+        direction="column"
+        className={classes.slide}
+        ref={slideRef}
+      >
         <Box>
           <Typography fs={isPresenting ? 40 : 28} align="center">
             {slide.question}

@@ -35,14 +35,10 @@ exports.getPresentationByCode = async (req, res) => {
       throw new Error('code not found');
     }
 
-    // userId can be undefined if user is not logged in
-    console.log(userid);
-    // TODO: Handle logic
-    // Kiểm tra người dùng = owner của presentation thì trả về dòng bên dưới
-    // Nếu userId không có hoặc user != owner thì chỉ trả về những gì cần thiết cho MemberView
-
     const presentation = await service.getPresentationByCode(code);
-    if (userid === presentation.owner._id.toString()) {
+    const isOwner = userid === presentation.owner._id.toString();
+
+    if (isOwner) {
       return res.status(200).json(presentation.toObject());
     } else {
       const slides = presentation.slides.map(
@@ -51,12 +47,7 @@ exports.getPresentationByCode = async (req, res) => {
             id: slide.id,
             question: slide.question,
             desc: slide.desc,
-            options: slide.options.map((option) => {
-              return {
-                value: option.value,
-                order: option.order,
-              };
-            }),
+            options: slide.options,
             answers: slide.answers,
             settings: slide.settings,
           }),
@@ -67,6 +58,7 @@ exports.getPresentationByCode = async (req, res) => {
         code: presentation.code,
         slides: slides,
         currentSlide: presentation.currentSlide,
+        userId: userid ? userid : req.socket.remoteAddress.toString(),
       };
       return res.status(200).json(result);
     }
@@ -127,24 +119,11 @@ exports.putUpdatePresentation = async (req, res) => {
   try {
     const { query, fields } = req.body;
     const { userId } = req.user;
-    if (fields.updateAnswers) {
-      const isAnswer = await service.getAnswerOfUser(
-        query,
-        fields.userId,
-        fields.slideId,
-      );
-      delete fields.updateAnswers;
-      delete fields.slideId;
-      delete fields.userId;
-      if (isAnswer.length !== 0)
-        return res.status(409).json({ msg: 'Bạn đã trả lời câu này' });
-    } else {
-      const isExist = await service.checkPresentationExistByQuery({
-        ...query,
-        owner: userId,
-      });
-      if (!isExist) return res.status(403).json({ msg: 'No permission' });
-    }
+    const isExist = await service.checkPresentationExistByQuery({
+      ...query,
+      owner: userId,
+    });
+    if (!isExist) return res.status(403).json({ msg: 'No permission' });
 
     await service.updatePresentation(query, fields);
 
@@ -155,19 +134,23 @@ exports.putUpdatePresentation = async (req, res) => {
   }
 };
 
-exports.checkUserAnswered = async (req, res) => {
+exports.putUpdateAnswers = async (req, res) => {
   try {
-    const { presentationId, slideId, userId } = req.params;
-    const isExist = await service.getAnswerOfUser(
-      { presentationId },
-      userId,
-      slideId,
+    const { query, fields } = req.body;
+    const isAnswer = await service.getAnswerOfUser(
+      query,
+      fields.userId,
+      fields.slideId,
     );
-    if (isExist.length === 0) {
-      return res.status(200).json({ answered: false });
-    } else {
-      return res.status(200).json({ answered: true });
-    }
+    delete fields.updateAnswers;
+    delete fields.slideId;
+    delete fields.userId;
+    if (isAnswer.length !== 0)
+      return res.status(409).json({ msg: 'Bạn đã trả lời câu này' });
+
+    await service.updatePresentation(query, fields);
+
+    return res.status(200).json({ msg: 'Success' });
   } catch (error) {
     console.log('updatePresentation ERROR: ', error);
     return res.status(400).json({ msg: 'Failed' });
