@@ -11,6 +11,15 @@ const useStyles = makeStyles((theme) => ({
 
   slideShow: {
     flexGrow: 1
+  },
+
+  chatView: {
+    w: '100vw',
+    h: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: 'red'
   }
 }));
 
@@ -26,6 +35,10 @@ function PresentMemberView() {
       <div className={classes.slideShow}>
         <MemberSlideShow />
       </div>
+
+      {/* <div className={classes.chatView}>
+        <ChatView />
+      </div> */}
     </div>
   );
 }
