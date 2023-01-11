@@ -28,7 +28,6 @@ function PresentationManagePage() {
       : null
   );
 
-  useFetch(presentationId ? `${ENDPOINTS.CHAT}/view/${presentationId}` : null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isHost = userId === presentation?.owner?._id;

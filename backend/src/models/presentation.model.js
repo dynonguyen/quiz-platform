@@ -43,6 +43,20 @@ const slideSchema = new Schema({
   settings: slideSettingSchema,
 });
 
+const chatSchema = new Schema(
+  {
+    ownerId: { type: Schema.Types.ObjectId, required: true, ref: 'user' },
+    chatText: {
+      type: String,
+      maxLength: MAX.CHAT_TEXT,
+      required: true,
+      trim: true,
+    },
+    seen: [{ type: Schema.Types.ObjectId, ref: 'user', default: [] }],
+  },
+  { timestamps: true },
+);
+
 // -----------------------------
 const presentationSchema = new Schema(
   {
@@ -65,6 +79,7 @@ const presentationSchema = new Schema(
     // slide is being shown (slide.id)
     currentSlide: { type: String, default: '' },
     onlineCount: { type: Number, default: 0 },
+    chats: { type: [chatSchema], default: [] },
   },
   { timestamps: true },
 );

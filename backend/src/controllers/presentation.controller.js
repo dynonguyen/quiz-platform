@@ -61,6 +61,7 @@ exports.getPresentationByCode = async (req, res) => {
         currentSlide: presentation.currentSlide,
         isPresenting: presentation.isPresenting,
         onlineCount: presentation.onlineCount,
+        chats: presentation.chats,
         userId: userid ? userid : req.socket.remoteAddress.toString(),
       };
       return res.status(200).json(result);
@@ -152,7 +153,7 @@ exports.putUpdateAnswers = async (req, res) => {
       if (isAnswer.length !== 0)
         return res.status(409).json({ msg: 'Bạn đã trả lời câu này' });
     } else {
-      delete fields.updateOnline;
+      delete fields.updateSeen;
     }
     await service.updatePresentation(query, fields);
 

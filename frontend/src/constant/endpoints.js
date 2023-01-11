@@ -3,8 +3,7 @@ export const ENDPOINTS = {
   AUTH: '/auth',
   USER: '/user',
   GROUP: '/group',
-  PRESENTATION: '/presentation',
-  CHAT: '/chat'
+  PRESENTATION: '/presentation'
 };
 
 export default ENDPOINTS;
