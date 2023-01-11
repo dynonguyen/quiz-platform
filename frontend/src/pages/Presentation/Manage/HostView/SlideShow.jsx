@@ -7,6 +7,7 @@ import {
   Typography,
   useEffectNotFirst
 } from '@cads-ui/core';
+import { Drawer, IconButton } from '@mui/material';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -16,6 +17,7 @@ import { SLIDE_TYPES } from '~/constant/presentation';
 import { openFullscreen } from '~/helper';
 import useSelectorOnly from '~/hooks/useOnlySelector';
 import { savePresentation } from '~/redux/slices/presentationSlice';
+import ChatView from '../MemberView/ChatView';
 // -----------------------------
 const useStyles = makeStyles((_) => ({
   root: (props) => ({
@@ -61,12 +63,32 @@ const useStyles = makeStyles((_) => ({
     right: props.fullscreen ? '48px' : '24px',
     transform: props.fullscreen ? 'scale(1.5)' : 'none'
   }),
+
   userOnline: {
     p: 2,
     borderRadius: '50px',
     bgColor: 'grey.300',
     w: 36,
     h: 36
+  },
+
+  newChatWrap: (props) => ({
+    position: 'absolute',
+    bottom: props.fullscreen ? '36px' : '16px',
+    right: props.fullscreen ? '128px' : '72px',
+    transform: props.fullscreen ? 'scale(1.5)' : 'none'
+  }),
+
+  newChat: {
+    p: 2,
+    borderRadius: '50px',
+    bgColor: 'grey.300',
+    w: 36,
+    h: 36
+  },
+
+  showChat: {
+    zIndex: '10 !important'
   }
 }));
 
@@ -210,6 +232,23 @@ function SlideShow() {
     return type === SLIDE_TYPES.MULTIPLE_CHOICE ? true : false;
   };
 
+  const isHeading = (type) => {
+    return type === SLIDE_TYPES.HEADING ? true : false;
+  };
+
+  const toggleDrawer =
+    (open = true) =>
+    (event) => {
+      if (
+        event.type === 'keydown' &&
+        (event.key === 'Tab' || event.key === 'Shift')
+      ) {
+        return;
+      }
+
+      setRight(open);
+    };
+
   // Change size when window resize
   React.useEffect(() => {
     calcRatioHeight();
@@ -253,6 +292,19 @@ function SlideShow() {
     }
   }, [isPresenting]);
 
+  const Chat = () => (
+    <Box
+      sx={{ width: 540 }}
+      role="presentation"
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
+    >
+      <Box className={classes.chatView}>
+        <ChatView />
+      </Box>
+    </Box>
+  );
+
   return (
     <div className={classes.root} ref={wrapper}>
       <Flex
@@ -262,15 +314,24 @@ function SlideShow() {
         ref={slideRef}
       >
         <Box className={!isMultipleSlide(type) ? classes.notChart : ''}>
-          <Typography fs={isPresenting ? 40 : 28} align="center">
-            {slide.question}
-          </Typography>
+          {!isHeading(type) && (
+            <Typography fs={isPresenting ? 40 : 28} align="center">
+              {slide.question}
+            </Typography>
+          )}
+
+          {isHeading(type) && (
+            <Typography variant="h1" fs={isPresenting ? 56 : 36} align="center">
+              {slide.question}
+            </Typography>
+          )}
 
           {slide.desc && (
             <Typography
               fs={isPresenting ? 28 : 18}
               color="text.secondary"
               align="center"
+              variant={isHeading(type) ? 'h4' : ''}
             >
               {slide.desc}
             </Typography>
@@ -301,6 +362,17 @@ function SlideShow() {
             </Flex>
           </Badge>
         </Box>
+
+        {/* New chat */}
+        <Box className={classes.newChatWrap}>
+          <Badge content="2">
+            <Flex center className={classes.newChat}>
+              <IconButton onClick={toggleDrawer(true)}>
+                <Icon sx={{ fs: 20 }} icon="ic:outline-message" />
+              </IconButton>
+            </Flex>
+          </Badge>
+        </Box>
       </Flex>
 
       {/* Slide show control */}
@@ -311,6 +383,15 @@ function SlideShow() {
           currentSlide={currentSlide}
         />
       )}
+
+      <Drawer
+        className={classes.showChat}
+        anchor="right"
+        open={right}
+        onClose={toggleDrawer(false)}
+      >
+        {Chat()}
+      </Drawer>
     </div>
   );
 }

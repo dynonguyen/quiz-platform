@@ -128,7 +128,7 @@ function PresentMemberView() {
         <Flex className={classes.slideShow}>
           <MemberSlideShow />
           <Box className={classes.newChatWrap}>
-            <Badge content="20">
+            <Badge content="2">
               <Flex center className={classes.newChat}>
                 <IconButton
                   aria-label="open drawer"

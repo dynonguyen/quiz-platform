@@ -280,6 +280,10 @@ function MemberSlideShow() {
     return type === SLIDE_TYPES.MULTIPLE_CHOICE ? true : false;
   };
 
+  const isHeading = (type) => {
+    return type === SLIDE_TYPES.HEADING ? true : false;
+  };
+
   const isEnd = currentSlide === slides[slides.length - 1].id;
   return (
     <Flex
@@ -289,12 +293,21 @@ function MemberSlideShow() {
       alignItems="center"
     >
       <Box className={!isMultipleSlide(type) ? classes.notChart : ''}>
-        <Typography fs={28} align="center">
+        <Typography
+          variant={isHeading(type) ? 'h1' : ''}
+          fs={isHeading(type) ? 36 : 28}
+          align="center"
+        >
           {slide.question}
         </Typography>
 
         {slide.desc && (
-          <Typography fs={18} color="text.secondary" align="center">
+          <Typography
+            variant={isHeading(type) ? 'h4' : ''}
+            fs={isHeading(type) ? 28 : 14}
+            color="text.secondary"
+            align="center"
+          >
             {slide.desc}
           </Typography>
         )}
