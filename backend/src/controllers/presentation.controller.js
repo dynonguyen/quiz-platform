@@ -59,6 +59,8 @@ exports.getPresentationByCode = async (req, res) => {
         code: presentation.code,
         slides: slides,
         currentSlide: presentation.currentSlide,
+        isPresenting: presentation.isPresenting,
+        onlineCount: presentation.onlineCount,
         userId: userid ? userid : req.socket.remoteAddress.toString(),
       };
       return res.status(200).json(result);
@@ -138,17 +140,20 @@ exports.putUpdatePresentation = async (req, res) => {
 exports.putUpdateAnswers = async (req, res) => {
   try {
     const { query, fields } = req.body;
-    const isAnswer = await service.getAnswerOfUser(
-      query,
-      fields.userId,
-      fields.slideId,
-    );
-    delete fields.updateAnswers;
-    delete fields.slideId;
-    delete fields.userId;
-    if (isAnswer.length !== 0)
-      return res.status(409).json({ msg: 'Bạn đã trả lời câu này' });
-
+    if (fields.updateAnswers) {
+      const isAnswer = await service.getAnswerOfUser(
+        query,
+        fields.userId,
+        fields.slideId,
+      );
+      delete fields.updateAnswers;
+      delete fields.slideId;
+      delete fields.userId;
+      if (isAnswer.length !== 0)
+        return res.status(409).json({ msg: 'Bạn đã trả lời câu này' });
+    } else {
+      delete fields.updateOnline;
+    }
     await service.updatePresentation(query, fields);
 
     return res.status(200).json({ msg: 'Success' });

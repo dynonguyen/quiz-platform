@@ -17,11 +17,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import goodSrc from '~/assets/img/good.png';
+// import SlideResultChart from '~/components/SlideResultChart';
+import { getOptionValue } from '~/helper';
 import useSelectorOnly from '~/hooks/useOnlySelector';
 import { savePresentation } from '~/redux/slices/presentationSlice';
 
 import { SLIDE_TYPES } from '~/constant/presentation';
-import { getOptionValue } from '~/helper';
 // -----------------------------
 const useStyles = makeStyles((_) => ({
   slide: {
@@ -131,6 +132,7 @@ function WaitingForNextSlide({
   isEndOfPresentation,
   classes,
   listChoices,
+  isPresenting,
   slide
 }) {
   let message;
@@ -161,7 +163,11 @@ function WaitingForNextSlide({
         <Typography fs={24} color="text.secondary">
           {message}
         </Typography>
+
         <img src={goodSrc} alt="done" width={isMobile ? '70%' : '250px'} />
+        {/* <Flex center className={classes.chartWrap}>
+          <SlideResultChart slide={slide} isPresenting={isPresenting} />
+        </Flex> */}
       </Flex>
     </>
   );
@@ -178,12 +184,16 @@ function MemberSlideShow() {
     code,
     activeSlide,
     currentSlide,
+    isPresenting,
+    onlineCount,
     userId
   } = useSelectorOnly('presentation', [
     'slides',
     'code',
     'activeSlide',
     'currentSlide',
+    'isPresenting',
+    'onlineCount',
     'userId'
   ]);
 
@@ -198,13 +208,6 @@ function MemberSlideShow() {
   );
   const { type = SLIDE_TYPES.MULTIPLE_CHOICE } = slide;
 
-  //creating function to load ip address from the API
-  // const getData = async () => {
-  //   const res = await axios.get('https://geolocation-db.com/json/');
-  //   if (userId) setUser(userId);
-  //   else setUser(res.data.IPv4);
-  // };
-
   const checkAnswered = () => {
     const choices = slides[activeSlide - 1].answers?.filter(
       (answer) => answer.userId === userId
@@ -214,11 +217,6 @@ function MemberSlideShow() {
     if (Boolean(choices)) setIsAnswered(true);
     else setIsAnswered(false);
   };
-
-  // useEffect(() => {
-  //   //passing getData method to the lifecycle method
-  //   getData();
-  // }, []);
 
   useEffect(() => {
     prevSlideId.current = slide.id;

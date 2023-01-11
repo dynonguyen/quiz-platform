@@ -29,10 +29,12 @@ exports.MAX = {
   PRESENTATION_CODE: 10,
   SLIDE_NAME: 150,
   SLIDE_DESC: 250,
+  CHAT_TEXT: 250,
 };
 
 exports.MIN = {
   PASSWORD_LEN: 6,
+  CHAT_TEXT: 1,
 };
 
 exports.GROUP_ROLES = {
