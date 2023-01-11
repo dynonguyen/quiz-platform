@@ -11,13 +11,13 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
-  Radio
+  Radio,
+  RadioGroup
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import goodSrc from '~/assets/img/good.png';
-// import SlideResultChart from '~/components/SlideResultChart';
 import { getOptionValue } from '~/helper';
 import useSelectorOnly from '~/hooks/useOnlySelector';
 import { savePresentation } from '~/redux/slices/presentationSlice';
@@ -101,25 +101,14 @@ function SlideOption({
       className={`${classes.option} ${
         selected === option.value ? classes.checked : ''
       }`}
+      onChange={onChange}
+      value={option._id}
+      name={name}
       control={
         multipleChoice > 1 ? (
-          <Checkbox
-            checked={selected[option._id]}
-            onChange={onChange}
-            value={option._id}
-            name={option.value}
-            size="medium"
-            color="primary"
-          />
+          <Checkbox size="medium" color="primary" />
         ) : (
-          <Radio
-            checked={selected === option._id}
-            onChange={onChange}
-            value={option._id}
-            name={name}
-            size="medium"
-            color="primary"
-          />
+          <Radio size="medium" color="primary" />
         )
       }
       label={option.value}
@@ -165,17 +154,10 @@ function WaitingForNextSlide({
         </Typography>
 
         <img src={goodSrc} alt="done" width={isMobile ? '70%' : '250px'} />
-        {/* <Flex center className={classes.chartWrap}>
-          <SlideResultChart slide={slide} isPresenting={isPresenting} />
-        </Flex> */}
       </Flex>
     </>
   );
 }
-
-const isMultipleChoice = (number) => {
-  return number > 1 ? new Set() : [];
-};
 
 // -----------------------------
 function MemberSlideShow() {
@@ -203,9 +185,7 @@ function MemberSlideShow() {
   const dispatch = useDispatch();
   const prevSlideId = useRef('');
   const slide = slides[activeSlide - 1] || {};
-  const [selected, setSelected] = useState(
-    isMultipleChoice(slide.settings.multipleChoice)
-  );
+  const [selected, setSelected] = useState(new Set());
   const { type = SLIDE_TYPES.MULTIPLE_CHOICE } = slide;
 
   const checkAnswered = () => {
@@ -240,7 +220,10 @@ function MemberSlideShow() {
       if (choices.size > 0 && choices.has(event.target.value))
         choices.delete(event.target.value);
       else choices.add(event.target.value);
-    } else choices = event.target.value;
+    } else {
+      choices.clear();
+      choices.add(event.target.value);
+    }
     setSelected(choices);
   };
 
@@ -267,13 +250,12 @@ function MemberSlideShow() {
   };
 
   const handleAddAnswer = () => {
-    let choices;
-    if (slide.settings.multipleChoice > 1) choices = Array.from(selected);
-    else choices = [selected];
+    const choices = Array.from(selected);
     saveUpdatedSlices('answers', [
       ...slide.answers,
       { userId: userId, choices: choices }
     ]);
+    setSelected(new Set());
   };
 
   const isMultipleSlide = (type) => {
@@ -327,19 +309,36 @@ function MemberSlideShow() {
               direction="column"
               alignItems="stretch"
             >
-              <FormGroup>
-                {slide.options.map((option) => (
-                  <SlideOption
-                    key={option.order}
-                    option={option}
-                    selected={selected}
-                    classes={classes}
-                    onChange={handleChange}
-                    name={slide.question}
-                    multipleChoice={slide.settings.multipleChoice}
-                  />
-                ))}
-              </FormGroup>
+              {slide.settings.multipleChoice > 1 ? (
+                <FormGroup>
+                  {slide.options.map((option) => (
+                    <SlideOption
+                      key={option.order}
+                      option={option}
+                      selected={selected}
+                      classes={classes}
+                      onChange={handleChange}
+                      name={slide.question}
+                      multipleChoice={slide.settings.multipleChoice}
+                    />
+                  ))}
+                </FormGroup>
+              ) : (
+                <RadioGroup>
+                  {slide.options.map((option) => (
+                    <SlideOption
+                      key={option.order}
+                      option={option}
+                      selected={selected}
+                      classes={classes}
+                      onChange={handleChange}
+                      name={slide.question}
+                      multipleChoice={slide.settings.multipleChoice}
+                    />
+                  ))}
+                </RadioGroup>
+              )}
+
               <Button
                 sx={{ m: 3 }}
                 size="large"

@@ -21,19 +21,19 @@ const groupApi = {
   },
   postAddMoreCoOwner: (groupID, req) => {
     return axiosClient.post(
-      `${endpoint}/${groupID}/members/addmorecoowner`,
+      `${endpoint}/${groupID}/members/add-more-co-owner`,
       req
     );
   },
   postRemoveCoOwner: (groupID, req) => {
     return axiosClient.post(
-      `${endpoint}/${groupID}/members/removecoowner`,
+      `${endpoint}/${groupID}/members/remove-co-owner`,
       req
     );
   },
-  postKichOutMember: (groupID, req) => {
+  postKickOutMember: (groupID, req) => {
     return axiosClient.post(
-      `${endpoint}/${groupID}/members/kickoutmember`,
+      `${endpoint}/${groupID}/members/kick-out-member`,
       req
     );
   },
