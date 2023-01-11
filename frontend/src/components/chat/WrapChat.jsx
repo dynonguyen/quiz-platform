@@ -1,12 +1,12 @@
-import { Divider, makeStyles, Typography } from '@cads-ui/core';
+import { Box, makeStyles } from '@cads-ui/core';
 import { Paper } from '@mui/material';
 import { MessageLeft, MessageRight } from '~/components/chat/Message';
 import { TextInput } from '~/components/chat/TextInput';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    width: '80vw',
-    height: '80vh',
+    width: '100%',
+    height: '100vh',
     maxWidth: '500px',
     maxHeight: '700px',
     display: 'flex',
@@ -24,8 +24,8 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative'
   },
   container: {
-    width: '100vw',
-    height: '100vh',
+    width: '100%',
+    maxWidth: '540px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
@@ -50,34 +50,30 @@ const useStyles = makeStyles((theme) => ({
 export default function WrapChat() {
   const classes = useStyles();
   return (
-    <div className={classes.container}>
+    <Box className={classes.container}>
       <Paper className={classes.paper} zDepth={2}>
-        <Typography className={classes.titleChat} variant="h4">
-          Chat box
-        </Typography>
-        <Divider variant="dashed" spacing={2} />
         <Paper id="style-1" className={classes.messagesBody}>
-          <MessageLeft
+          {/* <MessageLeft
             message="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo."
             timestamp="MM/DD 00:00"
             photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
             displayName="Tên người gửi"
             avatarDisp={true}
-          />
+          /> */}
           <MessageLeft
-            message="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl tincidunt eget nullam non."
+            message="Loremikkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"
             timestamp="MM/DD 00:00"
             photoURL=""
             displayName="Tên người gửi"
             avatarDisp={false}
           />
-          <MessageRight
+          {/* <MessageRight
             message="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl tincidunt eget nullam non."
             timestamp="MM/DD 00:00"
             photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
             displayName="Tên người gửi mới"
             avatarDisp={true}
-          />
+          /> */}
           <MessageRight
             message="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
             timestamp="MM/DD 00:00"
@@ -88,6 +84,6 @@ export default function WrapChat() {
         </Paper>
         <TextInput />
       </Paper>
-    </div>
+    </Box>
   );
 }

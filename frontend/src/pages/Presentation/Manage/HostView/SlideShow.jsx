@@ -20,8 +20,7 @@ import { savePresentation } from '~/redux/slices/presentationSlice';
 const useStyles = makeStyles((_) => ({
   root: (props) => ({
     p: props.fullscreen ? 0 : 6,
-    bgColor: 'grey.300',
-    h: 1
+    bgColor: 'grey.300'
   }),
 
   slide: (props) => ({
@@ -191,6 +190,10 @@ function SlideShow() {
   const classes = useStyles({ fullscreen: isPresenting });
   const slideRef = React.useRef(null);
   const wrapper = React.useRef(null);
+
+  // Chat
+  const [right, setRight] = React.useState(false);
+
   const dispatch = useDispatch();
   const slide = slides[activeSlide - 1] || {};
   const { type } = slide;

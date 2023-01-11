@@ -3,7 +3,7 @@ import WrapChat from '~/components/chat/WrapChat';
 
 function ChatView() {
   return (
-    <Container maxWidth="xl" sx={{ mt: 10 }}>
+    <Container maxWidth="340px" sx={{ mt: 0 }}>
       <WrapChat />
     </Container>
   );
