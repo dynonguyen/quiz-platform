@@ -21,5 +21,6 @@ groupApi.post(
   '/:groupId/members/kick-out-member',
   controller.postKickOutMember,
 );
+groupApi.delete('/:groupId/delete', controller.deleteGroup);
 
 module.exports = groupApi;

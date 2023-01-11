@@ -36,6 +36,9 @@ const groupApi = {
       `${endpoint}/${groupID}/members/kickoutmember`,
       req
     );
+  },
+  deleteGroup: (groupID) => {
+    return axiosClient.delete(`${endpoint}/${groupID}/delete`);
   }
 };
 

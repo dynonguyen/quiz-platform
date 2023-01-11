@@ -13,6 +13,7 @@ const {
   addMoreCoOwner,
   removeCoOwner,
   kickOutMember,
+  deleteGroupById,
 } = require('~/services/group.service');
 const {
   getUserByAccountId,
@@ -307,5 +308,19 @@ exports.postKickOutMember = async (req, res) => {
   } catch (error) {
     console.log('Transfer error: ', error);
     return res.status(400).json({ message: 'Failed' });
+  }
+};
+
+exports.deleteGroup = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const delRes = await deleteGroupById(groupId);
+    if (delRes) {
+      return res.status(200).json({ msg: 'success' });
+    }
+    throw new Error('Delete failed');
+  } catch (error) {
+    console.log('deleteGroup ERROR: ', error);
+    return res.status(400).json({ msg: 'Failed' });
   }
 };

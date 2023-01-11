@@ -115,3 +115,7 @@ exports.kickOutMember = async (groupId, memberId) => {
     throw error;
   }
 };
+
+exports.deleteGroupById = async (_id) => {
+  return await GroupModel.deleteOne({ _id });
+};
