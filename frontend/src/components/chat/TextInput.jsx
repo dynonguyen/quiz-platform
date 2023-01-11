@@ -1,7 +1,7 @@
 import { makeStyles } from '@cads-ui/core';
 import { Icon } from '@iconify/react';
 import { Button, TextField } from '@mui/material';
-
+import { useRef } from 'react';
 const useStyles = makeStyles((theme) => ({
   wrapForm: {
     display: 'flex',
@@ -17,21 +17,29 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export const TextInput = () => {
+export const TextInput = ({ onClickSendMessage }) => {
   const classes = useStyles();
+  const textMessages = useRef('');
+
   return (
-    <>
-      <form className={classes.wrapForm} noValidate autoComplete="off">
-        <TextField
-          id="standard-text"
-          label="Tên người gửi tin nhắn"
-          className={classes.wrapText}
-          //margin="normal"
-        />
-        <Button variant="contained" color="primary" className={classes.button}>
-          <Icon icon="material-symbols:send-outline" />
-        </Button>
-      </form>
-    </>
+    <div className={classes.wrapForm} noValidate autoComplete="off">
+      <TextField
+        id="standard-text"
+        label="Nội dung"
+        className={classes.wrapText}
+        inputRef={textMessages}
+      />
+      <Button
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        onClick={() => {
+          onClickSendMessage(textMessages.current.value);
+          textMessages.current.value = '';
+        }}
+      >
+        <Icon icon="material-symbols:send-outline" />
+      </Button>
+    </div>
   );
 };

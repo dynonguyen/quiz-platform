@@ -109,7 +109,6 @@ function PresentMemberView() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
-  // Handle logic trong getPresentationByCode trước khi implement
   const presentation = useSelectorOnly('presentation', [], true);
   if (presentation.loading) return <GlobalLoading />;
 

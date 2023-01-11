@@ -1,6 +1,6 @@
 import { makeStyles } from '@cads-ui/core';
 import { Avatar } from '@mui/material';
-
+import { memo } from 'react';
 const useStyles = makeStyles((theme) => ({
   messageRow: {
     display: 'flex'
@@ -121,38 +121,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //avatar
-export const MessageLeft = (props) => {
-  const message = props.message
-    ? props.message
-    : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl tincidunt eget nullam non.';
+export const MessageLeft = memo((props) => {
+  const message = props.message ? props.message : 'No message';
   const timestamp = props.timestamp ? props.timestamp : '';
-  const photoURL = props.photoURL ? props.photoURL : 'dummy.js';
+  const photoURL = props.photoURL ? props.photoURL : '';
   const displayName = props.displayName ? props.displayName : 'Tên người gửi';
   const classes = useStyles();
   return (
-    <>
-      <div className={classes.messageRow}>
-        <Avatar
-          alt={displayName}
-          className={classes.orange}
-          src={photoURL}
-        ></Avatar>
-        <div>
-          <div className={classes.displayName}>{displayName}</div>
-          <div className={classes.messageBlue}>
-            <div>
-              <p className={classes.messageContent}>{message}</p>
-            </div>
-            <div className={classes.messageTimeStampRight}>{timestamp}</div>
-          </div>
+    <div className={classes.messageRow}>
+      <Avatar alt={displayName} className={classes.orange} src={photoURL} />
+      <div>
+        <div className={classes.displayName}>{displayName}</div>
+        <div className={classes.messageBlue}>
+          <p className={classes.messageContent}>{message}</p>
+          <div className={classes.messageTimeStampRight}>{timestamp}</div>
         </div>
       </div>
-    </>
+    </div>
   );
-};
+});
 
 //avatar
-export const MessageRight = (props) => {
+export const MessageRight = memo((props) => {
   const classes = useStyles();
   const message = props.message ? props.message : 'no message';
   const timestamp = props.timestamp ? props.timestamp : '';
@@ -164,4 +154,4 @@ export const MessageRight = (props) => {
       </div>
     </div>
   );
-};
+});

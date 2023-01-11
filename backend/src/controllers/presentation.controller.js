@@ -149,12 +149,13 @@ exports.putUpdateAnswers = async (req, res) => {
       );
       delete fields.updateAnswers;
       delete fields.slideId;
-      delete fields.userId;
+
       if (isAnswer.length !== 0)
         return res.status(409).json({ msg: 'Bạn đã trả lời câu này' });
     } else {
-      delete fields.updateSeen;
+      delete fields.updateChat;
     }
+    delete fields.userId;
     await service.updatePresentation(query, fields);
 
     return res.status(200).json({ msg: 'Success' });

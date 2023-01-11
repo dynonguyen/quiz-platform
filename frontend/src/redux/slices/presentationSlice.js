@@ -11,10 +11,9 @@ export const savePresentation = createAsyncThunk(
     const presentation = thunkAPI.getState().presentation;
     const { _id } = presentation;
     if (!_id) return;
-
     try {
       let apiRes;
-      if (updateFields.updateAnswers) {
+      if (updateFields.updateAnswers || updateFields.updateChat) {
         apiRes = await presentationApi.putUpdateAnswers({ _id }, updateFields);
       } else {
         apiRes = await presentationApi.putUpdatePresentation(

@@ -5,7 +5,9 @@ exports.getPresentationByUserId = async (userId) => {
 };
 
 exports.getPresentationByCode = async (code) => {
-  return await PresentationModel.findOne({ code }).populate('owner');
+  return await PresentationModel.findOne({ code })
+    .populate('owner')
+    .populate('chats.ownerId');
 };
 
 exports.checkPresentationExistByCode = async (code) => {

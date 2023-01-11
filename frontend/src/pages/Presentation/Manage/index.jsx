@@ -31,7 +31,6 @@ function PresentationManagePage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isHost = userId === presentation?.owner?._id;
-
   // Add & remove presentation to redux
   React.useEffect(() => {
     if (!isValidating && presentation) {

@@ -1,8 +1,11 @@
 import { Box, makeStyles } from '@cads-ui/core';
-import { Paper } from '@mui/material';
+import { Divider, Paper, Typography } from '@mui/material';
+import moment from 'moment';
+import { useDispatch, useSelector } from 'react-redux';
 import { MessageLeft, MessageRight } from '~/components/chat/Message';
 import { TextInput } from '~/components/chat/TextInput';
-
+import useSelectorOnly from '~/hooks/useOnlySelector';
+import { savePresentation } from '~/redux/slices/presentationSlice';
 const useStyles = makeStyles((theme) => ({
   paper: {
     width: '100%',
@@ -47,43 +50,69 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function WrapChat() {
+function WrapChat() {
+  const { chats } = useSelectorOnly('presentation', ['chats']);
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const classes = useStyles();
+  const onClickSendMessage = (textMessages) => {
+    const chat = {
+      ownerId: {
+        _id: user.userId,
+        avt: user.avt,
+        name: user.name
+      },
+      chatText: textMessages,
+      seen: [user.userId]
+    };
+    dispatch(
+      savePresentation({
+        userId: user.userId,
+        chats: [...chats, chat],
+        updateChat: true
+      })
+    );
+  };
   return (
     <Box className={classes.container}>
-      <Paper className={classes.paper} zDepth={2}>
+      <Paper className={classes.paper}>
+        <Typography className={classes.titleChat} variant="h4">
+          Chat box
+        </Typography>
+        <Divider variant="dashed" spacing={2} />
         <Paper id="style-1" className={classes.messagesBody}>
-          {/* <MessageLeft
-            message="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo."
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="Tên người gửi"
-            avatarDisp={true}
-          /> */}
-          <MessageLeft
-            message="Loremikkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"
-            timestamp="MM/DD 00:00"
-            photoURL=""
-            displayName="Tên người gửi"
-            avatarDisp={false}
-          />
-          {/* <MessageRight
-            message="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl tincidunt eget nullam non."
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="Tên người gửi mới"
-            avatarDisp={true}
-          /> */}
-          <MessageRight
-            message="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="Tên người gửi mới"
-            avatarDisp={false}
-          />
+          {chats.length > 0
+            ? chats.map((chat) =>
+                chat.ownerId._id === user.userId ? (
+                  <MessageRight
+                    key={chat._id ? chat._id : new Date().getTime()}
+                    message={chat.chatText}
+                    timestamp={moment(chat.createdAt).format('hh:mm DD/MM/YY')}
+                    photoURL={chat.ownerId.avt}
+                    displayName={chat.ownerId.name}
+                  />
+                ) : (
+                  <MessageLeft
+                    key={chat._id ? chat._id : new Date().getTime()}
+                    message={chat.chatText}
+                    timestamp={moment(chat.createdAt).format('hh:mm DD/MM/YY')}
+                    photoURL={chat.ownerId.avt}
+                    displayName={chat.ownerId.name}
+                  />
+                )
+              )
+            : 'chưa có tin nhắn nào'}
         </Paper>
-        <TextInput />
+        {user.userId && (
+          <TextInput
+            chats={chats}
+            user={user}
+            onClickSendMessage={onClickSendMessage}
+          />
+        )}
       </Paper>
     </Box>
   );
 }
+
+export default WrapChat;

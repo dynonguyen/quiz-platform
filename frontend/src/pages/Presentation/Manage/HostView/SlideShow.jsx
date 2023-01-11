@@ -88,7 +88,7 @@ const useStyles = makeStyles((_) => ({
   },
 
   showChat: {
-    zIndex: '10 !important'
+    zIndex: '200 !important'
   }
 }));
 
@@ -292,18 +292,15 @@ function SlideShow() {
     }
   }, [isPresenting]);
 
-  const Chat = () => (
-    <Box
-      sx={{ width: 540 }}
-      role="presentation"
-      onClick={toggleDrawer(false)}
-      onKeyDown={toggleDrawer(false)}
-    >
-      <Box className={classes.chatView}>
-        <ChatView />
+  const Chat = () => {
+    return (
+      <Box sx={{ width: 540 }} role="presentation">
+        <Box className={classes.chatView}>
+          <ChatView />
+        </Box>
       </Box>
-    </Box>
-  );
+    );
+  };
 
   return (
     <div className={classes.root} ref={wrapper}>
