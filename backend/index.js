@@ -22,7 +22,7 @@ const userApi = require('~/apis/user.api');
 const accountApi = require('~/apis/account.api');
 const groupApi = require('~/apis/group.api');
 const presentationApi = require('~/apis/presentation.api');
-
+const chatBoxApi = require('~/apis/chatbox.api');
 const { whitelist } = require('~/middleware/whitelist.middleware');
 
 // ================== set port ==================
@@ -104,6 +104,12 @@ app.use(
   whitelist(['check-code', 'get-by-code', 'update-answers']),
   authorization,
   presentationApi,
+);
+app.use(
+  `${BASE_URL}/chat`,
+  whitelist(['view', 'update']),
+  authorization,
+  chatBoxApi,
 );
 app.get(`${BASE_URL}/test`, (_, res) => {
   res.status(200).json({ msg: 'Success' });

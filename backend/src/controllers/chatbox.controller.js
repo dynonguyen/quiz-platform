@@ -21,7 +21,7 @@ exports.getChatBoxByPresentationId = async (req, res) => {
     const chatBox = await getChatBoxByPresentationId(presentationId);
     if (chatBox) {
       res.status(200).json({
-        ...chatBox.toObject(),
+        chats: chatBox,
         thisUserId: req.socket.remoteAddress.toString(),
       });
     } else {
