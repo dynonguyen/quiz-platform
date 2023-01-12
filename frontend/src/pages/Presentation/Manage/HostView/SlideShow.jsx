@@ -12,6 +12,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import Icon from '~/components/Icon';
+import SlideResultChart from '~/components/SlideResultChart';
 import { SLIDE_TYPES } from '~/constant/presentation';
 import { openFullscreen } from '~/helper';
 import useSelectorOnly from '~/hooks/useOnlySelector';
@@ -337,7 +338,7 @@ function SlideShow() {
         {/* Chart result */}
         {isMultipleSlide(type) && (
           <Flex center className={classes.chartWrap}>
-            {/* <SlideResultChart slide={slide} isPresenting={isPresenting} /> */}
+            {<SlideResultChart slide={slide} isPresenting={isPresenting} />}
           </Flex>
         )}
 

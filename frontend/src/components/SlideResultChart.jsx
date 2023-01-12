@@ -5,6 +5,7 @@ import {
   Chart as ChartJS,
   Legend,
   LinearScale,
+  registerables,
   Title,
   Tooltip
 } from 'chart.js';
@@ -20,7 +21,8 @@ ChartJS.register(
   ChartDataLabels,
   Title,
   Legend,
-  Tooltip
+  Tooltip,
+  ...registerables
 );
 
 const chartOptions = (
